@@ -31,13 +31,21 @@ echo "machine Github.com
 " >  ~/.netrc
 fi
 
+# use latest revision if no explicit revision was given
+if [ x"${GS_BRANCH}" == x"" ]
+then
+	GS_BRANCH="master"
+else
+	echo "${GS_BRANCH}" > /etc/gemeinschaft_revision
+fi
+
 # Clone the git repository
 #
 set +e
 c=1
 while [[ $c -le 5 ]]
 do
-	git clone "${GS_GIT_URL}" "${GS_DIR}" 2>&1
+	git clone -b "${GS_BRANCH}" "${GS_GIT_URL}" "${GS_DIR}" 2>&1
 	if [ "$?" -eq "0" ]; then
 		break;
 	else
@@ -65,19 +73,6 @@ echo "W1:2345:respawn:/bin/su - gs5 -l -c \"cd ${GS_DIR}; RAILS_ENV=production r
 # Create log dir
 #
 mkdir /var/log/gemeinschaft
-
-# Gemeinschaft versioning
-#
-
-# use latest revision if no explicit revision was given
-if [ x"${GS_BRANCH}" == x"" ]
-then
-	echo "master" > /etc/gemeinschaft_revision
-	cd ${GS_DIR}; git checkout -b "master" 2>&1
-else
-	echo "${GS_BRANCH}" > /etc/gemeinschaft_revision
-	cd ${GS_DIR}; git checkout -b "${GS_BRANCH}" 2>&1
-fi
 
 # Set ownership
 #
