@@ -1,0 +1,49 @@
+#! /bin/bash
+### BEGIN INIT INFO
+# Provides:          gdfdl-prompt
+# Required-Start:    $local_fs $all
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Gemeinschaft Login screen
+# Description:       
+### END INIT INFO
+#
+# Create customized login screen for Gemeinschaft 5
+#
+
+IPS="`/bin/hostname -I`"
+FQDN="`/bin/hostname -f`"
+GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
+GS_REVISION="`cat /etc/gemeinschaft_revision`"
+
+echo "
+***      _____                                               _____
+***     (.---.)                GEMEINSCHAFT 5               (.---.)
+***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
+***      -----                                               -----
+***     Rev: ${GS_REVISION}, Build: ${GDFDL_BUILDNAME}
+***     Hostname: \n Console: \l
+***    -------------------------------------------------------------
+***
+***     You can reach the web configuration here:
+***" > /etc/issue
+
+for ADDRESS in ${FQDN} ${IPS}
+do
+	[[ ${ADDRESS} =~ ":" ]] && ADDRESS="["${ADDRESS}"]" 
+	echo "***     http://${ADDRESS}/" >> /etc/issue
+done
+
+echo "***
+***
+***
+***
+***
+***
+***
+***
+***
+***    _____________________________________________________________
+***     brought to you by Amooma - http://www.amooma.de/
+" >> /etc/issue

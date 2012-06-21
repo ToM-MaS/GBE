@@ -1,0 +1,7 @@
+sqlite3
+libsqlite3-dev
+libjpeg62
+ghostscript
+imagemagick
+libtiff-tools
+

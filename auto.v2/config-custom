@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# Gemeinschaft 5
+# live-build auto config script
+#
+# Copyright (c) 2012, Julian Pawlowski <jp@jps-networks.eu>
+# See LICENSE.GBE file for details.
+#
+
+lb config noauto \
+	--apt apt \
+	--apt-recommends disabled \
+	--architecture i386 \
+	--archive-areas "main contrib non-free" \
+	--bootappend-live "quiet splash vga=792 locales=de_DE.UTF-8 keyboard-layouts=de" \
+	--bootstrap-flavour minimal \
+	--chroot-filesystem squashfs \
+	--debian-installer live \
+	--distribution squeeze \
+	--hostname gs5-live \
+	--iso-application "Gemeinschaft 5" \
+	--iso-preparer "GS5 builder" \
+	--iso-publisher "Amooma GmbH; http://www.amooma.de/" \
+	--iso-volume "GS5" \
+	--language en \
+	--linux-flavours 686 \
+	--memtest none \
+	--mode debian \
+	--packages-lists minimal \
+	--root-command sudo \
+	--syslinux-splash "config/binary_syslinux/splash.rle" \
+	--syslinux-timeout 10 \
+	--username gs5 \
+	--win32-loader disabled \
+	"${@}"

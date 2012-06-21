@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Disable some X features 
+echo -e '\nSection "ServerFlags"' >> /etc/X11/xorg.conf
+echo 'Option "DontVTSwitch" "true"' >> /etc/X11/xorg.conf
+echo 'Option "DontZap" "true"' >> /etc/X11/xorg.conf
+echo 'Option "DontZoom" "true"' >> /etc/X11/xorg.conf
+echo 'EndSection' >> /etc/X11/xorg.conf
+
+# Make certain a few things are immutable, so as to quel various attacks
+chattr +i /home/gs5/.mozilla/firefox/*/localstore.*
+chattr +i /home/gs5/.mozilla/firefox/*/extensions.ini
+
+echo 'Putting the machine into Kiosk mode ...'
+sleep 1s
+/usr/local/bin/startkiosk.sh &
+
+exit 0
+

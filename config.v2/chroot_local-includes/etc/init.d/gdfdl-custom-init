@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Post-Installation setup for Gemeinschaft 5
+#
+
+echo -e "Preparing Gemeinschaft for 1st start ...\n"
+mysqladmin create gemeinschaft --user=root --password=$MYSQL_PASSWD
+
+echo "[gemeinschaft]
+Description  = MySQL database for Gemeinschaft
+Driver       = /usr/lib/odbc/libmyodbc.so
+Setup        = /usr/lib/odbc/libodbcmyS.so
+" >/etc/odbcinst.ini
+
+echo "[gemeinschaft]
+Description  = MySQL database for Gemeinschaft
+Driver       = /usr/lib/odbc/libmyodbc.so
+SERVER       = localhost
+PORT         = 3306
+DATABASE     = gemeinschaft
+OPTION       = 67108864
+USER         = gemeinschaft
+PASSWORD     = gemeinschaft
+" >/etc/odbc.ini
+
+mysql -e "GRANT ALL PRIVILEGES ON gemeinschaft.* TO gemeinschaft @'%' IDENTIFIED BY 'gemeinschaft';" --user=root --password=$MYSQL_PASSWD
+mysql -e "FLUSH PRIVILEGES" --user=root --password=$MYSQL_PASSWD
+
+# Load database structure into DB
+#
+su - ${GS_USER} -c "cd ${GS_DIR}; rake db:migrate RAILS_ENV=\"production\"" >/dev/null
+
+# Update FreeSwitch/GS5 config for current IPv4 address of primary interface eth0
+# Also correct NAT detection settings from NAT-PnP/uPNP to use public STUN server from Sipgate instead
+#
+LOCALIP=`ip addr show dev eth0 | sed -e's/^.*inet \([^ ]*\)\/.*$/\1/;t;d'`
+sed -i 's/^rtp-ip: 192.168.0.150/rtp-ip: '${LOCALIP}'/' /opt/freeswitch/scripts/ini/profile_gemeinschaft.ini
+sed -i 's/^sip-ip: 192.168.0.150/sip-ip: '${LOCALIP}'/' /opt/freeswitch/scripts/ini/profile_gemeinschaft.ini
+sed -i 's/^ext-sip-ip: auto-nat/ext-sip-ip: stun:stun.sipgate.net/' /opt/freeswitch/scripts/ini/profile_gemeinschaft.ini
+sed -i 's/^ext-rtp-ip: auto-nat/ext-rtp-ip: stun:stun.sipgate.net/' /opt/freeswitch/scripts/ini/profile_gemeinschaft.ini
+
+# Generate CSS
+#
+su - ${GS_USER} -c "cd \"${GS_DIR}\"; RAILS_ENV=production bundle exec rake assets:precompile" 2>&1 >/dev/null

@@ -1,0 +1,22 @@
+#
+# Debian Live Build Environment
+# System packages for Gemeinschaft 5
+#
+# Julian Pawlowski <julian.pawlowski@gmail.com> 2012.
+#
+
+# tools
+wget 
+
+# services
+mysql-server-5.1 mysql-server mysql-client-5.1 mysql-client mysql-common
+snmpd
+
+# libraries and modules
+libsasl2-2 libsasl2-modules libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap
+
+# Kiosk applications for live system
+xserver-xorg
+xinit
+xfonts-base
+iceweasel
