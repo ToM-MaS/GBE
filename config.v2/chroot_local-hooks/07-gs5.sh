@@ -22,12 +22,12 @@ echo -e "GBE: Downloading GS5 ...\n"
 
 # Setup Github user credentials for login
 #
-if [ ! -z "${GIT_USER}" -a ! -z "${GIT_PASSWORD}" ]
+if [ ! -z "${GS_GIT_USER}" -a ! -z "${GS_GIT_PASSWORD}" ]
 then
 	echo "Github credentials found!"
 echo "machine Github.com
-  login ${GIT_USER}
-  password ${GIT_PASSWORD}
+  login ${GS_GIT_USER}
+  password ${GS_GIT_PASSWORD}
 " >  ~/.netrc
 fi
 
@@ -37,7 +37,7 @@ set +e
 c=1
 while [[ $c -le 5 ]]
 do
-	git clone "https://github.com/amooma/GS5.git" "${GS_DIR}" 2>&1
+	git clone "${GS_GIT_URL}" "${GS_DIR}" 2>&1
 	if [ "$?" -eq "0" ]; then
 		break;
 	else
@@ -69,16 +69,14 @@ mkdir /var/log/gemeinschaft
 # Gemeinschaft versioning
 #
 
-# use latest revision if no explicit revision was given - ATTENTION! needs tagging in Git repo which is numerical sortable
-if [ x"${GS_REVISION}" == x"" ]
+# use latest revision if no explicit revision was given
+if [ x"${GS_BRANCH}" == x"" ]
 then
-	cd ${GS_DIR}; git tag | sort -n | tail -1 > /etc/gemeinschaft_revision
-	cd ${GS_DIR}; git checkout `cat /etc/gemeinschaft_revision` 2>&1
-elseif [ "${GS_REVISION}" == "HEAD" ]
-	echo "HEAD" > /etc/gemeinschaft_revision
+	echo "master" > /etc/gemeinschaft_revision
+	cd ${GS_DIR}; git checkout -b "master" 2>&1
 else
-	cd ${GS_DIR}; git checkout ${GS_REVISION} 2>&1
-	echo "${GS_REVISION}" > /etc/gemeinschaft_revision
+	echo "${GS_BRANCH}" > /etc/gemeinschaft_revision
+	cd ${GS_DIR}; git checkout -b "${GS_BRANCH}" 2>&1
 fi
 
 # Set ownership
