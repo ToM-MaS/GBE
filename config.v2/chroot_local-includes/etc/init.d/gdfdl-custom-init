@@ -4,7 +4,7 @@
 # Provides:          gdfdl-custom-init
 # Required-Start:    mysql
 # Required-Stop:
-# X-Start-Before:    apache2
+# X-Start-Before:    apache2 freeswitch gdfdl-init
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Do initial task for first startup of Gemeinschaft
@@ -12,7 +12,7 @@
 ### END INIT INFO
 
 # General settings
-source /gdfdl.conf
+[ -f /gdfdl.conf ] && source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 set -e
 
@@ -58,3 +58,8 @@ sed -i 's/^ext-rtp-ip: auto-nat/ext-rtp-ip: stun:stun.sipgate.net/' /opt/freeswi
 # Generate CSS
 #
 su - ${GS_USER} -c "cd \"${GS_DIR}\"; RAILS_ENV=production bundle exec rake assets:precompile" 2>&1 >/dev/null
+
+# self destruction
+#
+rm -rf /gdfdl-custom.conf
+rm -rf /etc/init.d/gdfdl-custom-init; update-rc.d gdfdl-custom-init remove
