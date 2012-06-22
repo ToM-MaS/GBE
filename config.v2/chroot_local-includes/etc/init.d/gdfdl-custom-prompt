@@ -15,14 +15,14 @@
 IPS="`/bin/hostname -I`"
 FQDN="`/bin/hostname -f`"
 GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
-GS_REVISION="`cat /etc/gemeinschaft_revision`"
+GS_BRANCH="`cat /etc/gemeinschaft_branch`"
 
 echo "
 ***      _____                                               _____
 ***     (.---.)                GEMEINSCHAFT 5               (.---.)
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
 ***      -----                                               -----
-***     Rev: ${GS_REVISION}, Build: ${GDFDL_BUILDNAME}
+***     Branch: ${GS_REVISION}, Build: ${GDFDL_BUILDNAME}
 ***     Hostname: \n Console: \l
 ***    -------------------------------------------------------------
 ***
