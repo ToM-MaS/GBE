@@ -11,6 +11,7 @@ wget
 # services
 mysql-server-5.1 mysql-server mysql-client-5.1 mysql-client mysql-common
 snmpd
+openssh-server
 
 # libraries and modules
 libsasl2-2 libsasl2-modules libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap
