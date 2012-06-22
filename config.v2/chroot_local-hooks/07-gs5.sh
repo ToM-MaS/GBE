@@ -36,7 +36,7 @@ if [ x"${GS_BRANCH}" == x"" ]
 then
 	GS_BRANCH="master"
 else
-	echo "${GS_BRANCH}" > /etc/gemeinschaft_revision
+	echo "${GS_BRANCH}" > /etc/gemeinschaft_branch
 fi
 
 # Clone the git repository
