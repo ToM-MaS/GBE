@@ -141,7 +141,7 @@ cd ${SRC_DIR}/dahdi-hfcs; make 2>&1 && make install 2>&1
 
 echo -e "GBE: Preparing FreeSwitch for compilation ...\n"
 cd ${SRC_DIR}/freeswitch
-./bootstrap.sh 2>&1
+./bootstrap.sh -j 2>&1
 # assure basic FreeSwitch modules are loaded as Gemeinschaft relies on them
 sed -i 's/#applications\/mod_cluechoo/applications\/mod_cluechoo/' modules.conf
 sed -i 's/#applications\/mod_cluechoo/applications\/mod_cluechoo/' modules.conf

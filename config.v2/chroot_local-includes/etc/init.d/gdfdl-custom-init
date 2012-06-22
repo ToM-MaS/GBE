@@ -1,5 +1,21 @@
 #!/bin/bash
 
+### BEGIN INIT INFO
+# Provides:          gdfdl-custom-init
+# Required-Start:    mysql
+# Required-Stop:
+# X-Start-Before:    apache2
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Do initial task for first startup of Gemeinschaft
+# Description:       
+### END INIT INFO
+
+# General settings
+source /gdfdl.conf
+[ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
+set -e
+
 # Post-Installation setup for Gemeinschaft 5
 #
 
