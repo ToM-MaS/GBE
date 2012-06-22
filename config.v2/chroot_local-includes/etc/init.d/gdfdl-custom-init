@@ -2,12 +2,12 @@
 
 ### BEGIN INIT INFO
 # Provides:          gdfdl-custom-init
-# Required-Start:    
+# Required-Start:    mysql
 # Required-Stop:
-# X-Start-Before:    
-# Default-Start:     
-# Default-Stop:      
-# Short-Description:
+# X-Start-Before:    apache2
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Do initial task for first startup of Gemeinschaft
 # Description:       
 ### END INIT INFO
 
