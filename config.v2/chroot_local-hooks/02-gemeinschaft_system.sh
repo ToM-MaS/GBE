@@ -27,3 +27,6 @@ echo "${GS_USER}:${GS_PASSWORD}" | chpasswd
 
 echo -e "GBE: Correcting file permissions ...\n"
 chmod 0440 /etc/sudoers.d/*
+
+echo - "GBE: Enable bootlog ...\n"
+sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
