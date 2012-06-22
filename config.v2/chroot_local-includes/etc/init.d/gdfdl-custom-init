@@ -1,5 +1,21 @@
 #!/bin/bash
 
+### BEGIN INIT INFO
+# Provides:          gdfdl-custom-init
+# Required-Start:    
+# Required-Stop:
+# X-Start-Before:    
+# Default-Start:     
+# Default-Stop:      
+# Short-Description:
+# Description:       
+### END INIT INFO
+
+# General settings
+source /gdfdl.conf
+[ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
+set -e
+
 # Post-Installation setup for Gemeinschaft 5
 #
 
