@@ -33,4 +33,4 @@ fi
 # run original build script
 #
 echo "GBE: Handing back to original run script now ..."
-"${GDFDL_BASEDIR_CI_02}/00-run.sh --force"
+"${GDFDL_BASEDIR_CI_STEP}/00-run.sh --force"
