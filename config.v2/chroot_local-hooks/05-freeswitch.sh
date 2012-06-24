@@ -22,7 +22,7 @@ echo -e "\n###########################################################
 echo -e "GBE: Downloading FreeSwitch and 3rd party components ...\n"
 cd ${SRC_DIR}
 
-if [ ! -d ./freeswitch ]
+if [[ ! -d ./freeswitch ]];
 	then
 	set +e
 	c=1

@@ -41,7 +41,7 @@ fi
 
 # Clone the git repository
 #
-if [ ! -d "${GS_DIR}" ]
+if [[ ! -d "${GS_DIR}" ]];
 	then
 	set +e
 	c=1

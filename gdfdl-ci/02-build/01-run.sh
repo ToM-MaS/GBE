@@ -23,8 +23,9 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 
 	echo "GBE: Copying latest upstream project repositories into their places ..."
 	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf /be/config/chroot_local-includes/usr/local/src
-	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p /be/config/chroot_local-includes/usr/local/src
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod 777 /be/config/chroot_local-includes/usr/local/src
+	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf /be/config/chroot_local-includes/opt
+	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 /be/config/chroot_local-includes/usr/local/src
+	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 /be/config/chroot_local-includes/opt
 
 	if [ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ]
 		then
@@ -35,7 +36,7 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	if [ -d "${GDFDL_BASEDIR}/.ci/GS5" ]
 		then
 		echo "Upstream GS5 sources found!"
-		cp -r ${GDFDL_BASEDIR}/.ci/GS5 ${INSTALLBASEDIR}/be/config/chroot_local-includes/usr/local/src
+		cp -r ${GDFDL_BASEDIR}/.ci/GS5 ${INSTALLBASEDIR}/be/config/chroot_local-includes/opt
 	fi
 else
 	echo "ERROR: No existing build environment installation found. Run installer first."
