@@ -18,17 +18,17 @@
 set -e
 
 SELF="`readlink -f $0`"
-GDFDL_BASEDIR_CI_00="`dirname ${SELF}`"
-GDFDL_BASEDIR_CI="`dirname ${GDFDL_BASEDIR_CI_00}`"
+GDFDL_BASEDIR_CI_STEP="`dirname ${SELF}`"
+GDFDL_BASEDIR_CI="`dirname ${GDFDL_BASEDIR_CI_STEP}`"
 GDFDL_BASEDIR="`dirname ${GDFDL_BASEDIR_CI}`"
 
 # If we find another script named '01-run.sh', start this instead.
 # If --force option was given, stay in line...
 #
-if [[ -f "${GDFDL_BASEDIR_CI_02}/01-run.sh" && x"$1" != "--force" ]]
+if [[ -f "${GDFDL_BASEDIR_CI_STEP}/01-run.sh" && x"$1" != "--force" ]]
 	then
-	echo "NOTE: '${GDFDL_BASEDIR_CI_00}/01-run.sh' found, handing over to that one ..."
-	"${GDFDL_BASEDIR_CI_00}/01-run.sh" "${@}"
+	echo "NOTE: '${GDFDL_BASEDIR_CI_STEP}/01-run.sh' found, handing over to that one ..."
+	"${GDFDL_BASEDIR_CI_STEP}/01-run.sh" "${@}"
 	exit 0
 fi
 
@@ -48,8 +48,9 @@ fi
 # if we find another script in the series, go on and run that
 # (but ignore 01-run.sh to avoid loops)
 #
-GDFDL_CI_NEXT="`find "${GDFDL_BASEDIR_CI_02}" -maxdepth 1 -name 01-*.sh | grep -v 01-run.sh`"
-if [ -f "${GDFDL_CI_NEXT}" ]
+set +e
+GDFDL_CI_NEXT="`find "${GDFDL_BASEDIR_CI_STEP}" -maxdepth 1 -type f -name '01-*.sh' | grep -v 01-run.sh`"
+if [ x"${GDFDL_CI_NEXT}" != x"" ]
 	then
 	echo "NOTE: Next script '${GDFDL_CI_NEXT}' found, handing over now ..."
 	"${GDFDL_CI_NEXT}" "${@}"
