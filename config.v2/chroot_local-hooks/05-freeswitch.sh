@@ -21,22 +21,26 @@ echo -e "\n###########################################################
 
 echo -e "GBE: Downloading FreeSwitch and 3rd party components ...\n"
 cd ${SRC_DIR}
-set +e
-c=1
-while [[ $c -le 5 ]]
-do
-	git clone http://git.freeswitch.org/freeswitch.git freeswitch
-	if [ "$?" -eq "0" ]; then
-		break;
-	else
-		[[ $c -eq 5 ]] && exit 1
-		(( c++ ))
-		rm -rf freeswitch
-		echo "$c. try in 3 seconds ..."
-		sleep 3
-	fi
-done
-set -e
+
+if [ ! -d ./freeswitch ]
+	then
+	set +e
+	c=1
+	while [[ $c -le 5 ]]
+	do
+		git clone http://git.freeswitch.org/freeswitch.git freeswitch
+		if [ "$?" -eq "0" ]; then
+			break;
+		else
+			[[ $c -eq 5 ]] && exit 1
+			(( c++ ))
+			rm -rf freeswitch
+			echo "$c. try in 3 seconds ..."
+			sleep 3
+		fi
+	done
+	set -e
+fi
 
 # FreeSwitch version handling
 #
