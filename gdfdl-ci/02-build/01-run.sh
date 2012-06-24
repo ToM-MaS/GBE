@@ -23,8 +23,16 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf /be/config/chroot_local-includes/usr/local/src
 	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p /be/config/chroot_local-includes/usr/local/src
 	"${GDFDL_ENTRYWRAPPER}" chroot chmod 777 /be/config/chroot_local-includes/usr/local/src
-	[ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ] && echo "Upstream Freeswitch sources found!"
-	[ -d "${GDFDL_BASEDIR}/.ci/GS5" ] && echo "Upstream GS5 sources found!"
+
+	if [ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ]
+		then
+		echo "Upstream Freeswitch sources found!"
+	fi
+
+	if [ -d "${GDFDL_BASEDIR}/.ci/GS5" ]
+		then
+		echo "Upstream GS5 sources found!"
+	fi
 else
 	echo "ERROR: No existing build environment installation found. Run installer first."
 	exit 1
