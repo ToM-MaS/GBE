@@ -28,7 +28,7 @@ if [[ ! -d ./freeswitch ]];
 	c=1
 	while [[ $c -le 5 ]]
 	do
-		git clone http://git.freeswitch.org/freeswitch.git freeswitch
+		git clone -b "${FREESWITCH_BRANCH}" http://git.freeswitch.org/freeswitch.git freeswitch
 		if [ "$?" -eq "0" ]; then
 			break;
 		else
@@ -40,13 +40,6 @@ if [[ ! -d ./freeswitch ]];
 		fi
 	done
 	set -e
-fi
-
-# FreeSwitch version handling
-#
-if [ x${FREESWITCH_VERSION} != x"HEAD" && x${FREESWITCH_VERSION} =! x"" ];
-then
-	git checkout ${FREESWITCH_VERSION}
 fi
 
 # loading autotalent for mod_ladspa
