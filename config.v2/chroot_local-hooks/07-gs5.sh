@@ -31,7 +31,7 @@ echo "machine Github.com
 " >  ~/.netrc
 fi
 
-# use latest revision if no explicit revision was given
+# use master branch if no explicit branch was given
 if [ x"${GS_BRANCH}" == x"" ]
 then
 	GS_BRANCH="master"
@@ -41,22 +41,26 @@ fi
 
 # Clone the git repository
 #
-set +e
-c=1
-while [[ $c -le 5 ]]
-do
-	git clone -b "${GS_BRANCH}" "${GS_GIT_URL}" "${GS_DIR}" 2>&1
-	if [ "$?" -eq "0" ]; then
-		break;
-	else
-		[[ $c -eq 5 ]] && exit 1
-		(( c++ ))
-		rm -rf "${GS_DIR}"
-		echo "$c. try in 3 seconds ..."
-		sleep 3
-	fi
-done
-set -e
+if [[ ! -d "${GS_DIR}" ]];
+	then
+	set +e
+	c=1
+	while [[ $c -le 5 ]]
+	do
+		git clone -b "${GS_BRANCH}" "${GS_GIT_URL}" "${GS_DIR}" 2>&1
+		if [ "$?" -eq "0" ]
+			then
+			break;
+		else
+			[[ $c -eq 5 ]] && exit 1
+			(( c++ ))
+			rm -rf "${GS_DIR}"
+			echo "$c. try in 3 seconds ..."
+			sleep 3
+		fi
+	done
+	set -e
+fi
 
 if [ -f "${GS_DIR}/config/application.rb" ]
 then
