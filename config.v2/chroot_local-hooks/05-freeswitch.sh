@@ -174,8 +174,13 @@ fi
 KERNEL_VERSION="`find /lib/modules -name 2.6*-686 -type d | cut -d"/" -f4`"
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" ]
 	then
-	(cd "${SRC_DIR}"; tar xfz wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz && WANPIPE_DIR="`find "${SRC_DIR}" -type d -name 'wanpipe-*'`" && cd "${WANPIPE_DIR}" && KVER="${KERNEL_VERSION}" make freetdm 2>&1 && make install 2>&1)
-	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" "`basename "${WANPIPE_DIR}"`")
+	cd "${SRC_DIR}"
+	tar xfz wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz
+	WANPIPE_DIR="`find "${SRC_DIR}" -type d -name 'wanpipe-*'`"
+	cd "${WANPIPE_DIR}"
+	KVER="${KERNEL_VERSION}" make freetdm 2>&1 && make install 2>&1
+	cd "${SRC_DIR}"
+	tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" "`basename "${WANPIPE_DIR}"`"
 else
 	# use pre-compiled archive
 	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" && WANPIPE_DIR="`find "${SRC_DIR}" -type d -name 'wanpipe-*'`" && cd "${WANPIPE_DIR}" && make install 2>&1)
@@ -184,8 +189,13 @@ fi
 # installing Sandoma ISDN driver for mod_freetdm
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" ]
 	then
-	(cd "${SRC_DIR}"; tar xfz libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz 2>&1 && SANGOMA_ISDN_DIR="`find "${SRC_DIR}" -type d -name 'libsng_isdn-*'`" && cd "${SANGOMA_ISDN_DIR}" && make install 2>&1)
-	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" "`basename "${SANGOMA_ISDN_DIR}"`")
+	cd "${SRC_DIR}"
+	tar xfz libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz 2>&1
+	SANGOMA_ISDN_DIR="`find "${SRC_DIR}" -type d -name 'libsng_isdn-*'`"
+	cd "${SANGOMA_ISDN_DIR}"
+	make install 2>&1
+	cd "${SRC_DIR}"
+	tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" "`basename "${SANGOMA_ISDN_DIR}"`"
 else
 	# use pre-compiled archive
 	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" && cd libsng_isdn-* && make install 2>&1)
@@ -194,8 +204,13 @@ fi
 # installing Sandoma SS7 driver for mod_freetdm
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" ]
 	then
-	(cd "${SRC_DIR}"; tar xfz libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz 2>&1 && SANGOMA_SS7_DIR="`find "${SRC_DIR}" -type d -name 'libsng_ss7-*'`" && cd "${SANGOMA_SS7_DIR}" && make install 2>&1)
-	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" "`basename "${SANGOMA_SS7_DIR}"`")
+	cd "${SRC_DIR}"
+	tar xfz libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz 2>&1
+	SANGOMA_SS7_DIR="`find "${SRC_DIR}" -type d -name 'libsng_ss7-*'`"
+	cd "${SANGOMA_SS7_DIR}"
+	make install 2>&1
+	cd "${SRC_DIR}"
+	tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" "`basename "${SANGOMA_SS7_DIR}"`"
 else
 	# use pre-compiled archive
 	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" && SANGOMA_SS7_DIR="`find "${SRC_DIR}" -type d -name 'libsng_ss7-*'`" && cd "${SANGOMA_SS7_DIR}" && make install 2>&1)
@@ -204,8 +219,14 @@ fi
 # installing libpri driver for mod_freetdm
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libpri-${FS3RD_freetdm_libpri}.tar" ]
 	then
-	(cd "${SRC_DIR}"; tar xfz libpri-${FS3RD_freetdm_libpri}.tar.gz 2>&1 && LIBPRI_DIR="`find "${SRC_DIR}" -type d -name 'libpri-*'`" && cd "${LIBPRI_DIR}" && make 2>&1 && make install 2>&1)
-	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libpri-${FS3RD_freetdm_libpri}.tar" "`basename "${LIBPRI_DIR}"`")
+	cd "${SRC_DIR}"
+	tar xfz libpri-${FS3RD_freetdm_libpri}.tar.gz 2>&1
+	LIBPRI_DIR="`find "${SRC_DIR}" -type d -name 'libpri-*'`"
+	cd "${LIBPRI_DIR}"
+	make 2>&1
+	make install 2>&1
+	cd "${SRC_DIR}"
+	tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libpri-${FS3RD_freetdm_libpri}.tar" "`basename "${LIBPRI_DIR}"`"
 else
 	# use pre-compiled archive
 	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" && LIBPRI_DIR="`find "${SRC_DIR}" -type d -name 'libpri-*'`" && cd "${LIBPRI_DIR}" && make install 2>&1)
