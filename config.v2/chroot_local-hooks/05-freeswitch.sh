@@ -229,7 +229,7 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libpri-${FS3RD_freetdm_lib
 	tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libpri-${FS3RD_freetdm_libpri}.tar" "`basename "${LIBPRI_DIR}"`"
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" && LIBPRI_DIR="`find "${SRC_DIR}" -type d -name 'libpri-*'`" && cd "${LIBPRI_DIR}" && make install 2>&1)
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libpri-${FS3RD_freetdm_libpri}.tar" && LIBPRI_DIR="`find "${SRC_DIR}" -type d -name 'libpri-*'`" && cd "${LIBPRI_DIR}" && make install 2>&1)
 fi
 
 # installing OpenR2 for mod_freetdm
@@ -249,7 +249,7 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" ]
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" ./dahdi-hfcs/)
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; rm -rf dahdi-hfcs; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd dahdi-hfcs && KVERS="${KERNEL_VERSION}" make install 2>&1)
+	(cd "${SRC_DIR}"; rm -rf dahdi-hfcs; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" && cd dahdi-hfcs && KVERS="${KERNEL_VERSION}" make install 2>&1)
 fi
 
 echo -e "GBE: Preparing FreeSwitch for compilation ...\n"
