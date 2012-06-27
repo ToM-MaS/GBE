@@ -198,7 +198,7 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetd
 	tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" "`basename "${SANGOMA_ISDN_DIR}"`"
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" && cd libsng_isdn-* && make install 2>&1)
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" && SANGOMA_ISDN_DIR="`find "${SRC_DIR}" -type d -name 'libsng_isdn-*'`" && cd "${SANGOMA_ISDN_DIR}" && make install 2>&1)
 fi
 
 # installing Sandoma SS7 driver for mod_freetdm
