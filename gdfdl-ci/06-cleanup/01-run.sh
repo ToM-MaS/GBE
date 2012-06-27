@@ -30,7 +30,7 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 		then
 		echo "GBE: Saving pre-compiled archives into cache directory ..."
 		[[ ! -d "${SRC_CACHE_BIN}" ]] && mkdir -p "${SRC_CACHE_BIN}"
-		find "${INSTALLBASEDIR}/src-cache-bin" -type f -name '*.tar' -exec cp -f '{}' "${SRC_CACHE_BIN}" \;
+		find "${INSTALLBASEDIR}/src-cache-bin" -name 'BIN_' -exec cp -rf '{}' "${SRC_CACHE_BIN}" \;
 	fi
 	set -e
 
