@@ -172,6 +172,7 @@ if [ x"${GDFDL_INSTALLTYPE}" == x"ci" ];
 	(cd "${GDFDL_INSTALL_URL}"; tar --exclude="./.ci" -c -f - . | ${BIN_CHROOT} "${GDFDL_INSTALLDIR}" tar -C "${GDFDL_DIR}" -x -f -)
 	${BIN_CHROOT} "${GDFDL_INSTALLDIR}" chown -R root.root "${GDFDL_DIR}" 2>&1 >/dev/null
 	${BIN_CHROOT} "${GDFDL_INSTALLDIR}" git --git-dir="${GDFDL_DIR}/.git" --work-tree="${GDFDL_DIR}" checkout "${GDFDL_BRANCH}" 2>&1 >/dev/null
+	[[ "`basename ${GDFDL_INSTALL_URL}`" == ".ci" ]] && ln -s "`basename "${GDFDL_INSTALLDIR}"`/iso" "`dirname "${GDFDL_INSTALLDIR}"`.artifacts"
 else
 	# Get GDFDL from remote Git
 	#
