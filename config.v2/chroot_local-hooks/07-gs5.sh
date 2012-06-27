@@ -20,17 +20,6 @@ echo -e "\n###########################################################
 
 echo -e "GBE: Downloading GS5 ...\n"
 
-# Setup Github user credentials for login
-#
-if [ ! -z "${GS_GIT_USER}" -a ! -z "${GS_GIT_PASSWORD}" ]
-then
-	echo "Github credentials found!"
-echo "machine Github.com
-  login ${GS_GIT_USER}
-  password ${GS_GIT_PASSWORD}
-" >  ~/.netrc
-fi
-
 # use master branch if no explicit branch was given
 if [ x"${GS_BRANCH}" == x"" ]
 then
@@ -43,6 +32,18 @@ fi
 #
 if [[ ! -d "${GS_DIR}" ]];
 	then
+
+	# Setup Github user credentials for login
+	#
+	if [ ! -z "${GS_GIT_USER}" -a ! -z "${GS_GIT_PASSWORD}" ]
+		then
+		echo "Github credentials found!"
+echo "machine Github.com
+login ${GS_GIT_USER}
+password ${GS_GIT_PASSWORD}
+" >  ~/.netrc
+	fi
+	
 	set +e
 	c=1
 	while [[ $c -le 5 ]]
@@ -60,14 +61,8 @@ if [[ ! -d "${GS_DIR}" ]];
 		fi
 	done
 	set -e
-fi
 
-if [ -f "${GS_DIR}/config/application.rb" ]
-then
-  rm -rf ~/.netrc
-else
-  rm -rf ~/.netrc
-  exit 1
+	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
 fi
 
 # Install delayed worker job

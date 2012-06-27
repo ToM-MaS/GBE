@@ -20,7 +20,7 @@ echo -e "\n###########################################################
 ## GBE: FreeSwitch installation\n\n"
 
 echo -e "GBE: Downloading FreeSwitch and 3rd party components ...\n"
-cd ${SRC_DIR}
+cd "${SRC_DIR}"
 
 if [[ ! -d ./freeswitch ]];
 	then
@@ -43,19 +43,19 @@ if [[ ! -d ./freeswitch ]];
 fi
 
 # loading autotalent for mod_ladspa
-wget -P ${SRC_DIR} -c -t 5 --waitretry=3 http://web.mit.edu/tbaran/www/autotalent-${FS3RD_ladspa_autotalent}.tar.gz 2>&1
+[ ! -f "${SRC_DIR}/autotalent-${FS3RD_ladspa_autotalent}.tar.gz" ] && wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 http://web.mit.edu/tbaran/www/autotalent-${FS3RD_ladspa_autotalent}.tar.gz 2>&1
 # loading opal for mod_opal
 set +e
 c=1
 while [[ $c -le 5 ]]
 do
-	svn --non-interactive co https://opalvoip.svn.sourceforge.net/svnroot/opalvoip/ptlib/${FS3RD_opal_ptlib} ptlib 2>&1
+	svn --non-interactive co "https://opalvoip.svn.sourceforge.net/svnroot/opalvoip/ptlib/${FS3RD_opal_ptlib}" "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}" 2>&1
 	if [ "$?" -eq "0" ]; then
 		break;
 	else
 		[[ $c -eq 5 ]] && exit 1
 		(( c++ ))
-		rm -rf ptlib
+		rm -rf "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}"
 		echo "$c. try in 3 seconds ..."
 		sleep 3
 	fi
@@ -64,38 +64,38 @@ done
 c=1
 while [[ $c -le 5 ]]
 do
-	svn --non-interactive co https://opalvoip.svn.sourceforge.net/svnroot/opalvoip/opal/${FS3RD_opal} opal 2>&1
+	svn --non-interactive co "https://opalvoip.svn.sourceforge.net/svnroot/opalvoip/opal/${FS3RD_opal}" "${SRC_DIR}/opal-${FS3RD_opal}" 2>&1
 	if [ "$?" -eq "0" ]; then
 		break;
 	else
 		[[ $c -eq 5 ]] && exit 1
 		(( c++ ))
-		rm -rf opal
+		rm -rf "${SRC_DIR}/opal-${FS3RD_opal}"
 		echo "$c. try in 3 seconds ..."
 		sleep 3
 	fi
 done
 set -e
 # loading Sangoma wanpipe driver for mod_freetdm
-wget -P ${SRC_DIR} -c -t 5 --waitretry=3 ftp://ftp.sangoma.com/linux/current_wanpipe/wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz 2>&1
+[ ! -f "${SRC_DIR}/wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz" ] && wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "ftp://ftp.sangoma.com/linux/current_wanpipe/wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz" 2>&1
 # loading Sangoma ISDN driver for mod_freetdm
-wget -P ${SRC_DIR} -c -t 5 --waitretry=3 ftp://ftp.sangoma.com/linux/libsng_isdn/libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz 2>&1
+[ ! -f "${SRC_DIR}/libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz" ] && wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "ftp://ftp.sangoma.com/linux/libsng_isdn/libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz" 2>&1
 # loading Sangoma SS7 driver for mod_freetdm
-wget -P ${SRC_DIR} -c -t 5 --waitretry=3 ftp://ftp.sangoma.com/linux/libsng_ss7/libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz 2>&1
+[ ! -f "${SRC_DIR}/libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz" ] && wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "ftp://ftp.sangoma.com/linux/libsng_ss7/libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz" 2>&1
 # loading libpri driver for mod_freetdm
-wget -P ${SRC_DIR} -c -t 5 --waitretry=3 http://downloads.asterisk.org/pub/telephony/libpri/releases/libpri-${FS3RD_freetdm_libpri}.tar.gz 2>&1
+[ ! -f "${SRC_DIR}/libpri-${FS3RD_freetdm_libpri}.tar.gz" ] && wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://downloads.asterisk.org/pub/telephony/libpri/releases/libpri-${FS3RD_freetdm_libpri}.tar.gz" 2>&1
 # loading OpenR2 driver for mod_freetdm
 set +e
 c=1
 while [[ $c -le 5 ]]
 do
-	svn --non-interactive co http://openr2.googlecode.com/svn/${FS3RD_freetdm_openr2}/ openr2 2>&1
+	svn --non-interactive co "http://openr2.googlecode.com/svn/${FS3RD_freetdm_openr2}/" "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}" 2>&1
 	if [ "$?" -eq "0" ]; then
 		break;
 	else
 		[[ $c -eq 5 ]] && exit 1
 		(( c++ ))
-		rm -rf openr2
+		rm -rf "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}"
 		echo "$c. try in 3 seconds ..."
 		sleep 3
 	fi
@@ -104,13 +104,13 @@ done
 c=1
 while [[ $c -le 5 ]]
 do
-	git clone --depth=0 git://dahdi-hfcs.git.sourceforge.net/gitroot/dahdi-hfcs/dahdi-hfcs dahdi-hfcs 2>&1
+	git clone --depth=0 "git://dahdi-hfcs.git.sourceforge.net/gitroot/dahdi-hfcs/dahdi-hfcs" "${SRC_DIR}/dahdi-hfcs" 2>&1
 	if [ "$?" -eq "0" ]; then
 		break;
 	else
 		[[ $c -eq 5 ]] && exit 1
 		(( c++ ))
-		rm -rf dahdi-hfcs
+		rm -rf "${SRC_DIR}/dahdi-hfcs"
 		echo "$c. try in 3 seconds ..."
 		sleep 3
 	fi
@@ -119,22 +119,22 @@ set -e
 
 echo -e "GBE: Installing FreeSwitch 3rd party components ...\n"
 # installing autotalent for mod_ladspa
-cd ${SRC_DIR}; tar xfz autotalent-${FS3RD_ladspa_autotalent}.tar.gz && cd autotalent-* && make install 2>&1
+cd "${SRC_DIR}"; tar xfz autotalent-${FS3RD_ladspa_autotalent}.tar.gz && cd autotalent-* && make install 2>&1
 # installing opal for mod_opal
-cd ${SRC_DIR}/ptlib; ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1
-cd ${SRC_DIR}/opal; PKG_CONFIG_PATH=/usr/lib/pkgconfig ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1
+cd "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}"; ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1
+cd "${SRC_DIR}/opal-${FS3RD_opal}"; PKG_CONFIG_PATH=/usr/lib/pkgconfig ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1
 # installing Sandoma wanpipe driver for mod_freetdm - only loadable when explicitly booting with 686 kernel or from local installation
-cd ${SRC_DIR}; tar xfz wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz && cd wanpipe-* && KVER=`find /lib/modules -name 2.6*-686 -type d | cut -d"/" -f4` make freetdm 2>&1 && make install 2>&1
+cd "${SRC_DIR}"; tar xfz wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz && cd wanpipe-* && KVER=`find /lib/modules -name 2.6*-686 -type d | cut -d"/" -f4` make freetdm 2>&1 && make install 2>&1
 # installing Sandoma ISDN driver for mod_freetdm
-cd ${SRC_DIR}; tar xfz libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz 2>&1 && cd libsng_isdn-* 2>&1 && make install
+cd "${SRC_DIR}"; tar xfz libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz 2>&1 && cd libsng_isdn-* 2>&1 && make install
 # installing Sandoma SS7 driver for mod_freetdm
-cd ${SRC_DIR}; tar xfz libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz 2>&1 && cd libsng_ss7-* 2>&1 && make install
+cd "${SRC_DIR}"; tar xfz libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz 2>&1 && cd libsng_ss7-* 2>&1 && make install
 # installing libpri driver for mod_freetdm
-cd ${SRC_DIR}; tar xfz libpri-${FS3RD_freetdm_libpri}.tar.gz 2>&1 && cd libpri-* 2>&1 && make 2>&1 && make install 2>&1
+cd "${SRC_DIR}"; tar xfz libpri-${FS3RD_freetdm_libpri}.tar.gz 2>&1 && cd libpri-* 2>&1 && make 2>&1 && make install 2>&1
 # installing OpenR2 for mod_freetdm
-mkdir ${SRC_DIR}/openr2/mybuild; cd ${SRC_DIR}/openr2/mybuild; cmake -DCMAKE_INSTALL_PREFIX=/usr 2>&1 && make 2>&1 && make install 2>&1
+mkdir "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}/mybuild"; cd "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}/mybuild"; cmake -DCMAKE_INSTALL_PREFIX=/usr 2>&1 && make 2>&1 && make install 2>&1
 # installing DAHDI for mod_freetdm
-cd ${SRC_DIR}/dahdi-hfcs; make 2>&1 && make install 2>&1
+cd "${SRC_DIR}/dahdi-hfcs"; make 2>&1 && make install 2>&1
 
 echo -e "GBE: Preparing FreeSwitch for compilation ...\n"
 cd ${SRC_DIR}/freeswitch
