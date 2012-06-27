@@ -123,7 +123,7 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	rm -rf "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/*"
 
 	echo "GBE: Copying 3rd party depdendencies into their places ..."
-	cp -rf "${SRC_CACHE}/*" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+	cp -rf "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 
 	echo -n "GBE: Copying latest upstream project repositories into their places ... "
 	if [ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ]
