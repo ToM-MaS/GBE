@@ -122,8 +122,8 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/*"
 	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/opt/*"
 
-	ls -la "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
-	ls -la "${GDFDL_DIR}/config/chroot_local-includes/opt"
+	ls -la "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
+	ls -la "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt"
 
 	echo "GBE: Copying 3rd party depdendencies into their places ..."
 	cp -rp "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
