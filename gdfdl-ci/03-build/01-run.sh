@@ -80,36 +80,42 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	fi
 
 	# loading OpenR2 driver for mod_freetdm
-	c=1
-	while [[ $c -le 5 ]]
-	do
-		svn --non-interactive co "http://openr2.googlecode.com/svn/${FS3RD_freetdm_openr2}/" "${SRC_CACHE}/openr2-${FS3RD_freetdm_openr2}"
-		if [ "$?" -eq "0" ]; then
-			break;
-		else
-			[[ $c -eq 5 ]] && exit 1
-			(( c++ ))
-			rm -rf "${SRC_CACHE}/openr2-${FS3RD_freetdm_openr2}"
-			echo "$c. try in 3 seconds ..."
-			sleep 3
-		fi
-	done
+	if [ ! -d "${SRC_CACHE}/openr2-${FS3RD_freetdm_openr2}" ]
+		then
+		c=1
+		while [[ $c -le 5 ]]
+		do
+			svn --non-interactive co "http://openr2.googlecode.com/svn/${FS3RD_freetdm_openr2}/" "${SRC_CACHE}/openr2-${FS3RD_freetdm_openr2}"
+			if [ "$?" -eq "0" ]; then
+				break;
+			else
+				[[ $c -eq 5 ]] && exit 1
+				(( c++ ))
+				rm -rf "${SRC_CACHE}/openr2-${FS3RD_freetdm_openr2}"
+				echo "$c. try in 3 seconds ..."
+				sleep 3
+			fi
+		done
+	fi
 
 	# loading DAHDI driver for mod_freetdm
-	c=1
-	while [[ $c -le 5 ]]
-	do
-		git clone --depth=0 "git://dahdi-hfcs.git.sourceforge.net/gitroot/dahdi-hfcs/dahdi-hfcs" "${SRC_CACHE}/dahdi-hfcs"
-		if [ "$?" -eq "0" ]; then
-			break;
-		else
-			[[ $c -eq 5 ]] && exit 1
-			(( c++ ))
-			rm -rf "${SRC_CACHE}/dahdi-hfcs"
-			echo "$c. try in 3 seconds ..."
-			sleep 3
-		fi
-	done
+	if [ ! -d "${SRC_CACHE}/${SRC_CACHE}/dahdi-hfcs" ]
+		then
+		c=1
+		while [[ $c -le 5 ]]
+		do
+			git clone --depth=0 "git://dahdi-hfcs.git.sourceforge.net/gitroot/dahdi-hfcs/dahdi-hfcs" "${SRC_CACHE}/dahdi-hfcs"
+			if [ "$?" -eq "0" ]; then
+				break;
+			else
+				[[ $c -eq 5 ]] && exit 1
+				(( c++ ))
+				rm -rf "${SRC_CACHE}/dahdi-hfcs"
+				echo "$c. try in 3 seconds ..."
+				sleep 3
+			fi
+		done
+	fi
 	set -e
 
 	# cleanup old files
@@ -117,19 +123,19 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	rm -rf "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/*"
 
 	echo "GBE: Copying 3rd party depdendencies into their places ..."
-	cp -rf "${SRC_CACHE}/*" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
+	cp -rf "${SRC_CACHE}/*" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 
 	echo -n "GBE: Copying latest upstream project repositories into their places ... "
 	if [ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ]
 		then
 		echo -n "FreeSWITCH "
-		cp -r "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
+		cp -r "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 	fi
 
 	if [ -d "${GDFDL_BASEDIR}/.ci/GS5" ]
 		then
 		echo -n "GS5 "
-		cp -r "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt"
+		cp -r "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/"
 	fi
 
 	echo "... done"
