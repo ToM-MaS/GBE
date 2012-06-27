@@ -119,23 +119,23 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	set -e
 
 	# cleanup old files
-	rm -rf "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/*"
-	rm -rf "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/*"
+	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/*"
+	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/opt/*"
 
 	echo "GBE: Copying 3rd party depdendencies into their places ..."
-	cp -r "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+	cp -rp "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 
 	echo -n "GBE: Copying latest upstream project repositories into their places ... "
 	if [ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ]
 		then
 		echo -n "FreeSWITCH "
-		cp -r "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+		cp -rp "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 	fi
 
 	if [ -d "${GDFDL_BASEDIR}/.ci/GS5" ]
 		then
 		echo -n "GS5 "
-		cp -r "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/"
+		cp -rp "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/"
 	fi
 
 	echo "... done"
