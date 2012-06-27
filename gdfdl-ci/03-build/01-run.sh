@@ -26,7 +26,7 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 
 	[ ! -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src" ] && "${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
 	[ ! -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt" ] && "${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/opt"
-	[ ! -d "${SRC_CACHE}" ] && mkdir -p "${SRC_CACHE}" || rm -rf "${SRC_CACHE}/*"
+	[ ! -d "${SRC_CACHE}" ] && mkdir -p "${SRC_CACHE}"
 
 	echo "GBE: Caching 3rd party dependencies ..."
 	# Download 3rd party modules if not cached already
@@ -123,7 +123,7 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	rm -rf "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/*"
 
 	echo "GBE: Copying 3rd party depdendencies into their places ..."
-	cp -rf "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+	cp -r "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 
 	echo -n "GBE: Copying latest upstream project repositories into their places ... "
 	if [ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ]
