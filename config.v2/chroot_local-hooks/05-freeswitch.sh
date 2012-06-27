@@ -239,7 +239,7 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_ope
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" "./openr2-${FS3RD_freetdm_openr2}/")
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; rm -rf "openr2-${FS3RD_freetdm_openr2}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd "openr2-${FS3RD_freetdm_openr2}/mybuild" && make install 2>&1)
+	(cd "${SRC_DIR}"; rm -rf "openr2-${FS3RD_freetdm_openr2}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd "openr2-${FS3RD_freetdm_openr2}" && make install 2>&1)
 fi
 
 # installing DAHDI for mod_freetdm
