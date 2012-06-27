@@ -24,8 +24,10 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	INSTALLBASEDIR="`"${GDFDL_ENTRYWRAPPER}" chroot --printdir`"
 	SRC_CACHE="${GDFDL_BASEDIR}/.ci/src-cache"
 
-	[ ! -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src" ] && "${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
-	[ ! -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt" ] && "${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/opt"
+	[ -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src" ] && "${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
+	[ -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt" ] && "${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/opt"
+	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
+	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/opt"
 	[ ! -d "${SRC_CACHE}" ] && mkdir -p "${SRC_CACHE}"
 
 	echo "GBE: Caching 3rd party dependencies ..."
@@ -118,24 +120,20 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	fi
 	set -e
 
-	# cleanup old files
-	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"*
-	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/opt/"*
-
 	echo "GBE: Copying 3rd party depdendencies into their places ..."
-	cp -rp "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+	cp -rpf "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 
 	echo -n "GBE: Copying latest upstream project repositories into their places ... "
 	if [ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ]
 		then
 		echo -n "FreeSWITCH "
-		cp -rp "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+		cp -rpf "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 	fi
 
 	if [ -d "${GDFDL_BASEDIR}/.ci/GS5" ]
 		then
 		echo -n "GS5 "
-		cp -rp "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/"
+		cp -rpf "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/"
 	fi
 
 	echo "... done"
