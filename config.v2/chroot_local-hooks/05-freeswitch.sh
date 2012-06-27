@@ -117,24 +117,99 @@ do
 done
 set -e
 
+# create temporal archive dir for compiled binaries
+SRC_CACHE="/src-cache-bin"
+mkdir -p -m 777 "${SRC_CACHE}"
+
 echo -e "GBE: Installing FreeSwitch 3rd party components ...\n"
 # installing autotalent for mod_ladspa
-cd "${SRC_DIR}"; tar xfz autotalent-${FS3RD_ladspa_autotalent}.tar.gz && cd autotalent-* && make install 2>&1
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_autotalent-${FS3RD_ladspa_autotalent}.tar" ]
+	then
+	(cd "${SRC_DIR}"; tar xfz "autotalent-${FS3RD_ladspa_autotalent}.tar.gz" && cd "autotalent-${FS3RD_ladspa_autotalent}" && make install 2>&1)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_autotalent-${FS3RD_ladspa_autotalent}.tar" "./autotalent-${FS3RD_ladspa_autotalent}/")
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_autotalent-${FS3RD_ladspa_autotalent}.tar" && cd "autotalent-${FS3RD_ladspa_autotalent}" && make install 2>&1)
+fi
+
 # installing opal for mod_opal
-cd "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}"; ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1
-cd "${SRC_DIR}/opal-${FS3RD_opal}"; PKG_CONFIG_PATH=/usr/lib/pkgconfig ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar" ]
+	then
+	(cd "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}"; ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar" "./ptlib-${FS3RD_opal_ptlib}/")
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar" && cd "autotalent-${FS3RD_ladspa_autotalent}" && make install 2>&1)
+fi
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" ]
+	then
+	(cd "${SRC_DIR}/opal-${FS3RD_opal}"; PKG_CONFIG_PATH=/usr/lib/pkgconfig ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" "./opal-${FS3RD_opal}/")
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" && cd "opal-${FS3RD_opal}" && make install 2>&1)
+fi
+
 # installing Sandoma wanpipe driver for mod_freetdm - only loadable when explicitly booting with 686 kernel or from local installation
-cd "${SRC_DIR}"; tar xfz wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz && cd wanpipe-* && KVER=`find /lib/modules -name 2.6*-686 -type d | cut -d"/" -f4` make freetdm 2>&1 && make install 2>&1
+KERNEL_VERSION="`find /lib/modules -name 2.6*-686 -type d | cut -d"/" -f4`"
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" ]
+	then
+	(cd "${SRC_DIR}"; tar xfz wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz && cd wanpipe-* && KVER="${KERNEL_VERSION}" make freetdm 2>&1 && make install 2>&1)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" "./wanpipe-*/")
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" && cd wanpipe-* && make install 2>&1)
+fi
+
 # installing Sandoma ISDN driver for mod_freetdm
-cd "${SRC_DIR}"; tar xfz libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz 2>&1 && cd libsng_isdn-* 2>&1 && make install
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" ]
+	then
+	(cd "${SRC_DIR}"; tar xfz libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tgz 2>&1 && cd libsng_isdn-* 2>&1 && make install)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" "./libsng_isdn-*/")
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_isdn-${FS3RD_freetdm_sangoma_isdn}.i686.tar" && cd libsng_isdn-* && make install 2>&1)
+fi
+
 # installing Sandoma SS7 driver for mod_freetdm
-cd "${SRC_DIR}"; tar xfz libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz 2>&1 && cd libsng_ss7-* 2>&1 && make install
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" ]
+	then
+	(cd "${SRC_DIR}"; tar xfz libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tgz 2>&1 && cd libsng_ss7-* 2>&1 && make install)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" "./libsng_ss7-*/")
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" && cd libsng_ss7-* && make install 2>&1)
+fi
+
 # installing libpri driver for mod_freetdm
-cd "${SRC_DIR}"; tar xfz libpri-${FS3RD_freetdm_libpri}.tar.gz 2>&1 && cd libpri-* 2>&1 && make 2>&1 && make install 2>&1
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libpri-${FS3RD_freetdm_libpri}.tar" ]
+	then
+	(cd "${SRC_DIR}"; tar xfz libpri-${FS3RD_freetdm_libpri}.tar.gz 2>&1 && cd libpri-* 2>&1 && make 2>&1 && make install 2>&1)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_libpri-${FS3RD_freetdm_libpri}.tar" "./libpri-*/")
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_libsng_ss7-4-${FS3RD_freetdm_sangoma_ss7}.i686.tar" && cd libpri-* && make install 2>&1)
+fi
+
 # installing OpenR2 for mod_freetdm
-mkdir "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}/mybuild"; cd "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}/mybuild"; cmake -DCMAKE_INSTALL_PREFIX=/usr 2>&1 && make 2>&1 && make install 2>&1
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" ]
+	then
+	(mkdir "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}/mybuild"; cd "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}/mybuild"; cmake -DCMAKE_INSTALL_PREFIX=/usr 2>&1 && make 2>&1 && make install 2>&1)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" "./openr2-${FS3RD_freetdm_openr2}/")
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd "openr2-${FS3RD_freetdm_openr2}/mybuild" && make install 2>&1)
+fi
+
 # installing DAHDI for mod_freetdm
-cd "${SRC_DIR}/dahdi-hfcs"; make 2>&1 && make install 2>&1
+if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" ]
+	then
+	(cd "${SRC_DIR}/dahdi-hfcs"; make 2>&1 && make install 2>&1)
+	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" ./dahdi-hfcs/)
+else
+	# use pre-compiled archive
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd dahdi-hfcs && make install 2>&1)
+fi
 
 echo -e "GBE: Preparing FreeSwitch for compilation ...\n"
 cd ${SRC_DIR}/freeswitch
@@ -259,4 +334,4 @@ chown -R freeswitch.adm /var/log/freeswitch
 chown -R freeswitch.root /opt/freeswitch
 
 echo -e "GBE: Cleaning up FreeSwitch sources ...\n"
-rm -rf ${SRC_DIR}/*
+rm -rf "${SRC_DIR}/"*
