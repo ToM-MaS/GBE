@@ -46,35 +46,44 @@ fi
 [ ! -f "${SRC_DIR}/autotalent-${FS3RD_ladspa_autotalent}.tar.gz" ] && wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 http://web.mit.edu/tbaran/www/autotalent-${FS3RD_ladspa_autotalent}.tar.gz 2>&1
 # loading opal for mod_opal
 set +e
-c=1
-while [[ $c -le 5 ]]
-do
-	svn --non-interactive co "https://opalvoip.svn.sourceforge.net/svnroot/opalvoip/ptlib/${FS3RD_opal_ptlib}" "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}" 2>&1
-	if [ "$?" -eq "0" ]; then
-		break;
-	else
-		[[ $c -eq 5 ]] && exit 1
-		(( c++ ))
-		rm -rf "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}"
-		echo "$c. try in 3 seconds ..."
-		sleep 3
-	fi
-done
+if [ ! -d "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}" ]
+	then
+	
+	c=1
+	while [[ $c -le 5 ]]
+	do
+		svn --non-interactive co "https://opalvoip.svn.sourceforge.net/svnroot/opalvoip/ptlib/${FS3RD_opal_ptlib}" "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}" 2>&1
+		if [ "$?" -eq "0" ]; then
+			break;
+		else
+			[[ $c -eq 5 ]] && exit 1
+			(( c++ ))
+			rm -rf "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}"
+			echo "$c. try in 3 seconds ..."
+			sleep 3
+		fi
+	done
+fi
 
-c=1
-while [[ $c -le 5 ]]
-do
-	svn --non-interactive co "https://opalvoip.svn.sourceforge.net/svnroot/opalvoip/opal/${FS3RD_opal}" "${SRC_DIR}/opal-${FS3RD_opal}" 2>&1
-	if [ "$?" -eq "0" ]; then
-		break;
-	else
-		[[ $c -eq 5 ]] && exit 1
-		(( c++ ))
-		rm -rf "${SRC_DIR}/opal-${FS3RD_opal}"
-		echo "$c. try in 3 seconds ..."
-		sleep 3
-	fi
-done
+if [ ! -d "${SRC_DIR}/opal-${FS3RD_opal}" ]
+	then
+	
+	c=1
+	while [[ $c -le 5 ]]
+	do
+		svn --non-interactive co "https://opalvoip.svn.sourceforge.net/svnroot/opalvoip/opal/${FS3RD_opal}" "${SRC_DIR}/opal-${FS3RD_opal}" 2>&1
+		if [ "$?" -eq "0" ]; then
+			break;
+		else
+			[[ $c -eq 5 ]] && exit 1
+			(( c++ ))
+			rm -rf "${SRC_DIR}/opal-${FS3RD_opal}"
+			echo "$c. try in 3 seconds ..."
+			sleep 3
+		fi
+	done
+fi
+
 set -e
 # loading Sangoma wanpipe driver for mod_freetdm
 [ ! -f "${SRC_DIR}/wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz" ] && wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "ftp://ftp.sangoma.com/linux/current_wanpipe/wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz" 2>&1
@@ -86,35 +95,44 @@ set -e
 [ ! -f "${SRC_DIR}/libpri-${FS3RD_freetdm_libpri}.tar.gz" ] && wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://downloads.asterisk.org/pub/telephony/libpri/releases/libpri-${FS3RD_freetdm_libpri}.tar.gz" 2>&1
 # loading OpenR2 driver for mod_freetdm
 set +e
-c=1
-while [[ $c -le 5 ]]
-do
-	svn --non-interactive co "http://openr2.googlecode.com/svn/${FS3RD_freetdm_openr2}/" "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}" 2>&1
-	if [ "$?" -eq "0" ]; then
-		break;
-	else
-		[[ $c -eq 5 ]] && exit 1
-		(( c++ ))
-		rm -rf "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}"
-		echo "$c. try in 3 seconds ..."
-		sleep 3
-	fi
-done
+if [ ! -d "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}" ]
+	then
+
+	c=1
+	while [[ $c -le 5 ]]
+	do
+		svn --non-interactive co "http://openr2.googlecode.com/svn/${FS3RD_freetdm_openr2}/" "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}" 2>&1
+		if [ "$?" -eq "0" ]; then
+			break;
+		else
+			[[ $c -eq 5 ]] && exit 1
+			(( c++ ))
+			rm -rf "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}"
+			echo "$c. try in 3 seconds ..."
+			sleep 3
+		fi
+	done
+fi
+
 # loading DAHDI driver for mod_freetdm
-c=1
-while [[ $c -le 5 ]]
-do
-	git clone --depth=0 "git://dahdi-hfcs.git.sourceforge.net/gitroot/dahdi-hfcs/dahdi-hfcs" "${SRC_DIR}/dahdi-hfcs" 2>&1
-	if [ "$?" -eq "0" ]; then
-		break;
-	else
-		[[ $c -eq 5 ]] && exit 1
-		(( c++ ))
-		rm -rf "${SRC_DIR}/dahdi-hfcs"
-		echo "$c. try in 3 seconds ..."
-		sleep 3
-	fi
-done
+if [ ! -d "${SRC_DIR}/dahdi-hfcs" ]
+	then
+
+	c=1
+	while [[ $c -le 5 ]]
+	do
+		git clone --depth=0 "git://dahdi-hfcs.git.sourceforge.net/gitroot/dahdi-hfcs/dahdi-hfcs" "${SRC_DIR}/dahdi-hfcs" 2>&1
+		if [ "$?" -eq "0" ]; then
+			break;
+		else
+			[[ $c -eq 5 ]] && exit 1
+			(( c++ ))
+			rm -rf "${SRC_DIR}/dahdi-hfcs"
+			echo "$c. try in 3 seconds ..."
+			sleep 3
+		fi
+	done
+fi
 set -e
 
 # create temporal archive dir for compiled binaries
@@ -140,7 +158,7 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar" "./ptlib-${FS3RD_opal_ptlib}/")
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar" && cd "autotalent-${FS3RD_ladspa_autotalent}" && make install 2>&1)
+	(cd "${SRC_DIR}"; rm -rf "ptlib-${FS3RD_opal_ptlib}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar" && cd "ptlib-${FS3RD_opal_ptlib}" && make install 2>&1)
 fi
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" ]
 	then
@@ -149,7 +167,7 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" ]
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" "./opal-${FS3RD_opal}/")
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" && cd "opal-${FS3RD_opal}" && make install 2>&1)
+	(cd "${SRC_DIR}"; rm -rf "opal-${FS3RD_opal}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" && cd "opal-${FS3RD_opal}" && make install 2>&1)
 fi
 
 # installing Sandoma wanpipe driver for mod_freetdm - only loadable when explicitly booting with 686 kernel or from local installation
@@ -200,7 +218,7 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_ope
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" "./openr2-${FS3RD_freetdm_openr2}/")
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd "openr2-${FS3RD_freetdm_openr2}/mybuild" && make install 2>&1)
+	(cd "${SRC_DIR}"; rm -rf "openr2-${FS3RD_freetdm_openr2}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd "openr2-${FS3RD_freetdm_openr2}/mybuild" && make install 2>&1)
 fi
 
 # installing DAHDI for mod_freetdm
@@ -210,7 +228,7 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" ]
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" ./dahdi-hfcs/)
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd dahdi-hfcs && make install 2>&1)
+	(cd "${SRC_DIR}"; rm -rf dahdi-hfcs; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd dahdi-hfcs && make install 2>&1)
 fi
 
 echo -e "GBE: Preparing FreeSwitch for compilation ...\n"
