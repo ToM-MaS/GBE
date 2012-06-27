@@ -178,12 +178,12 @@ if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-
 	tar xfz wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tgz
 	WANPIPE_DIR="`find "${SRC_DIR}" -type d -name 'wanpipe-*'`"
 	cd "${WANPIPE_DIR}"
-	KVER="${KERNEL_VERSION}" make freetdm 2>&1 && make install 2>&1
+	KVER="${KERNEL_VERSION}" make freetdm 2>&1 && KVER="${KERNEL_VERSION}" make install 2>&1
 	cd "${SRC_DIR}"
 	tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" "`basename "${WANPIPE_DIR}"`"
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" && WANPIPE_DIR="`find "${SRC_DIR}" -type d -name 'wanpipe-*'`" && cd "${WANPIPE_DIR}" && make install 2>&1)
+	(cd "${SRC_DIR}"; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_${KERNEL_VERSION}_wanpipe-${FS3RD_freetdm_sangoma_wanpipe}.tar" && WANPIPE_DIR="`find "${SRC_DIR}" -type d -name 'wanpipe-*'`" && cd "${WANPIPE_DIR}" && KVER="${KERNEL_VERSION}" make install 2>&1)
 fi
 
 # installing Sandoma ISDN driver for mod_freetdm
@@ -235,7 +235,7 @@ fi
 # installing OpenR2 for mod_freetdm
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" ]
 	then
-	(mkdir "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}/mybuild"; cd "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}/mybuild"; cmake -DCMAKE_INSTALL_PREFIX=/usr 2>&1 && make 2>&1 && make install 2>&1)
+	(cd "${SRC_DIR}/openr2-${FS3RD_freetdm_openr2}"; cmake -DCMAKE_INSTALL_PREFIX=/usr 2>&1 && make 2>&1 && make install 2>&1)
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" "./openr2-${FS3RD_freetdm_openr2}/")
 else
 	# use pre-compiled archive
@@ -245,11 +245,11 @@ fi
 # installing DAHDI for mod_freetdm
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" ]
 	then
-	(cd "${SRC_DIR}/dahdi-hfcs"; make 2>&1 && make install 2>&1)
+	(cd "${SRC_DIR}/dahdi-hfcs"; KVERS="${KERNEL_VERSION}" make 2>&1 && KVERS="${KERNEL_VERSION}" make install 2>&1)
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_dahdi-hfcs.tar" ./dahdi-hfcs/)
 else
 	# use pre-compiled archive
-	(cd "${SRC_DIR}"; rm -rf dahdi-hfcs; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd dahdi-hfcs && make install 2>&1)
+	(cd "${SRC_DIR}"; rm -rf dahdi-hfcs; tar xf "BIN_${GDFDL_BASEDISTRIBUTION^^}_openr2-${FS3RD_freetdm_openr2}.tar" && cd dahdi-hfcs && KVERS="${KERNEL_VERSION}" make install 2>&1)
 fi
 
 echo -e "GBE: Preparing FreeSwitch for compilation ...\n"

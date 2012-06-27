@@ -19,3 +19,6 @@ osptoolkit libosptk3 libosptk3-dev
 
 # mod_snmp
 libsnmp-dev
+
+# mod_freetdm - openrt2
+cmake
