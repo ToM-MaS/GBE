@@ -136,6 +136,7 @@ fi
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar" ]
 	then
 	(cd "${SRC_DIR}/ptlib-${FS3RD_opal_ptlib}"; ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1)
+	mkdir -p "`dirname ${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar`"
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_ptlib-${FS3RD_opal_ptlib}.tar" "./ptlib-${FS3RD_opal_ptlib}/")
 else
 	# use pre-compiled archive
@@ -144,6 +145,7 @@ fi
 if [ ! -f "${SRC_DIR}/BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" ]
 	then
 	(cd "${SRC_DIR}/opal-${FS3RD_opal}"; PKG_CONFIG_PATH=/usr/lib/pkgconfig ./configure --prefix=/usr 2>&1 && make 2>&1 && make install 2>&1)
+	mkdir -p "`dirname ${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar`"
 	(cd "${SRC_DIR}"; tar cf "${SRC_CACHE}/BIN_${GDFDL_BASEDISTRIBUTION^^}_opal-${FS3RD_opal}.tar" "./opal-${FS3RD_opal}/")
 else
 	# use pre-compiled archive
