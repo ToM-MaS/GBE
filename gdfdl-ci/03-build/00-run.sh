@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # GDFDL - A Development Framework for Debian live-build
-# CI cleanup script
+# CI build wrapper
 #
 # Copyright (c) 2012, Julian Pawlowski <jp@jps-networks.eu>
 # See LICENSE.GDFDL file for details.
@@ -21,25 +21,25 @@ SELF="`readlink -f $0`"
 GDFDL_BASEDIR_CI_STEP="`dirname ${SELF}`"
 GDFDL_BASEDIR_CI="`dirname ${GDFDL_BASEDIR_CI_STEP}`"
 GDFDL_BASEDIR="`dirname ${GDFDL_BASEDIR_CI}`"
-GDFDL_ENTRYWRAPPER="`find "${GDFDL_BASEDIR}/.ci" -maxdepth 1 -name *.sh`"
+GDFDL_ENTRYWRAPPER="`find "${GDFDL_BASEDIR}/.ci" -maxdepth 1 -name '*.sh'`"
 
 # If we find another script named '01-run.sh', start this instead.
 # If --force option was given, stay in line...
 #
 if [[ -f "${GDFDL_BASEDIR_CI_STEP}/01-run.sh" && x"$1" != x"--force" ]]
 	then
-	echo "NOTE: '${GDFDL_BASEDIR_CI_STEP}/01-run.sh' found, handing over to that one ..."
+	echo "CI - NOTE: '${GDFDL_BASEDIR_CI_STEP}/01-run.sh' found, handing over to that one ..."
 	"${GDFDL_BASEDIR_CI_STEP}/01-run.sh" "${@}"
 	exit 0
 fi
 
-# run cleanup taks
+# run build
 #
-if [[ -f "${GDFDL_ENTRYWRAPPER}" ]]
+if [[ -f "${GDFDL_ENTRYWRAPPER}" ]];
 	then
-	"${GDFDL_ENTRYWRAPPER}" full-clean
+	"${GDFDL_ENTRYWRAPPER}" build --verbose
 else
-	echo "ERROR: No existing build environment installation found. Run installer first."
+	echo "CI - ERROR: No existing build environment installation found. Run installer first."
 	exit 1
 fi
 
@@ -50,7 +50,7 @@ set +e
 GDFDL_CI_NEXT="`find "${GDFDL_BASEDIR_CI_STEP}" -maxdepth 1 -type f -name '01-*.sh' | grep -v 01-run.sh`"
 if [ x"${GDFDL_CI_NEXT}" != x"" ]
 	then
-	echo "NOTE: Next script '${GDFDL_CI_NEXT}' found, handing over now ..."
+	echo "CI - NOTE: Next script '${GDFDL_CI_NEXT}' found, handing over now ..."
 	"${GDFDL_CI_NEXT}" "${@}"
 	exit 0
 fi
