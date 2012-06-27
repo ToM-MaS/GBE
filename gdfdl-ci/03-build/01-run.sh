@@ -26,7 +26,7 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 
 	[ ! -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src" ] && "${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
 	[ ! -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt" ] && "${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/opt"
-	[ ! -d "${SRC_CACHE}" ] && mkdir -p "${SRC_CACHE}"
+	[ ! -d "${SRC_CACHE}" ] && mkdir -p "${SRC_CACHE}" || rm -rf "${SRC_CACHE}/*"
 
 	echo "GBE: Caching 3rd party dependencies ..."
 	# Download 3rd party modules if not cached already
@@ -99,7 +99,7 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	fi
 
 	# loading DAHDI driver for mod_freetdm
-	if [ ! -d "${SRC_CACHE}/${SRC_CACHE}/dahdi-hfcs" ]
+	if [ ! -d "${SRC_CACHE}/dahdi-hfcs" ]
 		then
 		c=1
 		while [[ $c -le 5 ]]
