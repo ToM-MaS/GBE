@@ -26,11 +26,11 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 
 	# save pre-compiled archives into cache directory
 	set +e
-	if [ -d "${INSTALLBASEDIR}/src-cache-bin" ]
+	if [ -d "${INSTALLBASEDIR}${GDFDL_DIR}/chroot/src-cache-bin" ]
 		then
 		echo "GBE: Saving pre-compiled archives into cache directory ..."
-		[[ ! -d "${SRC_CACHE_BIN}" ]] && mkdir -p "${SRC_CACHE_BIN}"
-		find "${INSTALLBASEDIR}/src-cache-bin" -name 'BIN_' -exec cp -rf '{}' "${SRC_CACHE_BIN}" \;
+		[ ! -d "${SRC_CACHE_BIN}" ] && mkdir -p "${SRC_CACHE_BIN}"
+		find "${INSTALLBASEDIR}${GDFDL_DIR}/chroot/src-cache-bin" -name 'BIN_' -exec cp -rf '{}' "${SRC_CACHE_BIN}" \;
 	fi
 	set -e
 
