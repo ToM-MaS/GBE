@@ -8,6 +8,9 @@ ladspa-sdk tap-plugins swh-plugins libgsm1 libfftw3-3
 # mod_opal
 flex
 
+# mod_freetdm - sangoma_wanpipe
+linux-headers-2.6-686
+
 # mod_ldap
 libldap2-dev groff groff-base
 
@@ -16,4 +19,3 @@ osptoolkit libosptk3 libosptk3-dev
 
 # mod_snmp
 libsnmp-dev
-
