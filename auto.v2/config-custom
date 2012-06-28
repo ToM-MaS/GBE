@@ -11,15 +11,14 @@ lb config noauto \
 	--apt apt \
 	--apt-recommends disabled \
 	--architecture i386 \
-	--archive-areas "main contrib non-free" \
-	--bootappend-live "quiet splash vga=792 locales=de_DE.UTF-8 keyboard-layouts=de" \
+	--archive-areas "main" \
 	--bootstrap-flavour minimal \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
 	--distribution squeeze \
 	--hostname gs5-live \
 	--iso-application "Gemeinschaft 5" \
-	--iso-preparer "GS5 builder" \
+	--iso-preparer "Gemeinschaft Build Enrironment" \
 	--iso-publisher "Amooma GmbH; http://www.amooma.de/" \
 	--iso-volume "GS5" \
 	--language en \
@@ -32,4 +31,5 @@ lb config noauto \
 	--syslinux-timeout 10 \
 	--username gs5 \
 	--win32-loader disabled \
+	--includes none \
 	"${@}"
