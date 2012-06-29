@@ -50,10 +50,10 @@ su - ${GS_USER} -c "cd ${GS_DIR}; rake db:migrate RAILS_ENV=\"production\"" >/de
 # Also correct NAT detection settings from NAT-PnP/uPNP to use public STUN server from Sipgate instead
 #
 LOCALIP=`ip addr show dev eth0 | sed -e's/^.*inet \([^ ]*\)\/.*$/\1/;t;d'`
-sed -i 's/^rtp-ip: 192.168.0.150/rtp-ip: '${LOCALIP}'/' /opt/freeswitch/scripts/ini/profile_gemeinschaft.ini
-sed -i 's/^sip-ip: 192.168.0.150/sip-ip: '${LOCALIP}'/' /opt/freeswitch/scripts/ini/profile_gemeinschaft.ini
-sed -i 's/^ext-sip-ip: auto-nat/ext-sip-ip: stun:stun.sipgate.net/' /opt/freeswitch/scripts/ini/profile_gemeinschaft.ini
-sed -i 's/^ext-rtp-ip: auto-nat/ext-rtp-ip: stun:stun.sipgate.net/' /opt/freeswitch/scripts/ini/profile_gemeinschaft.ini
+sed -i 's/^rtp-ip: 192.168.0.150/rtp-ip: '${LOCALIP}'/' /etc/freeswitch/scripts/ini/profile_gemeinschaft.ini
+sed -i 's/^sip-ip: 192.168.0.150/sip-ip: '${LOCALIP}'/' /etc/freeswitch/scripts/ini/profile_gemeinschaft.ini
+sed -i 's/^ext-sip-ip: auto-nat/ext-sip-ip: stun:stun.sipgate.net/' /etc/freeswitch/scripts/ini/profile_gemeinschaft.ini
+sed -i 's/^ext-rtp-ip: auto-nat/ext-rtp-ip: stun:stun.sipgate.net/' /etc/freeswitch/scripts/ini/profile_gemeinschaft.ini
 
 # Generate CSS
 #
