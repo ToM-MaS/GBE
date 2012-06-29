@@ -7,8 +7,6 @@
 # See LICENSE.GBE file for details.
 #
 
-exit
-
 # check each command return codes for errors
 #
 set -e

@@ -11,6 +11,8 @@
 #
 set -e
 
+exit
+
 # General settings
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
