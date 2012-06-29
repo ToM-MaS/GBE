@@ -7,6 +7,8 @@
 # See LICENSE.GBE file for details.
 #
 
+exit
+
 # check each command return codes for errors
 #
 set -e
@@ -81,8 +83,10 @@ echo -e "GBE: Installing GS5 gems ...\n"
 su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 echo -e "GBE: Creating FreeSWITCH configuration ...\n"
-ln -s "${GS_DIR}/misc/freeswitch/conf" /etc/freeswitch/conf
-ln -s "${GS_DIR}/misc/freeswitch/scripts" /etc/freeswitch/scripts
+mv /opt/freeswitch/conf /opt/freeswitch/conf.default
+mv /opt/freeswitch/scripts /opt/freeswitch/scripts.default
+ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
+ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 

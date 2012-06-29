@@ -1,0 +1,24 @@
+# basics
+git-core build-essential autoconf automake libtool libncurses5 libncurses5-dev make libjpeg-dev pkg-config unixodbc unixodbc-dev
+libcurl4-openssl-dev libexpat1-dev libgnutls-dev libtiff4-dev libx11-dev unixodbc-dev libssl-dev python2.6-dev zlib1g-dev libzrtpcpp-dev libasound2-dev libogg-dev libvorbis-dev libperl-dev libgdbm-dev libdb-dev python-dev uuid-dev bison libmyodbc
+
+# mod_ladspa
+ladspa-sdk tap-plugins swh-plugins libgsm1 libfftw3-3
+
+# mod_opal
+flex
+
+# mod_freetdm - sangoma_wanpipe
+linux-headers-2.6-686
+
+# mod_ldap
+libldap2-dev groff groff-base
+
+# mod_osp
+osptoolkit libosptk3 libosptk3-dev
+
+# mod_snmp
+libsnmp-dev
+
+# mod_freetdm - openrt2
+cmake
