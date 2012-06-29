@@ -81,6 +81,7 @@ echo -e "GBE: Installing GS5 gems ...\n"
 su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 echo -e "GBE: Creating FreeSWITCH configuration ...\n"
+[ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
 ln -s "${GS_DIR}/misc/freeswitch/conf" /etc/freeswitch/conf
 ln -s "${GS_DIR}/misc/freeswitch/scripts" /etc/freeswitch/scripts
 
