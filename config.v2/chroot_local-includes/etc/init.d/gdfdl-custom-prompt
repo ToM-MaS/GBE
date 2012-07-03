@@ -22,7 +22,7 @@ echo "
 ***     (.---.)                GEMEINSCHAFT 5               (.---.)
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
 ***      -----                                               -----
-***     Branch: ${GS_REVISION}, Build: ${GDFDL_BUILDNAME}
+***     Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}
 ***     Hostname: \n Console: \l
 ***    -------------------------------------------------------------
 ***

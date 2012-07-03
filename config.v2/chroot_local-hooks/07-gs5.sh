@@ -18,8 +18,6 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft installation\n\n"
 
-echo -e "GBE: Downloading GS5 ...\n"
-
 # use master branch if no explicit branch was given
 if [ x"${GS_BRANCH}" == x"" ]
 then
@@ -32,6 +30,8 @@ fi
 #
 if [[ ! -d "${GS_DIR}" ]];
 	then
+
+	echo -e "GBE: Downloading GS5 ...\n"
 
 	# Setup Github user credentials for login
 	#
@@ -67,20 +67,18 @@ fi
 
 # Install delayed worker job
 #
+echo -e "GBE: Install delayed worker job ...\n"
 echo "W1:2345:respawn:/bin/su - gs5 -l -c \"cd ${GS_DIR}; RAILS_ENV=production rake jobs:work >> /var/log/gemeinschaft/worker.log 2>&1\"" >> /etc/inittab
 
 # Create log dir
 #
+echo -e "GBE: Create logfile directory ...\n"
 mkdir /var/log/gemeinschaft
-
-# Set ownership
-#
-chown -R "${GS_USER}".root "${GS_DIR}" /var/log/gemeinschaft
 
 echo -e "GBE: Installing GS5 gems ...\n"
 su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
-echo -e "GBE: Creating FreeSWITCH configuration ...\n"
+echo -e "GBE: Linking FreeSWITCH configuration ...\n"
 [ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
 ln -s "${GS_DIR}/misc/freeswitch/conf" /etc/freeswitch/conf
 ln -s "${GS_DIR}/misc/freeswitch/scripts" /etc/freeswitch/scripts
@@ -117,9 +115,10 @@ a2dissite default 2>&1
 a2ensite gemeinschaft 2>&1
 
 echo -e "GBE: Setting up permissions ...\n"
+chown -R "${GS_USER}".root "${GS_DIR}" /var/log/gemeinschaft
 # Allow GS user to modify essential system configuration files
-chgrp ${GS_GROUP} /etc/resolv.conf
-chmod g+rw /etc/resolv.conf
+chgrp ${GS_GROUP} /etc/resolv.conf /etc/network/interfaces
+chmod g+rw /etc/resolv.conf /etc/network/interfaces
 
 #FIXME: really necessary to grant rw access to all group members, resp. all daemons?
 #chmod -R g+w "${GS_DIR}"
