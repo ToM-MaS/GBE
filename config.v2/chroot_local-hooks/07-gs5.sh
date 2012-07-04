@@ -19,12 +19,8 @@ echo -e "\n###########################################################
 ## GBE: Gemeinschaft installation\n\n"
 
 # use master branch if no explicit branch was given
-if [ x"${GS_BRANCH}" == x"" ]
-then
-	GS_BRANCH="master"
-else
-	echo "${GS_BRANCH}" > /etc/gemeinschaft_branch
-fi
+[ x"${GS_BRANCH}" == x"" ] && GS_BRANCH="master"
+echo "${GS_BRANCH}" > /etc/gemeinschaft_branch
 
 # Clone the git repository
 #
@@ -73,7 +69,7 @@ echo "W1:2345:respawn:/bin/su - gs5 -l -c \"cd ${GS_DIR}; RAILS_ENV=production r
 # Create log dir
 #
 echo -e "GBE: Create logfile directory ...\n"
-mkdir /var/log/gemeinschaft
+[ ! -d /var/log/gemeinschaft ] && mkdir /var/log/gemeinschaft
 
 echo -e "GBE: Installing GS5 gems ...\n"
 su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"

@@ -357,6 +357,19 @@ if [[ ! -f /usr/bin/freeswitch ]]
 		hd-moh-install \
 		sounds-install \
 		moh-install 2>&1
+
+	echo -e "GBE: Setting up permissions ...\n"
+	adduser --system --quiet --disabled-password --disabled-login --ingroup daemon --home /opt/freeswitch freeswitch
+	adduser --quiet freeswitch ${GS_GROUP}
+
+	# Create FreeSWITCH log directory
+	#
+	if [ ! -d /var/log/freeswitch ]
+		then
+		mkdir /var/log/freeswitch
+		chown -R freeswitch.adm /var/log/freeswitch
+		chown -R freeswitch.root /opt/freeswitch
+	fi
 fi
 
 echo -e "GBE: Enabling FreeSwitch ...\n"
@@ -371,15 +384,5 @@ echo "
 agentXPerms     0755 0755 freeswitch daemon
 " >> /etc/snmp/snmpd.conf
 
-echo -e "GBE: Setting up permissions ...\n"
-adduser --system --quiet --disabled-password --disabled-login --ingroup daemon --home /opt/freeswitch freeswitch
-adduser --quiet freeswitch ${GS_GROUP}
-
-# Create FreeSWITCH log directory
-#
-mkdir /var/log/freeswitch/
-chown -R freeswitch.adm /var/log/freeswitch
-chown -R freeswitch.root /opt/freeswitch
-
-echo -e "GBE: Cleaning up FreeSwitch sources ...\n"
-rm -rf "${SRC_DIR}/"*
+# cleanup sources
+rm -rf "${SRC_DIR}/freeswitch"
