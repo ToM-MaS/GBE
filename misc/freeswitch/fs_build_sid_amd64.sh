@@ -23,6 +23,7 @@ ver="$(cat build/next-release.txt | sed -e 's/-/~/g')~n$(date +%Y%m%dT%H%M%SZ)-1
 git clean -fdx && git reset --hard HEAD
 ./build/set-fs-version.sh "$ver"
 git add configure.in && git commit -m "bump to custom v$ver"
+[ -f ../modules_${distro}.conf ] && cp -L ../modules_${distro}.conf debian/modules.conf
 (cd debian && ./bootstrap.sh -c $distro)
 dch -b -m -v "$ver" --force-distribution -D "$suite" "Custom build."
 
