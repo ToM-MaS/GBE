@@ -76,8 +76,14 @@ su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 echo -e "GBE: Linking FreeSWITCH configuration ...\n"
 [ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
-ln -s "${GS_DIR}/misc/freeswitch/conf" /etc/freeswitch/conf
-ln -s "${GS_DIR}/misc/freeswitch/scripts" /etc/freeswitch/scripts
+[ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
+ln -s "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
+ln -s "${GS_DIR}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
+
+# compatibility with manual installation and GS default directories
+ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
+ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
+ln -s /opt/GS5/misc/freeswitch/scripts /usr/scripts #FIXME this is a hack! check why /usr/share/freeswitch/scripts is not used
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
