@@ -80,10 +80,15 @@ echo -e "GBE: Linking FreeSWITCH configuration ...\n"
 ln -s "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
 ln -s "${GS_DIR}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
-# compatibility with manual installation and GS default directories
+#FIXME compatibility with manual installation and GS default directories
 ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
 ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
-ln -s /opt/GS5/misc/freeswitch/scripts /usr/scripts #FIXME this is a hack! check why /usr/share/freeswitch/scripts is not used
+
+#FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
+ln -s /opt/GS5/misc/freeswitch/scripts /usr/scripts
+ln -s /var/lib/freeswitch/db /usr/db
+ln -s /var/lib/freeswitch/recordings /usr/recordings
+ln -s /var/lib/freeswitch/storage /usr/storage
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
