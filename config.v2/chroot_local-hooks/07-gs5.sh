@@ -85,7 +85,7 @@ ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
 ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
 
 #FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
-ln -s /opt/GS5/misc/freeswitch/scripts /usr/scripts
+ln -s /usr/share/freeswitch/scripts /usr/scripts
 ln -s /var/lib/freeswitch/db /usr/db
 ln -s /var/lib/freeswitch/recordings /usr/recordings
 ln -s /var/lib/freeswitch/storage /usr/storage
