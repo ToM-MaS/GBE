@@ -45,10 +45,6 @@ PASSWORD     = gemeinschaft
 		mysql -e "GRANT ALL PRIVILEGES ON gemeinschaft.* TO gemeinschaft @'%' IDENTIFIED BY 'gemeinschaft';" --user=root --password=$MYSQL_PASSWD
 		mysql -e "FLUSH PRIVILEGES" --user=root --password=$MYSQL_PASSWD
 
-		# make sure Gemfile.lock does not exist to avoid version conflicts
-		#
-		rm -rf ${GS_DIR}/Gemfile.lock
-
 		# Load database structure into DB
 		#
 		su - ${GS_USER} -c "cd ${GS_DIR}; RAILS_ENV=production bundle exec rake db:migrate --trace 2>&1 >~/gs5-init.log"
