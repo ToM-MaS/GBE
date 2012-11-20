@@ -64,7 +64,7 @@ fi
 # Install delayed worker job
 #
 echo -e "GBE: Install delayed worker job ...\n"
-echo "W1:2345:respawn:/bin/su - gs5 -l -c \"cd ${GS_DIR}; RAILS_ENV=production rake jobs:work >> /var/log/gemeinschaft/worker.log 2>&1\"" >> /etc/inittab
+echo "W1:2345:respawn:/bin/su - gs5 -l -c \"cd ${GS_DIR}; RAILS_ENV=production bundle exec rake jobs:work >> /var/log/gemeinschaft/worker.log 2>&1\"" >> /etc/inittab
 
 # Create log dir
 #
@@ -89,6 +89,12 @@ ln -s /usr/share/freeswitch/scripts /usr/scripts
 ln -s /var/lib/freeswitch/db /usr/db
 ln -s /var/lib/freeswitch/recordings /usr/recordings
 ln -s /var/lib/freeswitch/storage /usr/storage
+ln -s /usr/lib/lua /usr/local/lib/lua
+
+#FIXME This is only temporal, see bug https://github.com/GS5-build/GBE/issues/33
+#BUG-33
+touch /opt/GS5/misc/freeswitch/scripts/ini/gateways.ini
+chown ${GS_USER} /opt/GS5/misc/freeswitch/scripts/ini/gateways.ini
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
@@ -124,8 +130,8 @@ a2ensite gemeinschaft 2>&1
 echo -e "GBE: Setting up permissions ...\n"
 chown -R "${GS_USER}".root "${GS_DIR}" /var/log/gemeinschaft
 # Allow GS user to modify essential system configuration files
-chgrp ${GS_GROUP} /etc/resolv.conf /etc/network/interfaces
-chmod g+rw /etc/resolv.conf /etc/network/interfaces
+chgrp ${GS_GROUP} /etc/resolv.conf /etc/network/interfaces /etc/hosts /etc/hostname
+chmod g+rw /etc/resolv.conf /etc/network/interfaces /etc/hosts /etc/hostname
 
 #FIXME: really necessary to grant rw access to all group members, resp. all daemons?
 #chmod -R g+w "${GS_DIR}"
