@@ -18,9 +18,6 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft specific system configuration\n\n"
 
-echo -e "GBE: Enable SNMP monitoring ...\n"
-sed -i 's/# rocommunity public  localhost/rocommunity public default/' /etc/snmp/snmpd.conf
-
 echo -e "GBE: Create local user ${GS_USER} and set default password ...\n"
 useradd ${GS_USER} -U -m -s /bin/bash
 echo "${GS_USER}:${GS_PASSWORD}" | chpasswd

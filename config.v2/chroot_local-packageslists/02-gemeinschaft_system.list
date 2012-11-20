@@ -15,9 +15,3 @@ openssh-server
 
 # libraries and modules
 libsasl2-2 libsasl2-modules libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap
-
-# Kiosk applications for live system
-xserver-xorg
-xinit
-xfonts-base
-iceweasel
