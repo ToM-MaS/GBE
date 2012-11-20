@@ -91,11 +91,6 @@ ln -s /var/lib/freeswitch/recordings /usr/recordings
 ln -s /var/lib/freeswitch/storage /usr/storage
 ln -s /usr/lib/lua /usr/local/lib/lua
 
-#FIXME This is only temporal, see bug https://github.com/GS5-build/GBE/issues/33
-#BUG-33
-touch /opt/GS5/misc/freeswitch/scripts/ini/gateways.ini
-chown ${GS_USER} /opt/GS5/misc/freeswitch/scripts/ini/gateways.ini
-
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
 echo -e "GBE: Adjusting Apache2 configuration ...\n"
