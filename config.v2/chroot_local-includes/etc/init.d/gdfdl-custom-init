@@ -53,19 +53,6 @@ PASSWORD     = gemeinschaft
 		#
 		su - ${GS_USER} -c "cd \"${GS_DIR}\"; RAILS_ENV=production bundle exec rake assets:precompile --trace 2>&1 >>~/gs5-init.log"
 
-		# Update FreeSwitch/GS5 config for current IPv4 address of primary interface eth0
-		# Also correct NAT detection settings from NAT-PnP/uPNP to use public STUN server from Sipgate instead
-		#
-		if [ -f "/etc/freeswitch/scripts/ini/profile_gemeinschaft.ini" ]
-			then
-			echo "Adjusting FreeSWITCH configuration for local IPv4 address ..."
-			LOCALIP=`ip addr show dev eth0 | sed -e's/^.*inet \([^ ]*\)\/.*$/\1/;t;d'`
-			sed -i 's/^rtp-ip: 192.168.0.150/rtp-ip: '${LOCALIP}'/' /etc/freeswitch/scripts/ini/profile_gemeinschaft.ini
-			sed -i 's/^sip-ip: 192.168.0.150/sip-ip: '${LOCALIP}'/' /etc/freeswitch/scripts/ini/profile_gemeinschaft.ini
-			sed -i 's/^ext-sip-ip: auto-nat/ext-sip-ip: stun:stun.sipgate.net/' /etc/freeswitch/scripts/ini/profile_gemeinschaft.ini
-			sed -i 's/^ext-rtp-ip: auto-nat/ext-rtp-ip: stun:stun.sipgate.net/' /etc/freeswitch/scripts/ini/profile_gemeinschaft.ini
-		fi
-
 		# self destruction
 		#
 		rm -rf /gdfdl-custom.conf
