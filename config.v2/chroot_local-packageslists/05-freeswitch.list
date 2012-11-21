@@ -1,1 +1,1 @@
-freeswitch-meta-default freeswitch-init freeswitch-meta-codecs freeswitch-mod-say-en freeswitch-mod-say-de freeswitch-mod-snmp freeswitch-mod-logfile freeswitch-mod-event-socket freeswitch-mod-expr freeswitch-mod-valet-parking freeswitch-mod-sndfile libmyodbc liblua5.1-sql-mysql-2
+freeswitch-meta-default freeswitch-init freeswitch-meta-codecs freeswitch-mod-say-en freeswitch-mod-say-de freeswitch-mod-snmp freeswitch-mod-logfile freeswitch-mod-event-socket freeswitch-mod-expr freeswitch-mod-valet-parking freeswitch-mod-sndfile libmyodbc
