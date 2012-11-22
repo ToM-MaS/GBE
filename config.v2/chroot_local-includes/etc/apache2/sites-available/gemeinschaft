@@ -69,7 +69,7 @@ LogFormat "%h %l %u \"%r\" %>s %b KA:%k \"%{User-agent}i\"" log_format_for_syslo
 	RailsEnv production
 	#RackEnv  production
 
-	<Directory /opt/gemeinschaft/public>
+	<Directory /opt/GS5/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
