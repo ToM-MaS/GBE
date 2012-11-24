@@ -16,7 +16,6 @@ lb config noauto \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
 	--distribution squeeze \
-	--hostname gs-live \
 	--iso-application "Gemeinschaft 5" \
 	--iso-preparer "Gemeinschaft Build Enrironment" \
 	--iso-publisher "Amooma GmbH; http://www.amooma.de/" \
@@ -29,7 +28,6 @@ lb config noauto \
 	--root-command sudo \
 	--syslinux-splash "config/binary_syslinux/splash.rle" \
 	--syslinux-timeout 10 \
-	--username gsmaster \
 	--win32-loader disabled \
 	--includes none \
 	--bootappend-live "noautologin" \
