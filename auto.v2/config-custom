@@ -18,7 +18,7 @@ lb config noauto \
 	--distribution squeeze \
 	--iso-application "Gemeinschaft 5" \
 	--iso-preparer "Gemeinschaft Build Enrironment" \
-	--iso-publisher "Amooma GmbH; http://www.amooma.de/" \
+	--iso-publisher "AMOOMA GmbH; http://www.amooma.de/" \
 	--iso-volume "GS5" \
 	--language en \
 	--linux-flavours 686 \
