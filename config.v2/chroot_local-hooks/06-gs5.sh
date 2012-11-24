@@ -27,7 +27,7 @@ echo "${GS_BRANCH}" > /etc/gemeinschaft_branch
 if [[ ! -d "${GS_DIR}" ]];
 	then
 
-	echo -e "GBE: Downloading GS5 ...\n"
+	echo -e "GBE: Downloading GS from ${GS_GIT_URL} (branch: ${GS_BRANCH}) ...\n"
 
 	# Setup Github user credentials for login
 	#
