@@ -32,4 +32,5 @@ lb config noauto \
 	--username gsmaster \
 	--win32-loader disabled \
 	--includes none \
+	--bootappend-live "noautologin" \
 	"${@}"
