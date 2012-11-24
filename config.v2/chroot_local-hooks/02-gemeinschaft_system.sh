@@ -24,11 +24,6 @@ groupadd -r -f ${GS_GROUP}
 echo -e "GBE: Create service account ${GS_USER} ...\n"
 useradd ${GS_USER} -N -m -r -s /bin/bash -c "Gemeinschaft Service Account" -g ${GS_GROUP}
 
-echo -e "GBE: Create admin account ${GS_USER} ...\n"
-useradd ${GS_USER_ADMIN} -N -m -s /bin/bash -c "Gemeinschaft Administrator Account" -g ${GS_GROUP}
-adduser ${GS_USER_ADMIN} sudo
-echo "${GS_USER_ADMIN}:${GS_PASSWORD_ADMIN}" | chpasswd
-
 echo -e "GBE: Correcting file permissions ...\n"
 chmod 0440 /etc/sudoers.d/*
 
