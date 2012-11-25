@@ -69,12 +69,13 @@ echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR}; RAILS_ENV=produ
 # Install cronjobs
 #
 echo -e "GBE: Install cronjobs ...\n"
-echo "23	1	*	*	*	${GS_USER}	/opt/GS5/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
+[ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
+echo "23 1 * * * ${GS_USER} /opt/GS5/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
 
 # Create log dir
 #
 echo -e "GBE: Create logfile directory ...\n"
-[ ! -d /var/log/gemeinschaft ] && mkdir /var/log/gemeinschaft
+[ ! -d /var/log/gemeinschaft ] && mkdir -p /var/log/gemeinschaft
 
 echo -e "GBE: Installing GS gems ...\n"
 su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
