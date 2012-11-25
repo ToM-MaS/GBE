@@ -30,5 +30,5 @@ lb config noauto \
 	--syslinux-timeout 10 \
 	--win32-loader disabled \
 	--includes none \
-	--bootappend-live "noautologin" \
+	--bootappend-live "noautologin quickreboot" \
 	"${@}"
