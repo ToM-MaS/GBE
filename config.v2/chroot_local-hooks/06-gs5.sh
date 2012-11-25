@@ -230,15 +230,14 @@ LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for
 	</Directory>
         
         SSLVerifyClient none
-        SSLCACertificateFile /etc/ssl/certs/snom-ca.pem
 
        <Files ~ \"settings-.*\">
           SSLVerifyClient require
           SSLVerifyDepth 1
         </Files>	
 	SSLEngine on
-	SSLCertificateFile    /etc/ssl/amooma.pem
-	SSLCertificateKeyFile /etc/ssl/private/amooma.key
+	SSLCertificateFile    /etc/ssl/gemeinschaft.crt
+	SSLCertificateKeyFile /etc/ssl/gemeinschaft.key
 </VirtualHost>" > /etc/apache2/sites-available/gemeinschaft
 
 # enable modules
