@@ -70,7 +70,7 @@ echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR}; RAILS_ENV=produ
 #
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "23 1 * * * ${GS_USER} /opt/GS5/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
+echo "23 1 * * * ${GS_USER} ${GS_DIR}/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
 
 # Create log dir
 #
