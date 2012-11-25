@@ -130,9 +130,5 @@ a2ensite gemeinschaft 2>&1
 
 echo -e "GBE: Setting up permissions ...\n"
 chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
-# Allow GS user to modify essential system configuration files
-chgrp ${GS_GROUP} /etc/resolv.conf /etc/network/interfaces /etc/hosts /etc/hostname
-chmod g+rw /etc/resolv.conf /etc/network/interfaces /etc/hosts /etc/hostname
-
 # Allow members of the GS system group to modify+upgrade files
 chmod -R g+w "${GS_DIR}"
