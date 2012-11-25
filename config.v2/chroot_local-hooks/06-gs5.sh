@@ -120,14 +120,7 @@ PassengerDefaultUser nobody
 PassengerFriendlyErrorPages off
 PassengerSpawnMethod smart-lv2" > /etc/apache2/mods-available/passenger.conf
 
-echo "# Reduce memory usage.
-# Default values for the prefork MPM:
-# StartServers          :  Apache:   5,  Debian:   5
-# MinSpareServers       :  Apache:   5,  Debian:   5
-# MaxSpareServers       :  Apache:  10,  Debian:  10
-# MaxClients            :  Apache: 256,  Debian: 150
-# MaxRequestsPerChild   :  Apache:   0,  Debian:   0
-<IfModule mpm_prefork_module>
+echo "<IfModule mpm_prefork_module>
     StartServers          2
     MinSpareServers       1
     MaxSpareServers       4
@@ -142,16 +135,12 @@ MaxKeepAliveRequests 40
 KeepAliveTimeout 60
 Timeout 100
 
-# http://httpd.apache.org/docs/current/mod/mod_log_config.html#formats
-#LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" my_log_format
-#LogFormat "%h %l %u %t \"%r\" %>s %b" my_log_format
-#LogFormat "%h %l %u \"%r\" %>s %b" log_format_for_syslog_without_redundant_time
-LogFormat "%h %l %u \"%r\" %>s %b KA:%k \"%{User-agent}i\"" log_format_for_syslog_without_redundant_time
+LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for_syslog_without_redundant_time
 
 
 <VirtualHost *:80>
-	ErrorLog  "|/usr/bin/logger -t apache -i -p local6.info" 
-	CustomLog "|/usr/bin/logger -t apache -i -p local6.info" log_format_for_syslog_without_redundant_time
+	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\" 
+	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" log_format_for_syslog_without_redundant_time
 
 	RewriteEngine on
 
@@ -168,9 +157,9 @@ LogFormat "%h %l %u \"%r\" %>s %b KA:%k \"%{User-agent}i\"" log_format_for_syslo
 
 	RewriteRule ^/(.*) https://%{HTTP_HOST}/$1 [R,L]
 
-	SetEnvIf Request_URI "^/freeswitch-call-processing/actions" downgrade-1.0 no-gzip no-cache
-	BrowserMatch "^freeswitch-spidermonkey-curl/1\." downgrade-1.0 no-gzip no-cache
-	BrowserMatch "^freeswitch-xml/1\." downgrade-1.0 no-gzip no-cache
+	SetEnvIf Request_URI \"^/freeswitch-call-processing/actions\" downgrade-1.0 no-gzip no-cache
+	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
+	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
 
 	DocumentRoot ${GS_DIR}/public
 
@@ -200,8 +189,8 @@ LogFormat "%h %l %u \"%r\" %>s %b KA:%k \"%{User-agent}i\"" log_format_for_syslo
 
 
 <VirtualHost *:443>
-	ErrorLog  "|/usr/bin/logger -t apache -i -p local6.info" 
-	CustomLog "|/usr/bin/logger -t apache -i -p local6.info" log_format_for_syslog_without_redundant_time
+	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\"
+	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" log_format_for_syslog_without_redundant_time
 
 	RewriteEngine on
 
@@ -211,9 +200,9 @@ LogFormat "%h %l %u \"%r\" %>s %b KA:%k \"%{User-agent}i\"" log_format_for_syslo
 	RewriteCond %{HTTP:Range} ([0-9]*-[0-9]*)(\s*,\s*[0-9]*-[0-9]*)+
 	RewriteRule .* - [F]
 
-	SetEnvIf Request_URI "^/freeswitch-call-processing/actions" downgrade-1.0 no-gzip no-cache
-	BrowserMatch "^freeswitch-spidermonkey-curl/1\." downgrade-1.0 no-gzip no-cache
-	BrowserMatch "^freeswitch-xml/1\." downgrade-1.0 no-gzip no-cache
+	SetEnvIf Request_URI \"^/freeswitch-call-processing/actions\" downgrade-1.0 no-gzip no-cache
+	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
+	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
 
 	DocumentRoot ${GS_DIR}/public
 
@@ -243,7 +232,7 @@ LogFormat "%h %l %u \"%r\" %>s %b KA:%k \"%{User-agent}i\"" log_format_for_syslo
         SSLVerifyClient none
         SSLCACertificateFile /etc/ssl/certs/snom-ca.pem
 
-       <Files ~ "settings-.*">
+       <Files ~ \"settings-.*\">
           SSLVerifyClient require
           SSLVerifyDepth 1
         </Files>	
