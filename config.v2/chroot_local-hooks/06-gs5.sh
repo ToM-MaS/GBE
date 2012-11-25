@@ -66,12 +66,17 @@ fi
 echo -e "GBE: Install delayed worker job ...\n"
 echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR}; RAILS_ENV=production bundle exec rake jobs:work >> /var/log/gemeinschaft/worker.log 2>&1\"" >> /etc/inittab
 
+# Install cronjobs
+#
+echo -e "GBE: Install cronjobs ...\n"
+echo "23	1	*	*	*	${GS_USER}	/opt/GS5/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
+
 # Create log dir
 #
 echo -e "GBE: Create logfile directory ...\n"
 [ ! -d /var/log/gemeinschaft ] && mkdir /var/log/gemeinschaft
 
-echo -e "GBE: Installing GS5 gems ...\n"
+echo -e "GBE: Installing GS gems ...\n"
 su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 echo -e "GBE: Linking FreeSWITCH configuration ...\n"
@@ -96,7 +101,7 @@ PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 echo -e "GBE: Adjusting Apache2 configuration ...\n"
 echo "LoadModule passenger_module ${PASSENGER_ROOT}/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
 echo "PassengerRoot ${PASSENGER_ROOT}
-PassengerRuby /home/${GS_USER}/.rvm/wrappers/default/ruby
+PassengerRuby /var/lib/${GS_USER}/.rvm/wrappers/default/ruby
 
 PassengerMaxPoolSize 4
 PassengerMaxInstancesPerApp 3
@@ -123,10 +128,10 @@ a2dissite default 2>&1
 a2ensite gemeinschaft 2>&1
 
 echo -e "GBE: Setting up permissions ...\n"
-chown -R "${GS_USER}".root "${GS_DIR}" /var/log/gemeinschaft
+chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
 # Allow GS user to modify essential system configuration files
 chgrp ${GS_GROUP} /etc/resolv.conf /etc/network/interfaces /etc/hosts /etc/hostname
 chmod g+rw /etc/resolv.conf /etc/network/interfaces /etc/hosts /etc/hostname
 
-#FIXME: really necessary to grant rw access to all group members, resp. all daemons?
-#chmod -R g+w "${GS_DIR}"
+# Allow members of the GS system group to modify+upgrade files
+chmod -R g+w "${GS_DIR}"

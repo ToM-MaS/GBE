@@ -24,7 +24,7 @@ groupadd -r -f ${GS_GROUP}
 echo -e "GBE: Create service account ${GS_USER} ...\n"
 # hint: This should be a system service account (-s) or at least UID needs to be != 1000
 # otherwise live-config user setup will not work correctly.
-useradd ${GS_USER} -N -m -r -s /bin/bash -c "Gemeinschaft Service Account" -g ${GS_GROUP}
+useradd ${GS_USER} -N -m -r -d /var/lib/${GS_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GS_GROUP}
 
 echo -e "GBE: Correcting file permissions ...\n"
 chmod 0440 /etc/sudoers.d/*
