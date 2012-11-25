@@ -58,6 +58,39 @@ case "$1" in
 			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.mysql_gs_password"`"
 		fi
 
+		# Create MySQL user for FreeSwitch
+		if [ ! -f "/var/lib/${GS_USER}/.mysql_fs_password" ]
+			then
+			echo "** Creating MySQL user 'freeswitch'"
+			apg -m30 -a0 -n 1 -E\'\" > "/var/lib/${GS_USER}/.mysql_fs_password"
+			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.mysql_fs_password"
+			chmod 0440 "/var/lib/${GS_USER}/.mysql_fs_password"
+			MYSQL_PASSWD_FS="`cat "/var/lib/${GS_USER}/.mysql_fs_password"`"
+			mysql -e "GRANT ALL PRIVILEGES ON gemeinschaft.* TO freeswitch @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_FS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}"
+		else
+			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.mysql_gs_password"`"
+		fi
+
+		# Generate ODBC configuration files
+		echo "** Configuring ODBC"
+echo "[gemeinschaft]
+Description  = MySQL database for Gemeinschaft
+Driver       = /usr/lib/odbc/libmyodbc.so
+Setup        = /usr/lib/odbc/libodbcmyS.so
+" >/etc/odbcinst.ini
+
+echo "[gemeinschaft]
+Description  = MySQL database for Gemeinschaft
+Driver       = /usr/lib/odbc/libmyodbc.so
+SERVER       = localhost
+PORT         = 3306
+DATABASE     = gemeinschaft
+OPTION       = 67108864
+USER         = freeswitch
+PASSWORD     = ${MYSQL_PASSWD_FS}
+" >/etc/odbc.ini
+		chmod 0640 /etc/odbc.ini
+
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
 		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft;" --user=root --password="${MYSQL_PASSWD_ROOT}"
