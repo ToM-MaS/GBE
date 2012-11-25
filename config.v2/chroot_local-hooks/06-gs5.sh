@@ -130,5 +130,6 @@ a2ensite gemeinschaft 2>&1
 
 echo -e "GBE: Setting up permissions ...\n"
 chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
+chmod 0770 "${GS_DIR}" /var/log/gemeinschaft
 # Allow members of the GS system group to modify+upgrade files
 chmod -R g+w "${GS_DIR}"

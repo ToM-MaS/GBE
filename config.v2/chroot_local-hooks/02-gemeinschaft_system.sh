@@ -27,7 +27,10 @@ echo -e "GBE: Create service account ${GS_USER} ...\n"
 useradd ${GS_USER} -N -m -r -d /var/lib/${GS_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GS_GROUP}
 
 echo -e "GBE: Correcting file permissions ...\n"
+chmod 0770 /var/lib/${GS_USER}
 chmod 0440 /etc/sudoers.d/*
 
 echo - "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
+
+echo - "GBE: Enable local firewall ...\n"
