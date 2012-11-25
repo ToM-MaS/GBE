@@ -25,8 +25,10 @@ case "$1" in
 
 		# Change primary group of GS system admin to GS_GROUP
 		#
-		usermod -g ${GS_GROUP} gsmaster
-		groupdel gsmaster
+		set +e
+		usermod -g ${GS_GROUP} gsmaster 2>&1 >/dev/null
+		groupdel gsmaster 2>&1 >/dev/null
+		set -e
 
 		# Database setup
 		#
@@ -34,6 +36,7 @@ case "$1" in
 		# Change MySQL password for user root
 		if [ ! -f /root/.mysql_root_password ]
 			then
+			echo "** Generating individual password for MySQL user 'root'"
 			apg -m30 -a0 -n 1 -E\'\" > /root/.mysql_root_password
 			chmod 0440 /root/.mysql_root_password
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
@@ -45,6 +48,7 @@ case "$1" in
 		# Create MySQL user for Gemeinschaft
 		if [ ! -f "/var/lib/${GS_USER}/.mysql_gs_password" ]
 			then
+			echo "** Creating MySQL user 'gemeinschaft'"
 			apg -m30 -a0 -n 1 -E\'\" > "/var/lib/${GS_USER}/.mysql_gs_password"
 			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.mysql_gs_password"
 			chmod 0440 "/var/lib/${GS_USER}/.mysql_gs_password"
@@ -55,18 +59,22 @@ case "$1" in
 		fi
 
 		# (re)create Gemeinschaft database
+		echo "** Creating MySQL database 'gemeinschaft'"
 		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 
 		# Update database password in Gemeinschaft config
 		#
+		echo "** Updating GS with new MySQL password"
 		sed -i "s/password: gemeinschaft/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
 
 		# Load database structure into DB
 		#
+		echo "** Initializing database"
 		su - ${GS_USER} -c "cd ${GS_DIR}; RAILS_ENV=production bundle exec rake db:migrate --trace 2>&1 >/var/log/gemeinschaft/init.log"
 
-		# Generate CSS
+		# Generate assets (like CSS)
 		#
+		echo "** Precompile GS assets"
 		su - ${GS_USER} -c "cd \"${GS_DIR}\"; RAILS_ENV=production bundle exec rake assets:precompile --trace 2>&1 >>/var/log/gemeinschaft/init.log"
 
 		# self destruction
