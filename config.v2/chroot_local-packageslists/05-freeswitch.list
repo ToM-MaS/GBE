@@ -1,1 +1,1 @@
-freeswitch-meta-default freeswitch-init freeswitch-meta-codecs freeswitch-mod-say-en freeswitch-mod-say-de freeswitch-mod-snmp freeswitch-mod-logfile freeswitch-mod-event-socket freeswitch-mod-expr freeswitch-mod-valet-parking freeswitch-mod-sndfile
+freeswitch-meta-default freeswitch-init freeswitch-meta-codecs freeswitch-mod-say-en freeswitch-mod-say-de freeswitch-mod-snmp freeswitch-mod-logfile freeswitch-mod-event-socket freeswitch-mod-expr freeswitch-mod-valet-parking freeswitch-mod-sndfile libmyodbc
