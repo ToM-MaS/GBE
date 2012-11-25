@@ -26,6 +26,12 @@ echo -e "GBE: Create service account ${GS_USER} ...\n"
 # otherwise live-config user setup will not work correctly.
 useradd ${GS_USER} -N -m -r -d /var/lib/${GS_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GS_GROUP}
 
+# Allow service account some system commands via sudo
+echo "Cmnd_Alias BACKUP = /usr/bin/nohup /usr/local/bin/backup_system.sh *" > /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias SHUTDOWN = /sbin/shutdown -h now" >> /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias REBOOT = /sbin/shutdown -r now" >> /etc/sudoers.d/gemeinschaft
+echo "${GS_USER} ALL = (ALL) NOPASSWD: SHUTDOWN, REBOOT, BACKUP" >> /etc/sudoers.d/gemeinschaft
+
 echo -e "GBE: Correcting file permissions ...\n"
 chmod -R g+w /var/lib/${GS_USER}
 chmod 0770 /var/lib/${GS_USER}
