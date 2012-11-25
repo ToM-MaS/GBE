@@ -23,9 +23,9 @@ case "$1" in
 
 		echo -e "Preparing Gemeinschaft for 1st start ...\n"
 
-		# Add system admin account to GS service group
+		# Change primary group of GS system admin to GS_GROUP
 		#
-		useradd -G ${GS_GROUP} gsmaster
+		usermod -g ${GS_GROUP} gsmaster
 
 		# Database setup
 		#
