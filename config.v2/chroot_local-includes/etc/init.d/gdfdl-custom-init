@@ -32,9 +32,8 @@ case "$1" in
 		#
 		
 		# let root administer mysql without password when connecting through localhost
-		mysql -e "USE mysql; DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1'); UPDATE user SET password=null WHERE user='root' AND (host='localhost' OR host='127.0.0.1');" --user=root --password=$MYSQL_PASSWD
-		mysql -e "GRANT ALL PRIVILEGES ON gemeinschaft.* TO gemeinschaft @'localhost' IDENTIFIED BY 'gemeinschaft';"
-		mysql -e "FLUSH PRIVILEGES"
+		mysql -e "USE mysql; DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1'); UPDATE user SET password=null WHERE user='root' AND (host='localhost' OR host='127.0.0.1'); FLUSH PRIVILEGES;" --user=root --password=$MYSQL_PASSWD
+		mysql -e "GRANT ALL PRIVILEGES ON gemeinschaft.* TO gemeinschaft @'localhost' IDENTIFIED BY 'gemeinschaft'; FLUSH PRIVILEGES;"
 
 		mysql -e "DROP DATABASE IF EXISTS gemeinschaft;"
 		mysql -e "CREATE DATABASE gemeinschaft;"
