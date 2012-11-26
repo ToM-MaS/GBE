@@ -77,7 +77,7 @@ PORT         = 3306
 DATABASE     = gemeinschaft
 OPTION       = 67108864
 USER         = gemeinschaft
-PASSWORD     = ${MYSQL_PASSWD_FS}
+PASSWORD     = ${MYSQL_PASSWD_GS}
 " >/etc/odbc.ini
 		chmod 0640 /etc/odbc.ini
 
