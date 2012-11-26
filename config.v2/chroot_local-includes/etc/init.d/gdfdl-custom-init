@@ -49,9 +49,7 @@ case "$1" in
 		if [ ! -f "/var/lib/${GS_USER}/.mysql_gs_password" ]
 			then
 			echo "** Creating MySQL user 'gemeinschaft'"
-			# FIXME: Hack in static password as long as it's hardcoded too much in the GS5 code...
-			#apg -m30 -a0 -n 1 > "/var/lib/${GS_USER}/.mysql_gs_password"
-			echo gemeinschaft > "/var/lib/${GS_USER}/.mysql_gs_password"
+			apg -m30 -a0 -n 1 > "/var/lib/${GS_USER}/.mysql_gs_password"
 			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.mysql_gs_password"
 			chmod 0440 "/var/lib/${GS_USER}/.mysql_gs_password"
 			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.mysql_gs_password"`"
@@ -88,8 +86,14 @@ chown freeswitch.freeswitch /var/run/freeswitch/.odbc.ini
 		# Update database password in Gemeinschaft config
 		# FIXME: a lot of files are missing, conrete files still unknown !!!!!
 		#
-		echo "** Updating GS with new MySQL password"
+		echo "** Updating Gemeinschaft with new MySQL password"
 		sed -i "s/password: gemeinschaft/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
+
+		echo "** Updating FreeSwitch with new MySQL password"
+		sed -i "s/password = gemeinschaft/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini"
+		sed -i "s/odbc-dsn = gemeinschaft:gemeinschaft:gemeinschaft/odbc-dsn = gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini"
+		sed -i "s/<param name="core-db-dsn" value="gemeinschaft:gemeinschaft:gemeinschaft"\/>/<param name="core-db-dsn" value="gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<param name="odbc-dsn" value="gemeinschaft:gemeinschaft:gemeinschaft"\/>/<param name="odbc-dsn" value="gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
 
 		# Load database structure into DB
 		#
