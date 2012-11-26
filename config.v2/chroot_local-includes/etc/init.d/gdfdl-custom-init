@@ -45,14 +45,13 @@ case "$1" in
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
 		fi
 
-		# FIXME: Hack in static password as long as it's hardcoded too much in the GS5 code...
-		echo gemeinschaft > "/var/lib/${GS_USER}/.mysql_gs_password"
-
 		# Create MySQL user for Gemeinschaft
 		if [ ! -f "/var/lib/${GS_USER}/.mysql_gs_password" ]
 			then
 			echo "** Creating MySQL user 'gemeinschaft'"
-			apg -m30 -a0 -n 1 > "/var/lib/${GS_USER}/.mysql_gs_password"
+			# FIXME: Hack in static password as long as it's hardcoded too much in the GS5 code...
+			#apg -m30 -a0 -n 1 > "/var/lib/${GS_USER}/.mysql_gs_password"
+			echo gemeinschaft > "/var/lib/${GS_USER}/.mysql_gs_password"
 			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.mysql_gs_password"
 			chmod 0440 "/var/lib/${GS_USER}/.mysql_gs_password"
 			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.mysql_gs_password"`"
