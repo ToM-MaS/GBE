@@ -18,7 +18,7 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft specific system configuration\n\n"
 
-echo -e "GBE: Create service group ${GS_GROUP} ...\n"
+echo -e "GBE: Create service group '${GS_GROUP}' ...\n"
 groupadd -r -f ${GS_GROUP}
 
 echo -e "GBE: Create service account ${GS_USER} ...\n"
