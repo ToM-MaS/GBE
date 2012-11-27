@@ -17,6 +17,13 @@ FQDN="`/bin/hostname -f`"
 GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
 GS_BRANCH="`cat /etc/gemeinschaft_branch`"
 
+if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
+	then
+	LIVE=true
+else
+	LIVE=false
+fi
+
 echo "
 ***      _____                                               _____
 ***     (.---.)                GEMEINSCHAFT 5               (.---.)
@@ -31,15 +38,23 @@ echo "
 
 for ADDRESS in ${FQDN} ${IPS}
 do
+	[[ ${ADDRESS} =~ "localhost" ]] && continue
 	[[ ${ADDRESS} =~ ":" ]] && ADDRESS="["${ADDRESS}"]" 
 	echo "***     http://${ADDRESS}/" >> /etc/issue
 done
 
 echo "***
 ***
-***
-***
-***
+***" >> /etc/issue
+
+if [[ ${LIVE} == true ]]
+	then
+	echo "***     LIVE SYSTEM - ALL CHANGES WILL BE LOST AFTER REBOOT" >> /etc/issue
+else
+	echo "***" >> /etc/issue
+fi
+
+echo "***
 ***
 ***
 ***
