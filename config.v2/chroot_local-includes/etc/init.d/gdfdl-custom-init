@@ -46,16 +46,16 @@ case "$1" in
 		fi
 
 		# Create MySQL user for Gemeinschaft
-		if [ ! -f "/var/lib/${GS_USER}/.mysql_gs_password" ]
+		if [ ! -f "/var/lib/${GS_USER}/.gs_mysql_password" ]
 			then
 			echo "** Creating MySQL user 'gemeinschaft'"
-			apg -m30 -a0 -n 1 > "/var/lib/${GS_USER}/.mysql_gs_password"
-			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.mysql_gs_password"
-			chmod 0440 "/var/lib/${GS_USER}/.mysql_gs_password"
-			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.mysql_gs_password"`"
+			apg -m30 -a0 -n 1 > "/var/lib/${GS_USER}/.gs_mysql_password"
+			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.gs_mysql_password"
+			chmod 0440 "/var/lib/${GS_USER}/.gs_mysql_password"
+			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.gs_mysql_password"`"
 			mysql -e "GRANT ALL PRIVILEGES ON gemeinschaft.* TO gemeinschaft @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_GS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 		else
-			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.mysql_gs_password"`"
+			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.gs_mysql_password"`"
 		fi
 
 		# Generate ODBC configuration files
