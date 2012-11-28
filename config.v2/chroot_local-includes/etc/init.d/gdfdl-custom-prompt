@@ -38,7 +38,7 @@ echo "
 
 for ADDRESS in ${FQDN} ${IPS}
 do
-	[[ ${ADDRESS} =~ "localhost" ]] && echo "***"; continue
+	[[ ${ADDRESS} =~ "localhost" ]] && echo "***" >> /etc/issue; continue
 	[[ ${ADDRESS} =~ ":" ]] && ADDRESS="["${ADDRESS}"]" 
 	echo "***     http://${ADDRESS}/" >> /etc/issue
 done
