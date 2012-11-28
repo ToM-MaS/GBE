@@ -84,16 +84,22 @@ chown freeswitch.freeswitch /var/run/freeswitch/.odbc.ini
 		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 
 		# Update database password in Gemeinschaft config
-		# FIXME: a lot of files are missing, conrete files still unknown !!!!!
-		#
 		echo "** Updating Gemeinschaft with new MySQL password"
 		sed -i "s/password: gemeinschaft/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
 
+		# Update database password in FreeSwitch configs
 		echo "** Updating FreeSwitch with new MySQL password"
 		sed -i "s/password = gemeinschaft/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini"
 		sed -i "s/odbc-dsn = gemeinschaft:gemeinschaft:gemeinschaft/odbc-dsn = gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini"
 		sed -i "s/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:gemeinschaft\"\/>/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
 		sed -i "s/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:gemeinschaft\"\/>/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+
+		# Lower FreeSwitch debug level for productive installations
+		[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
+		if [[ `expr length ${BUILD}` == 10 ]]
+			then
+			sed -i "s/<map name=\"all\" value=\"console,debug,info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"console,info,notice,warning,err,crit,alert\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+		fi
 
 		# Load database structure into DB
 		#
