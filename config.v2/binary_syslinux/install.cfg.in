@@ -2,5 +2,6 @@ label install
 	menu label ^Install
 	text help
  Start installation to local drive
+	endtext
 	kernel @KERNEL@
 	append initrd=@INITRD@ @LB_BOOTAPPEND_INSTALL@

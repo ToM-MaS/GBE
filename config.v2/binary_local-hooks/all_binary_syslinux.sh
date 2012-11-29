@@ -21,7 +21,7 @@ cp -pf ${SELF}/config/binary_syslinux/menu.cfg ${SELF}/binary/isolinux/
 # Live boot menu
 echo "Generating ${SELF}/binary/isolinux/live.cfg based on ${SELF}/config/binary_syslinux/live.cfg.in ..."
 sed -e "s|@KERNEL@|/live/vmlinuz|g" \
-    -e "s|@INITRD@|/live/initrd.gz|g" \
+    -e "s|@INITRD@|/live/initrd.img|g" \
     -e "s|@LB_BOOTAPPEND_LIVE_DE@|${LB_BOOTAPPEND_LIVE} ${LB_BOOTAPPEND_LIVE_DE}|g" \
     -e "s|@LB_BOOTAPPEND_LIVE_CH@|${LB_BOOTAPPEND_LIVE} ${LB_BOOTAPPEND_LIVE_CH}|g" \
     -e "s|@LB_BOOTAPPEND_LIVE_EN@|${LB_BOOTAPPEND_LIVE} ${LB_BOOTAPPEND_LIVE_EN}|g" \
