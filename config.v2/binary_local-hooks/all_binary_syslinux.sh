@@ -29,7 +29,10 @@ sed -e "s|@KERNEL@|/live/vmlinuz|g" \
 
 # Install menu
 echo "Generating ${SELF}/binary/isolinux/install.cfg based on ${SELF}/config/binary_syslinux/install.cfg.in ..."
-sed -e "s|@KERNEL@|/install/gtk/vmlinuz|g" \
-    -e "s|@INITRD@|/install/gtk/initrd.gz|g" \
-    -e "s|@LB_BOOTAPPEND_INSTALL@|video=vesa:ywrap,mtrr vga=788 file=/cdrom/install/preseed.cfg ${LB_BOOTAPPEND_INSTALL}|g" \
+sed -e "s|@KERNEL@|/install/vmlinuz|g" \
+	-e "s|@KERNEL_GUI@|/install/gtk/vmlinuz|g" \
+    -e "s|@INITRD@|/install/initrd.gz|g" \
+    -e "s|@INITRD_GUI@|/install/gtk/initrd.gz|g" \
+    -e "s|@LB_BOOTAPPEND_INSTALL@|vga=normal quiet file=/cdrom/install/preseed.cfg ${LB_BOOTAPPEND_INSTALL}|g" \
+    -e "s|@LB_BOOTAPPEND_INSTALL_GUI@|video=vesa:ywrap,mtrr vga=788 file=/cdrom/install/preseed.cfg ${LB_BOOTAPPEND_INSTALL}|g" \
     ${SELF}/config/binary_syslinux/install.cfg.in > ${SELF}/binary/isolinux/install.cfg
