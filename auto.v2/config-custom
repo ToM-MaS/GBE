@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Gemeinschaft 5
 # live-build auto config script
@@ -16,10 +16,9 @@ lb config noauto \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
 	--distribution squeeze \
-	--hostname gs5-live \
 	--iso-application "Gemeinschaft 5" \
-	--iso-preparer "Gemeinschaft Build Enrironment" \
-	--iso-publisher "Amooma GmbH; http://www.amooma.de/" \
+	--iso-preparer "Gemeinschaft Build Environment" \
+	--iso-publisher "AMOOMA GmbH; http://www.amooma.de/" \
 	--iso-volume "GS5" \
 	--language en \
 	--linux-flavours 686 \
@@ -27,9 +26,8 @@ lb config noauto \
 	--mode debian \
 	--packages-lists minimal \
 	--root-command sudo \
-	--syslinux-splash "config/binary_syslinux/splash.rle" \
-	--syslinux-timeout 10 \
-	--username gs5 \
+	--syslinux-splash "config/binary_syslinux/splash.png" \
+	--syslinux-timeout 0 \
 	--win32-loader disabled \
 	--includes none \
 	"${@}"

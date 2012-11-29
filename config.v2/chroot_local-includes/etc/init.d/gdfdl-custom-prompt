@@ -17,32 +17,73 @@ FQDN="`/bin/hostname -f`"
 GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
 GS_BRANCH="`cat /etc/gemeinschaft_branch`"
 
+if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
+	then
+	LIVE=true
+else
+	LIVE=false
+fi
+
+[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
+if [[ `expr length ${BUILD}` == 10 ]]
+	then
+	PRODUCTION=true
+else
+	PRODUCTION=false
+fi
+
+[ -f /etc/gemeinschaft_release ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
+if [[ `expr length ${BUILD}` == 10 ]]
+	then
+	PRODUCTION=true
+	VERSION=`cat /etc/gemeinschaft_release`
+else
+	PRODUCTION=false
+	VERSION="5.0"
+fi
+
+
 echo "
 ***      _____                                               _____
 ***     (.---.)                GEMEINSCHAFT 5               (.---.)
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
-***      -----                                               -----
-***     Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}
-***     Hostname: \n Console: \l
+***      -----                                               -----" > /etc/issue
+
+if [[ ${PRODUCTION} == true ]]
+	then
+	echo "***     Release Version: ${VERSION}.${GDFDL_BUILDNAME}" >> /etc/issue
+else
+	echo "***     GS Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}" >> /etc/issue
+fi
+
+echo "***     Hostname: \n Console: \l
 ***    -------------------------------------------------------------
 ***
 ***     You can reach the web configuration here:
-***" > /etc/issue
+***" >> /etc/issue
 
 for ADDRESS in ${FQDN} ${IPS}
 do
+	[[ ${ADDRESS} =~ "localhost" ]] && echo "***" >> /etc/issue && continue
 	[[ ${ADDRESS} =~ ":" ]] && ADDRESS="["${ADDRESS}"]" 
 	echo "***     http://${ADDRESS}/" >> /etc/issue
 done
 
 echo "***
 ***
-***
-***
-***
+***" >> /etc/issue
+
+if [[ ${LIVE} == true ]]
+	then
+	echo "***     LIVE SYSTEM - ALL CHANGES WILL BE LOST AFTER REBOOT" >> /etc/issue
+else
+	echo "***" >> /etc/issue
+fi
+
+echo "***
 ***
 ***
 ***
 ***    _____________________________________________________________
-***     brought to you by Amooma - http://www.amooma.de/
+***              brought to you by AMOOMA - www.amooma.de
 " >> /etc/issue

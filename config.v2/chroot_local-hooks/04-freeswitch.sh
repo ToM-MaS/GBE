@@ -372,10 +372,10 @@ if [[ ! -f /usr/bin/freeswitch ]]
 	fi
 else
 	# for Debian package based installations we still need to do some additional work for music and sounds
-	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://files.freeswitch.org/freeswitch-sounds-en-us-callie-8000-1.0.16.tar.gz"
-	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://files.freeswitch.org/freeswitch-sounds-en-us-callie-16000-1.0.16.tar.gz"
-	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://files.freeswitch.org/freeswitch-sounds-music-8000-1.0.8.tar.gz"
-	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://files.freeswitch.org/freeswitch-sounds-music-16000-1.0.8.tar.gz"
+	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-en-us-callie-8000-1.0.22.tar.gz"
+	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-en-us-callie-16000-1.0.22.tar.gz"
+	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-8000-1.0.8.tar.gz"
+	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-16000-1.0.8.tar.gz"
 	mkdir -p /usr/share/freeswitch/sounds
 	chmod 755 /usr/share/freeswitch/sounds
 	find /usr/local/src -name 'freeswitch-*.tar.gz' -type f -exec tar xfz {} -C /usr/share/freeswitch/sounds \;
@@ -397,12 +397,12 @@ FREESWITCH_PARAMS=\"-rp -nc\"
 DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
 " > /etc/default/freeswitch
 
-echo -e "GBE: Activating SNMP monitoring for FreeSwitch ...\n"
-echo "
-#  Listen on default named socket /var/agentx/master
-#  agentXPerms  SOCKPERMS [DIRPERMS [USER|UID [GROUP|GID]]]
-agentXPerms     0755 0755 freeswitch daemon
-" >> /etc/snmp/snmpd.conf
+#echo -e "GBE: Activating SNMP monitoring for FreeSwitch ...\n"
+#echo "
+##  Listen on default named socket /var/agentx/master
+##  agentXPerms  SOCKPERMS [DIRPERMS [USER|UID [GROUP|GID]]]
+#agentXPerms     0755 0755 freeswitch daemon
+#" >> /etc/snmp/snmpd.conf
 
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*

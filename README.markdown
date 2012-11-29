@@ -1,12 +1,12 @@
 # Gemeinschaft Build Environment
 
-At the moment the GS5 repository of Amooma is private access only.
+At the moment the GS5 repository of AMOOMA is private access only.
 You will need to provide valid credentials during the build phase to get access and build GS5 successfully.
 
 However feedback to the current development of GBE is always welcome.
 
 **IMPORTANT: Please notice the FAQ below for frequently asked questions!
-Neither Amooma nor I will answer to any questions that are already answered below in the widest sense.**
+Neither AMOOMA nor I will answer to any questions that are already answered below in the widest sense.**
 
 
 ### Building Gemeinschaft 5
@@ -36,7 +36,7 @@ For all the others I have to say sorry, it's highly likely you won't get an acco
 
 
 ### Will there be a download of the generated ISO file available?
-Yes. Amooma as the sponsoring developer of Gemeinschaft 5 has stated they are planning to offer a regular daily or weekly download of the generated ISO file of Gemeinschaft 5. However there is no target date set yet.
+Yes. AMOOMA as the sponsoring developer of Gemeinschaft 5 has stated they are planning to offer a regular daily or weekly download of the generated ISO file of Gemeinschaft 5. However there is no target date set yet.
 
 
 ### How can I build from one of the other branches beside *master*?

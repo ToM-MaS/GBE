@@ -18,15 +18,26 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft specific system configuration\n\n"
 
-echo -e "GBE: Enable SNMP monitoring ...\n"
-sed -i 's/# rocommunity public  localhost/rocommunity public default/' /etc/snmp/snmpd.conf
+echo -e "GBE: Create service group '${GS_GROUP}' ...\n"
+groupadd -r -f ${GS_GROUP}
 
-echo -e "GBE: Create local user ${GS_USER} and set default password ...\n"
-useradd ${GS_USER} -U -m -s /bin/bash
-echo "${GS_USER}:${GS_PASSWORD}" | chpasswd
+echo -e "GBE: Create service account ${GS_USER} ...\n"
+# hint: This should be a system service account (-s) or at least UID needs to be != 1000
+# otherwise live-config user setup will not work correctly.
+useradd ${GS_USER} -N -m -r -d /var/lib/${GS_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GS_GROUP}
+
+# Allow service account some system commands via sudo
+echo "Cmnd_Alias BACKUP = /usr/bin/nohup /usr/local/bin/backup_system.sh *" > /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias SHUTDOWN = /sbin/shutdown -h now" >> /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias REBOOT = /sbin/shutdown -r now" >> /etc/sudoers.d/gemeinschaft
+echo "${GS_USER} ALL = (ALL) NOPASSWD: SHUTDOWN, REBOOT, BACKUP" >> /etc/sudoers.d/gemeinschaft
 
 echo -e "GBE: Correcting file permissions ...\n"
+chmod -R g+w /var/lib/${GS_USER}
+chmod 0770 /var/lib/${GS_USER}
 chmod 0440 /etc/sudoers.d/*
 
 echo - "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
+
+echo - "GBE: Enable local firewall ...\n"

@@ -6,18 +6,11 @@
 #
 
 # tools
-wget 
+wget inetutils-ping inetutils-telnet traceroute
 
 # services
 mysql-server-5.1 mysql-server mysql-client-5.1 mysql-client mysql-common
-snmpd
-openssh-server
+openssh-server postfix postfix-tls
 
-# libraries and modules
-libsasl2-2 libsasl2-modules libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap
-
-# Kiosk applications for live system
-xserver-xorg
-xinit
-xfonts-base
-iceweasel
+# security
+iptables iptables-persistent apg
