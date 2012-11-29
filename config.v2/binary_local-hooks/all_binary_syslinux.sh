@@ -12,6 +12,8 @@ LB_BOOTAPPEND_LIVE_CH="timezone=Europe/Zurich locales=de_CH.UTF-8 keyboard-layou
 LB_BOOTAPPEND_LIVE_EN="timezone=Europe/London locales=en_US.UTF-8 keyboard-layouts=us"
 SELF="`pwd`"
 
+source ${SELF}/config/binary
+
 # Copy default files
 echo "Copy files from ${SELF}/config/binary_syslinux/ to ${SELF}/binary/isolinux/ ..."
 cp -pf ${SELF}/config/binary_syslinux/splash.png ${SELF}/binary/isolinux/
