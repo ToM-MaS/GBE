@@ -7,9 +7,9 @@
 # See LICENSE.GBE file for details.
 #
 
-LB_BOOTAPPEND_LIVE_DE="noautologin quickreboot noprompt timezone=Europe/Berlin locales=de_DE.UTF-8 keyboard-layouts=de"
-LB_BOOTAPPEND_LIVE_CH="noautologin quickreboot noprompt timezone=Europe/Zurich locales=de_CH.UTF-8 keyboard-layouts=ch"
-LB_BOOTAPPEND_LIVE_EN="noautologin quickreboot noprompt timezone=Europe/London locales=en_US.UTF-8 keyboard-layouts=us"
+LB_BOOTAPPEND_LIVE_DE="noautologin quickreboot noprompt timezone=Europe/Berlin locales=de keyboard-layouts=de"
+LB_BOOTAPPEND_LIVE_CH="noautologin quickreboot noprompt timezone=Europe/Zurich locales=ch keyboard-layouts=ch"
+LB_BOOTAPPEND_LIVE_EN="noautologin quickreboot noprompt timezone=Europe/London locales=us keyboard-layouts=us"
 SELF="`pwd`"
 
 # Copy default files
