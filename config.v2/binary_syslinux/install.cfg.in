@@ -4,4 +4,4 @@ label install
  Start installation to local drive
 	endtext
 	kernel @KERNEL@
-	append initrd=@INITRD@ @LB_BOOTAPPEND_INSTALL@
+	append initrd=@INITRD@ quiet @LB_BOOTAPPEND_INSTALL@

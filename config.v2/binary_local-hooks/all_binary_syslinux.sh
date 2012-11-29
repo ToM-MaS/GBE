@@ -34,5 +34,5 @@ sed -e "s|@KERNEL@|/live/vmlinuz|g" \
 echo "Generating ${SELF}/binary/isolinux/install.cfg based on ${SELF}/config/binary_syslinux/install.cfg.in ..."
 sed -e "s|@KERNEL@|/install/gtk/vmlinuz|g" \
     -e "s|@INITRD@|/install/gtk/initrd.gz|g" \
-    -e "s|@LB_BOOTAPPEND_INSTALL@|video=vesa:ywrap,mtrr vga=788 quiet ${LB_BOOTAPPEND_INSTALL}|g" \
+    -e "s|@LB_BOOTAPPEND_INSTALL@|video=vesa:ywrap,mtrr vga=788 ${LB_BOOTAPPEND_INSTALL}|g" \
     ${SELF}/config/binary_syslinux/install.cfg.in > ${SELF}/binary/isolinux/install.cfg
