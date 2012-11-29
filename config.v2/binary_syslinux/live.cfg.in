@@ -1,0 +1,24 @@
+label live-de
+	menu label Live (^DE)
+	menu default
+	text help
+ Boot live system with german keyboard layout
+	endtext
+	kernel @KERNEL@
+	append initrd=@INITRD@ boot=live config @LB_BOOTAPPEND_LIVE_DE@
+
+label live-ch
+	menu label Live (^CH)
+	text help
+ Boot live system with swiss keyboard layout
+	endtext
+	kernel @KERNEL@
+	append initrd=@INITRD@ boot=live config @LB_BOOTAPPEND_LIVE_CH@
+
+label live-en
+	menu label Live (^EN)
+	text help
+ Boot live system with english keyboard layout
+	endtext
+	kernel @KERNEL@
+	append initrd=@INITRD@ boot=live config @LB_BOOTAPPEND_LIVE_EN@
