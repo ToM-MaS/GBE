@@ -61,6 +61,9 @@ password ${GS_GIT_PASSWORD}
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
 fi
 
+# Alias link alias
+ln -s "${GS_DIR}" `dirname("${GS_DIR}")`/gemeinschaft
+
 # Install delayed worker job
 #
 echo -e "GBE: Install delayed worker job ...\n"
