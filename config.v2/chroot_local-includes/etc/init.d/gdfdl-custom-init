@@ -94,12 +94,15 @@ chown freeswitch.freeswitch /var/run/freeswitch/.odbc.ini
 		sed -i "s/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:gemeinschaft\"\/>/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
 		sed -i "s/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:gemeinschaft\"\/>/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
 
-		# Lower FreeSwitch debug level for productive installations
+		# Lower debug levels for productive installations
 		[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
 		if [[ `expr length ${BUILD}` == 10 ]]
 			then
 			echo "** Updating FreeSwitch debugging to production level"
 			sed -i "s/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+
+			echo "** Updating Gemeinschaft debugging to production level"
+			sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "${GS_DIR}/config/environments/production.rb"
 		fi
 
 		# Load database structure into DB
