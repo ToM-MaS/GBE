@@ -98,7 +98,8 @@ chown freeswitch.freeswitch /var/run/freeswitch/.odbc.ini
 		[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
 		if [[ `expr length ${BUILD}` == 10 ]]
 			then
-			sed -i "s/<map name=\"all\" value=\"console,debug,info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"console,info,notice,warning,err,crit,alert\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+			echo "** Updating FreeSwitch debugging to production level"
+			sed -i "s/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
 		fi
 
 		# Load database structure into DB
