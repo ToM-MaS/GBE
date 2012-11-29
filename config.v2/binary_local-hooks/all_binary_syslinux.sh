@@ -7,13 +7,10 @@
 # See LICENSE.GBE file for details.
 #
 
-LB_BOOTAPPEND_LIVE_DE="timezone=Europe/Berlin locales=de_DE.UTF-8 keyboard-layouts=de"
-LB_BOOTAPPEND_LIVE_CH="timezone=Europe/Zurich locales=de_CH.UTF-8 keyboard-layouts=ch"
-LB_BOOTAPPEND_LIVE_EN="timezone=Europe/London locales=en_US.UTF-8 keyboard-layouts=us"
+LB_BOOTAPPEND_LIVE_DE="noautologin quickreboot noprompt timezone=Europe/Berlin locales=de_DE.UTF-8 keyboard-layouts=de"
+LB_BOOTAPPEND_LIVE_CH="noautologin quickreboot noprompt timezone=Europe/Zurich locales=de_CH.UTF-8 keyboard-layouts=ch"
+LB_BOOTAPPEND_LIVE_EN="noautologin quickreboot noprompt timezone=Europe/London locales=en_US.UTF-8 keyboard-layouts=us"
 SELF="`pwd`"
-
-echo "Read binary configuration from ${SELF}/config/binary ..."
-[ -f ${SELF}/config/binary ] && source ${SELF}/config/binary || echo "binary configuration from lb_config not found!"
 
 # Copy default files
 echo "Copy files from ${SELF}/config/binary_syslinux/ to ${SELF}/binary/isolinux/ ..."
@@ -34,5 +31,5 @@ sed -e "s|@KERNEL@|/live/vmlinuz|g" \
 echo "Generating ${SELF}/binary/isolinux/install.cfg based on ${SELF}/config/binary_syslinux/install.cfg.in ..."
 sed -e "s|@KERNEL@|/install/gtk/vmlinuz|g" \
     -e "s|@INITRD@|/install/gtk/initrd.gz|g" \
-    -e "s|@LB_BOOTAPPEND_INSTALL@|video=vesa:ywrap,mtrr vga=788 ${LB_BOOTAPPEND_INSTALL}|g" \
+    -e "s|@LB_BOOTAPPEND_INSTALL@|video=vesa:ywrap,mtrr vga=788 file=/cdrom/install/preseed.cfg ${LB_BOOTAPPEND_INSTALL}|g" \
     ${SELF}/config/binary_syslinux/install.cfg.in > ${SELF}/binary/isolinux/install.cfg
