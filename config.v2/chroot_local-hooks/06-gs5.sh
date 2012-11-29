@@ -86,6 +86,10 @@ echo -e "GBE: Linking FreeSWITCH configuration ...\n"
 ln -s "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
 ln -s "${GS_DIR}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
+echo -e "GBE: Setup loggin directory ...\n"
+rm -rf "${GS_DIR}/log"
+ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
+
 #FIXME compatibility with manual installation and GS default directories
 ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
 ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
