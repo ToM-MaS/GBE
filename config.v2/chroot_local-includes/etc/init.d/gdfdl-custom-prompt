@@ -24,17 +24,43 @@ else
 	LIVE=false
 fi
 
+[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
+if [[ `expr length ${BUILD}` == 10 ]]
+	then
+	PRODUCTION=true
+else
+	PRODUCTION=false
+fi
+
+[ -f /etc/gemeinschaft_release ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
+if [[ `expr length ${BUILD}` == 10 ]]
+	then
+	PRODUCTION=true
+	VERSION=`cat /etc/gemeinschaft_release`
+else
+	PRODUCTION=false
+	VERSION="5.0"
+fi
+
+
 echo "
 ***      _____                                               _____
 ***     (.---.)                GEMEINSCHAFT 5               (.---.)
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
-***      -----                                               -----
-***     Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}
-***     Hostname: \n Console: \l
+***      -----                                               -----" > /etc/issue
+
+if [[ ${PRODUCTION} == true ]]
+	then
+	echo "***     Release Version: ${VERSION}.${GDFDL_BUILDNAME}" >> /etc/issue
+else
+	echo "***     GS Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}" >> /etc/issue
+fi
+
+echo "***     Hostname: \n Console: \l
 ***    -------------------------------------------------------------
 ***
 ***     You can reach the web configuration here:
-***" > /etc/issue
+***" >> /etc/issue
 
 for ADDRESS in ${FQDN} ${IPS}
 do
