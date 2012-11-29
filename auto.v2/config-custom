@@ -26,7 +26,7 @@ lb config noauto \
 	--mode debian \
 	--packages-lists minimal \
 	--root-command sudo \
-	--syslinux-splash "config/binary_syslinux/gs_bootsplash_syslinux.png" \
+	--syslinux-splash "config/binary_syslinux/splash.png" \
 	--syslinux-timeout 10 \
 	--win32-loader disabled \
 	--includes none \
