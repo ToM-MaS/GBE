@@ -259,3 +259,5 @@ chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
 chmod -R g+w "${GS_DIR}"
 # Restrict access to configuration and logfiles
 chmod 0770 "${GS_DIR}/config" /var/log/gemeinschaft
+# add GS system user to freeswitch group
+usermod -a -G freeswitch ${GS_USER} 
