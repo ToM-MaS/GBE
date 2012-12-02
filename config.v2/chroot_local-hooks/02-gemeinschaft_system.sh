@@ -37,6 +37,9 @@ chmod -R g+w /var/lib/${GS_USER}
 chmod 0770 /var/lib/${GS_USER}
 chmod 0440 /etc/sudoers.d/*
 
+echo -e "GBE: Disabling TLS in Postfix ...\n"
+sed -i 's/smtpd_use_tls=yes/smtpd_use_tls=no/' /etc/postfix/main.cf
+
 echo - "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
 
