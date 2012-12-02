@@ -62,7 +62,7 @@ password ${GS_GIT_PASSWORD}
 fi
 
 #  Create alias
-GS_DIR_NORMALIZED=`dirname("${GS_DIR}")`/gemeinschaft
+GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
 ln -s `filename("${GS_DIR}")` "${GS_DIR_NORMALIZED}"
 
 # Install delayed worker job
