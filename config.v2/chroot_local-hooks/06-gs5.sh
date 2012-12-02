@@ -62,18 +62,19 @@ password ${GS_GIT_PASSWORD}
 fi
 
 #  Create alias
-ln -s `filename("${GS_DIR}")` `dirname("${GS_DIR}")`/gemeinschaft
+GS_DIR_NORMALIZED="`dirname("${GS_DIR}")`/gemeinschaft"
+ln -s "`filename("${GS_DIR}")`" "${GS_DIR_NORMALIZED}"
 
 # Install delayed worker job
 #
 echo -e "GBE: Install delayed worker job ...\n"
-echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR}; RAILS_ENV=production bundle exec rake jobs:work >> /var/log/gemeinschaft/worker.log 2>&1\"" >> /etc/inittab
+echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work >> /var/log/gemeinschaft/worker.log 2>&1\"" >> /etc/inittab
 
 # Install cronjobs
 #
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "23 1 * * * ${GS_USER} ${GS_DIR}/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
+echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
 
 # Create log dir
 #
@@ -86,16 +87,16 @@ su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 echo -e "GBE: Linking FreeSWITCH configuration ...\n"
 [ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
-ln -s "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
-ln -s "${GS_DIR}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
 echo -e "GBE: Setup loggin directory ...\n"
 rm -rf "${GS_DIR}/log"
 ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
 
 #FIXME compatibility with manual installation and GS default directories
-ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
-ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/conf" /opt/freeswitch/conf
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /opt/freeswitch/scripts
 
 #FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
 ln -s /usr/share/freeswitch/scripts /usr/scripts
@@ -114,7 +115,7 @@ PassengerRuby /var/lib/${GS_USER}/.rvm/wrappers/default/ruby
 PassengerMaxPoolSize 4
 PassengerMaxInstancesPerApp 3
 # http://stackoverflow.com/questions/821820/how-does-phusion-passenger-reuse-threads-and-processes
-# Both virtual hosts (PassengerAppRoot /opt/gemeinschaft) are actually
+# Both virtual hosts (PassengerAppRoot ${GS_DIR_NORMALIZED}) are actually
 # the same application!
 
 PassengerPoolIdleTime 200
@@ -165,10 +166,10 @@ Timeout 100
 	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
 	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
 
-	DocumentRoot ${GS_DIR}/public
+	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR}
+	PassengerAppRoot ${GS_DIR_NORMALIZED}
 	PassengerMinInstances 1
 	PassengerPreStart http://127.0.0.1:80/
 	PassengerStatThrottleRate 10
@@ -184,7 +185,7 @@ Timeout 100
 	RailsEnv production
 	#RackEnv  production
 
-	<Directory ${GS_DIR}/public>
+	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
@@ -208,10 +209,10 @@ Timeout 100
 	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
 	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
 
-	DocumentRoot ${GS_DIR}/public
+	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR}
+	PassengerAppRoot ${GS_DIR_NORMALIZED}
 	PassengerMinInstances 1
 	PassengerPreStart https://127.0.0.1:443/
 	PassengerStatThrottleRate 10
@@ -227,7 +228,7 @@ Timeout 100
 	RailsEnv production
 	#RackEnv  production
 
-	<Directory ${GS_DIR}/public>
+	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
