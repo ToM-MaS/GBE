@@ -63,7 +63,7 @@ fi
 
 #  Create alias
 GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
-ln -s `filename("${GS_DIR}")` "${GS_DIR_NORMALIZED}"
+ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 
 # Install delayed worker job
 #
