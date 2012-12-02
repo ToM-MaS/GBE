@@ -142,12 +142,9 @@ MaxKeepAliveRequests 40
 KeepAliveTimeout 60
 Timeout 100
 
-LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for_syslog_without_redundant_time
-
-
 <VirtualHost *:80>
 	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\" 
-	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" log_format_for_syslog_without_redundant_time
+	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" combined
 
 	RewriteEngine on
 
@@ -197,7 +194,7 @@ LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for
 
 <VirtualHost *:443>
 	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\"
-	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" log_format_for_syslog_without_redundant_time
+	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" combined
 
 	RewriteEngine on
 
