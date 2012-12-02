@@ -105,6 +105,11 @@ ln -s /var/lib/freeswitch/recordings /usr/recordings
 ln -s /var/lib/freeswitch/storage /usr/storage
 ln -s /usr/lib/lua /usr/local/lib/lua
 
+#FIXME another hack for ruby/rails environment as GS scripts explicitly uses this path for sourcing
+#      (although excplicit sourcing is deprecated from GBE perspective)
+mkdir -p /usr/local/rvm/scripts
+ln -s /var/lib/${GS_USER}/.rvm/scripts/rvm /usr/local/rvm/scripts/rvm
+
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
 echo -e "GBE: Adjusting Apache2 configuration ...\n"
