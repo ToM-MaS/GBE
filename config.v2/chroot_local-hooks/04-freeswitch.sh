@@ -386,6 +386,9 @@ else
 	# compatibility with manual installation and GS default directories
 	mkdir -p /opt/freeswitch
 	ln -s /usr/share/freeswitch/sounds /opt/freeswitch/sounds
+	ln -s /var/lib/freeswitch/storage /opt/freeswitch/storage
+	ln -s /var/lib/freeswitch/recordings /opt/freeswitch/recordings
+	ln -s /var/lib/freeswitch/db /opt/freeswitch/db
 fi
 
 echo -e "GBE: Enabling FreeSwitch ...\n"

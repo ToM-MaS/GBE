@@ -37,6 +37,17 @@ chmod -R g+w /var/lib/${GS_USER}
 chmod 0770 /var/lib/${GS_USER}
 chmod 0440 /etc/sudoers.d/*
 
+echo -e "GBE: Configuring Postfix ...\n"
+# Disable TLS for INCOMING mails to avoid certificate issues
+# when Gemeinschaft wants to send mails
+sed -i 's/smtpd_use_tls=yes/smtpd_use_tls=no/' /etc/postfix/main.cf
+# Enable TLS for OUTGOING mails so that emails to users can be encrypted
+echo "smtp_use_tls = yes" >> /etc/postfix/main.cf
+echo "smtp_tls_security_level = may" >> /etc/postfix/main.cf
+echo "smtpd_tls_CApath = /etc/ssl/certs" >> /etc/postfix/main.cf
+echo "smtpd_tls_cert_file=/etc/ssl/gemeinschaft.crt" >> /etc/postfix/main.cf
+echo "smtpd_tls_key_file=/etc/ssl/gemeinschaft.key" >> /etc/postfix/main.cf
+
 echo - "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
 

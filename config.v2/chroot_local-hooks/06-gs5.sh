@@ -61,16 +61,20 @@ password ${GS_GIT_PASSWORD}
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
 fi
 
+#  Create alias
+GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
+ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
+
 # Install delayed worker job
 #
 echo -e "GBE: Install delayed worker job ...\n"
-echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR}; RAILS_ENV=production bundle exec rake jobs:work >> /var/log/gemeinschaft/worker.log 2>&1\"" >> /etc/inittab
+echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work\"" >> /etc/inittab
 
 # Install cronjobs
 #
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "23 1 * * * ${GS_USER} ${GS_DIR}/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
+echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
 
 # Create log dir
 #
@@ -83,12 +87,16 @@ su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 echo -e "GBE: Linking FreeSWITCH configuration ...\n"
 [ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
-ln -s "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
-ln -s "${GS_DIR}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
+
+echo -e "GBE: Setup loggin directory ...\n"
+rm -rf "${GS_DIR}/log"
+ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
 
 #FIXME compatibility with manual installation and GS default directories
-ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
-ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/conf" /opt/freeswitch/conf
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /opt/freeswitch/scripts
 
 #FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
 ln -s /usr/share/freeswitch/scripts /usr/scripts
@@ -96,6 +104,11 @@ ln -s /var/lib/freeswitch/db /usr/db
 ln -s /var/lib/freeswitch/recordings /usr/recordings
 ln -s /var/lib/freeswitch/storage /usr/storage
 ln -s /usr/lib/lua /usr/local/lib/lua
+
+#FIXME another hack for ruby/rails environment as GS scripts explicitly uses this path for sourcing
+#      (although excplicit sourcing is deprecated from GBE perspective)
+mkdir -p /usr/local/rvm/scripts
+ln -s /var/lib/${GS_USER}/.rvm/scripts/rvm /usr/local/rvm/scripts/rvm
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
@@ -107,7 +120,7 @@ PassengerRuby /var/lib/${GS_USER}/.rvm/wrappers/default/ruby
 PassengerMaxPoolSize 4
 PassengerMaxInstancesPerApp 3
 # http://stackoverflow.com/questions/821820/how-does-phusion-passenger-reuse-threads-and-processes
-# Both virtual hosts (PassengerAppRoot /opt/gemeinschaft) are actually
+# Both virtual hosts (PassengerAppRoot ${GS_DIR_NORMALIZED}) are actually
 # the same application!
 
 PassengerPoolIdleTime 200
@@ -135,12 +148,9 @@ MaxKeepAliveRequests 40
 KeepAliveTimeout 60
 Timeout 100
 
-LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for_syslog_without_redundant_time
-
-
 <VirtualHost *:80>
 	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\" 
-	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" log_format_for_syslog_without_redundant_time
+	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" combined
 
 	RewriteEngine on
 
@@ -161,10 +171,10 @@ LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for
 	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
 	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
 
-	DocumentRoot ${GS_DIR}/public
+	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR}
+	PassengerAppRoot ${GS_DIR_NORMALIZED}
 	PassengerMinInstances 1
 	PassengerPreStart http://127.0.0.1:80/
 	PassengerStatThrottleRate 10
@@ -180,7 +190,7 @@ LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for
 	RailsEnv production
 	#RackEnv  production
 
-	<Directory ${GS_DIR}/public>
+	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
@@ -190,7 +200,7 @@ LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for
 
 <VirtualHost *:443>
 	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\"
-	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" log_format_for_syslog_without_redundant_time
+	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" combined
 
 	RewriteEngine on
 
@@ -204,10 +214,10 @@ LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for
 	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
 	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
 
-	DocumentRoot ${GS_DIR}/public
+	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR}
+	PassengerAppRoot ${GS_DIR_NORMALIZED}
 	PassengerMinInstances 1
 	PassengerPreStart https://127.0.0.1:443/
 	PassengerStatThrottleRate 10
@@ -223,7 +233,7 @@ LogFormat \"%h %l %u \\"%r\\" %>s %b KA:%k \\"%{User-agent}i\\"\" log_format_for
 	RailsEnv production
 	#RackEnv  production
 
-	<Directory ${GS_DIR}/public>
+	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
@@ -254,3 +264,5 @@ chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
 chmod -R g+w "${GS_DIR}"
 # Restrict access to configuration and logfiles
 chmod 0770 "${GS_DIR}/config" /var/log/gemeinschaft
+# add GS system user to freeswitch group
+usermod -a -G freeswitch ${GS_USER} 
