@@ -25,7 +25,7 @@ start)
 
 		echo "Generating SSL certificate for ${HOSTNAME} ..."
 		openssl req -newkey rsa:2048 -x509 -days 3650 -nodes -out /etc/ssl/certs/${HOSTNAME}.crt -keyout /etc/ssl/private/${HOSTNAME}.key -subj "/C=DE/ST=Rhineland-Palatinate/L=Neuwied/O=AMOOMA GmbH/OU=Self-generated certificate for Gemeinschaft/CN=${HOSTNAME}"
-		c_rehash /etc/ssl/certs 2>&1 >/dev/null
+		update-ca-certificates
 
 		ln -sf /etc/ssl/private/${HOSTNAME}.key /etc/ssl/gemeinschaft.key
 		ln -sf /etc/ssl/certs/${HOSTNAME}.crt /etc/ssl/gemeinschaft.crt
