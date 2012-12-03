@@ -44,6 +44,9 @@ sed -i 's/smtpd_use_tls=yes/smtpd_use_tls=no/' /etc/postfix/main.cf
 # Enable TLS for OUTGOING mails so that emails to users can be encrypted
 echo "smtp_use_tls = yes" >> /etc/postfix/main.cf
 echo "smtp_tls_security_level = may" >> /etc/postfix/main.cf
+echo "smtpd_tls_CApath = /etc/ssl/certs" >> /etc/postfix/main.cf
+echo "smtpd_tls_cert_file=/etc/ssl/gemeinschaft.crt" >> /etc/postfix/main.cf
+echo "smtpd_tls_key_file=/etc/ssl/gemeinschaft.key" >> /etc/postfix/main.cf
 
 echo - "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
