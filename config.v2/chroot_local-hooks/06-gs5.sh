@@ -68,7 +68,7 @@ ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 # Install delayed worker job
 #
 echo -e "GBE: Install delayed worker job ...\n"
-echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work\ 2>&1 >/dev/null"" >> /etc/inittab
+echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work 2>&1 >/dev/null\"" >> /etc/inittab
 
 # Install cronjobs
 #
