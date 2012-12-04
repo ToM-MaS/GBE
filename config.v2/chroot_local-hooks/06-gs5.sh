@@ -74,12 +74,12 @@ echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAIL
 #
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin" > /etc/cron.d/gemeinschaft.rvm
-echo "SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell" >> /etc/cron.d/gemeinschaft.rvm
-echo "RAILS_ENV=production" >> /etc/cron.d/gemeinschaft.rvm
-echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones" >> /etc/cron.d/gemeinschaft.rvm
-echo "* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )" >> /etc/cron.d/gemeinschaft.rvm
-echo "* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" >> /etc/cron.d/gemeinschaft.rvm
+echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin" > /etc/cron.d/gemeinschaft_rvm
+echo "SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell" >> /etc/cron.d/gemeinschaft_rvm
+echo "RAILS_ENV=production" >> /etc/cron.d/gemeinschaft_rvm
+echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones" >> /etc/cron.d/gemeinschaft_rvm
+echo "* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )" >> /etc/cron.d/gemeinschaft_rvm
+echo "* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" >> /etc/cron.d/gemeinschaft_rvm
 
 # Create log dir
 #
