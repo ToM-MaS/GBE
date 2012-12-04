@@ -106,6 +106,9 @@ chown freeswitch.freeswitch /var/run/freeswitch/.odbc.ini
 
 			echo "** Updating monAMI debugging to production level"
 			sed -i "s/ARGS=\"--log-file=/var/log/gemeinschaft/mon_ami.log\"/ARGS=\"--log-file=/var/log/gemeinschaft/mon_ami.log --log-level=2\"" "${GS_DIR}/misc/mon_ami/log.py"
+
+			echo "** Updating Cron logging to production level"
+			sed -i "s/# EXTRA_OPTS=\"-L 2\"/EXTRA_OPTS=\"-L 0\"/" /etc/syslog-ng/syslog-ng.conf
 		fi
 
 		# Load database structure into DB

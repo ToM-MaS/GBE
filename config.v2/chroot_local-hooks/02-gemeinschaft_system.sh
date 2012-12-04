@@ -51,6 +51,9 @@ echo "${GS_USER}: root" >> /etc/aliases
 echo "gsmaster: root" >> /etc/aliases
 newaliases
 
+echo -e "GBE: Adjust syslog facilities ...\n"
+sed -i "s/filter f_syslog3 { not facility(auth, authpriv, mail) and not filter(f_debug); };/filter f_syslog3 { not facility(auth, authpriv, mail, cron) and not filter(f_debug); };/" /etc/syslog-ng/syslog-ng.conf
+
 echo - "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
 
