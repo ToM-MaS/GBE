@@ -154,8 +154,9 @@ KeepAliveTimeout 60
 Timeout 100
 
 <VirtualHost *:80>
-	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\" 
-	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" combined
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+	LogLevel error
 
 	RewriteEngine on
 
@@ -204,8 +205,9 @@ Timeout 100
 
 
 <VirtualHost *:443>
-	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\"
-	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" combined
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+	LogLevel error
 
 	RewriteEngine on
 
