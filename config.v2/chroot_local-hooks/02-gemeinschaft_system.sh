@@ -47,6 +47,12 @@ echo "smtp_tls_security_level = may" >> /etc/postfix/main.cf
 echo "smtpd_tls_CApath = /etc/ssl/certs" >> /etc/postfix/main.cf
 echo "smtpd_tls_cert_file=/etc/ssl/gemeinschaft.crt" >> /etc/postfix/main.cf
 echo "smtpd_tls_key_file=/etc/ssl/gemeinschaft.key" >> /etc/postfix/main.cf
+echo "${GS_USER}: root" >> /etc/aliases
+echo "gsmaster: root" >> /etc/aliases
+newaliases
+
+echo -e "GBE: Adjust syslog facilities ...\n"
+sed -i "s/filter f_syslog3 { not facility(auth, authpriv, mail) and not filter(f_debug); };/filter f_syslog3 { not facility(auth, authpriv, mail, cron) and not filter(f_debug); };/" /etc/syslog-ng/syslog-ng.conf
 
 echo - "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd

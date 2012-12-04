@@ -68,13 +68,18 @@ ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 # Install delayed worker job
 #
 echo -e "GBE: Install delayed worker job ...\n"
-echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work\"" >> /etc/inittab
+echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work 2>&1 >/dev/null\"" >> /etc/inittab
 
 # Install cronjobs
 #
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones.sh" > /etc/cron.d/gemeinschaft
+echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin" > /etc/cron.d/gemeinschaft_rvm
+echo "SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell" >> /etc/cron.d/gemeinschaft_rvm
+echo "RAILS_ENV=production" >> /etc/cron.d/gemeinschaft_rvm
+echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones" >> /etc/cron.d/gemeinschaft_rvm
+echo "* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )" >> /etc/cron.d/gemeinschaft_rvm
+echo "* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" >> /etc/cron.d/gemeinschaft_rvm
 
 # Create log dir
 #
@@ -149,8 +154,9 @@ KeepAliveTimeout 60
 Timeout 100
 
 <VirtualHost *:80>
-	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\" 
-	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" combined
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+	LogLevel error
 
 	RewriteEngine on
 
@@ -181,14 +187,14 @@ Timeout 100
 	PassengerSpawnMethod smart-lv2
 	PassengerUseGlobalQueue on
 	PassengerUser  ${GS_USER}
-	#PassengerGroup www-data
+	PassengerGroup ${GS_GROUP}
 
 	# http://blog.phusion.nl/2010/01/08/phusion-passenger-2-2-9-released/
 	# http://blog.phusion.nl/2010/07/29/the-road-to-passenger-3-technology-preview-4-adding-new-features-and-removing-old-limitations/
 	RailsBaseURI /
 	#RackBaseURI  /
-	RailsEnv production
-	#RackEnv  production
+	RailsEnv development
+	#RackEnv  development
 
 	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
@@ -199,8 +205,9 @@ Timeout 100
 
 
 <VirtualHost *:443>
-	ErrorLog  \"|/usr/bin/logger -t apache -i -p local6.info\"
-	CustomLog \"|/usr/bin/logger -t apache -i -p local6.info\" combined
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+	LogLevel error
 
 	RewriteEngine on
 
@@ -224,14 +231,14 @@ Timeout 100
 	PassengerSpawnMethod smart-lv2
 	PassengerUseGlobalQueue on
 	PassengerUser  ${GS_USER}
-	#PassengerGroup www-data
+	PassengerGroup ${GS_GROUP}
 
 	# http://blog.phusion.nl/2010/01/08/phusion-passenger-2-2-9-released/
 	# http://blog.phusion.nl/2010/07/29/the-road-to-passenger-3-technology-preview-4-adding-new-features-and-removing-old-limitations/
 	RailsBaseURI /
 	#RackBaseURI  /
-	RailsEnv production
-	#RackEnv  production
+	RailsEnv development
+	#RackEnv  development
 
 	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
@@ -239,12 +246,6 @@ Timeout 100
 		Options FollowSymLinks
 	</Directory>
         
-        SSLVerifyClient none
-
-       <Files ~ \"settings-.*\">
-          SSLVerifyClient require
-          SSLVerifyDepth 1
-        </Files>	
 	SSLEngine on
 	SSLCertificateFile    /etc/ssl/gemeinschaft.crt
 	SSLCertificateKeyFile /etc/ssl/gemeinschaft.key
