@@ -78,8 +78,8 @@ echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin" > /etc/cron.d/gemeinschaft.rvm
 echo "SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell" >> /etc/cron.d/gemeinschaft.rvm
 echo "RAILS_ENV=production" >> /etc/cron.d/gemeinschaft.rvm
 echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones" >> /etc/cron.d/gemeinschaft.rvm
-echo "* * * * * ${GS_USER} cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications" >> /etc/cron.d/gemeinschaft.rvm
-echo "* * * * * ${GS_USER} cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications" >> /etc/cron.d/gemeinschaft.rvm
+echo "* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )" >> /etc/cron.d/gemeinschaft.rvm
+echo "* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" >> /etc/cron.d/gemeinschaft.rvm
 
 # Create log dir
 #
