@@ -187,7 +187,7 @@ Timeout 100
 	PassengerSpawnMethod smart-lv2
 	PassengerUseGlobalQueue on
 	PassengerUser  ${GS_USER}
-	#PassengerGroup www-data
+	PassengerGroup ${GS_GROUP}
 
 	# http://blog.phusion.nl/2010/01/08/phusion-passenger-2-2-9-released/
 	# http://blog.phusion.nl/2010/07/29/the-road-to-passenger-3-technology-preview-4-adding-new-features-and-removing-old-limitations/
@@ -231,7 +231,7 @@ Timeout 100
 	PassengerSpawnMethod smart-lv2
 	PassengerUseGlobalQueue on
 	PassengerUser  ${GS_USER}
-	#PassengerGroup www-data
+	PassengerGroup ${GS_GROUP}
 
 	# http://blog.phusion.nl/2010/01/08/phusion-passenger-2-2-9-released/
 	# http://blog.phusion.nl/2010/07/29/the-road-to-passenger-3-technology-preview-4-adding-new-features-and-removing-old-limitations/
