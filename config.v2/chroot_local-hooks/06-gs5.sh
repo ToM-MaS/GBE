@@ -246,12 +246,6 @@ Timeout 100
 		Options FollowSymLinks
 	</Directory>
         
-        SSLVerifyClient none
-
-       <Files ~ \"settings-.*\">
-          SSLVerifyClient require
-          SSLVerifyDepth 1
-        </Files>	
 	SSLEngine on
 	SSLCertificateFile    /etc/ssl/gemeinschaft.crt
 	SSLCertificateKeyFile /etc/ssl/gemeinschaft.key
