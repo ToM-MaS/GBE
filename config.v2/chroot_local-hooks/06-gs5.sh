@@ -193,8 +193,8 @@ Timeout 100
 	# http://blog.phusion.nl/2010/07/29/the-road-to-passenger-3-technology-preview-4-adding-new-features-and-removing-old-limitations/
 	RailsBaseURI /
 	#RackBaseURI  /
-	RailsEnv production
-	#RackEnv  production
+	RailsEnv development
+	#RackEnv  development
 
 	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
@@ -237,8 +237,8 @@ Timeout 100
 	# http://blog.phusion.nl/2010/07/29/the-road-to-passenger-3-technology-preview-4-adding-new-features-and-removing-old-limitations/
 	RailsBaseURI /
 	#RackBaseURI  /
-	RailsEnv production
-	#RackEnv  production
+	RailsEnv development
+	#RackEnv  development
 
 	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
