@@ -3,7 +3,7 @@
 # Provides:          gemeinschaft-runtime-init
 # Required-Start:    hostname
 # Required-Stop:     
-# X-Start-Before:    apache2 dnsmasq
+# X-Start-Before:    
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Updates certain configurations after reboot
@@ -31,6 +31,9 @@ start)
 
 		ln -sf /etc/ssl/private/${FQDN}.key /etc/ssl/gemeinschaft.key
 		ln -sf /etc/ssl/certs/${FQDN}.crt /etc/ssl/gemeinschaft.crt
+		
+		/etc/init.d/apache2 reload
+		/etc/init.d/postfix reload
 	fi
 
 	# Update dnsmasq configuration with current IPv4 address for auto-provisioning
@@ -47,6 +50,7 @@ start)
 		if [[ -f /etc/dnsmasq.d/gemeinschaft_simple.conf ]]; then
 			sed -i "s/^#dhcp-range=.*proxy.*\$/#dhcp-range=${ADDRESS},proxy/" /etc/dnsmasq.d/gemeinschaft_simple.conf
 		fi
+		/etc/init.d/dnsmasq restart
 	done
 
 	;;
