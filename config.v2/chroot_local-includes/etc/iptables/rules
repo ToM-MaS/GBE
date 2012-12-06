@@ -23,14 +23,18 @@ COMMIT
 -A INPUT -s 127.0.0.1/32 -d 127.0.0.1/32 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 123 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 563 -j ACCEPT
 -A INPUT -p udp -m udp --dport 1900 -j ACCEPT
 -A INPUT -p udp -m udp --dport 3000 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 5038 -j ACCEPT
 -A INPUT -p udp -m udp --dport 5060 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 5061 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 10161 -j ACCEPT
+-A INPUT -p udp -m udp --dport 123 -j ACCEPT
 -A INPUT -p udp -m udp --dport 161 -j ACCEPT
+-A INPUT -p udp -m udp --dport 563 -j ACCEPT
 -A INPUT -p udp -m udp --sport 67:68 --dport 67:68 -j ACCEPT
 -A INPUT -p udp -m udp --sport 1024:65535 --dport 1024:65535 -j ACCEPT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
