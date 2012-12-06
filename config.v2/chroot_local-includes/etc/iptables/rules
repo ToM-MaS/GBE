@@ -32,6 +32,7 @@ COMMIT
 -A INPUT -p udp -m udp --dport 5060 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 5061 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 10161 -j ACCEPT
+-A INPUT -p udp -m udp --dport 53 -j ACCEPT
 -A INPUT -p udp -m udp --dport 123 -j ACCEPT
 -A INPUT -p udp -m udp --dport 161 -j ACCEPT
 -A INPUT -p udp -m udp --dport 563 -j ACCEPT
