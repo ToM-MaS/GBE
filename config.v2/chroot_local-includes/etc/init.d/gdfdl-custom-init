@@ -96,7 +96,7 @@ chown freeswitch.freeswitch /var/run/freeswitch/.odbc.ini
 
 		# Lower debug levels for productive installations
 		[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
-		if [[ `expr length ${BUILD}` == 10 ]]
+		if [[ `expr length ${BUILD}` == 10 ]]; then
 			/usr/local/bin/gs-change-state.sh production
 
 		# Enforce higher debug levels for development installations
