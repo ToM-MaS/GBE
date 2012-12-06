@@ -20,4 +20,5 @@ echo -e "\n###########################################################
 
 echo -e "GBE: Enabling system services ...\n"
 update-rc.d gemeinschaft-runtime-init defaults 2>&1
+update-rc.d gemeinschaft-runtime-init-post defaults 2>&1
 update-rc.d mon_ami defaults 2>&1
