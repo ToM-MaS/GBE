@@ -260,7 +260,7 @@ a2dissite default 2>&1
 a2ensite gemeinschaft 2>&1
 
 echo -e "GBE: Setup runtime user for MonAMI ...\n"
-sed -i "s/^USER=.*/USER=\"${GS_USER}\"" /etc/init.d/mon_ami
+sed -i "s/^USER=.*/USER=\"${GS_USER}\"/" /etc/init.d/mon_ami
 
 echo -e "GBE: Setting permissions ...\n"
 chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
