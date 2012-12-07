@@ -21,6 +21,7 @@ DAEMON=/opt/GS5/misc/mon_ami/mon_ami
 EXECUTABLE=`basename 'mon_ami'`
 DESC="MonAMI Asterisk Manger Interface Emulator"
 ARGS="--log-file=/var/log/gemeinschaft/mon_ami.log"
+USER="root"
 
 if ! [ -x $DAEMON ] ; then
 	echo "ERROR: $DAEMON not found"
@@ -31,7 +32,7 @@ case "$1" in
 	start)
 	        echo -n "Starting $DESC: "
 	        start-stop-daemon --start --pidfile /var/run/$EXECUTABLE.pid \
-            	--make-pidfile --background --startas $DAEMON -- $ARGS
+            	--make-pidfile --background --startas $DAEMON -c $USER -- $ARGS
 		echo "$EXECUTABLE."
 		;;
 
