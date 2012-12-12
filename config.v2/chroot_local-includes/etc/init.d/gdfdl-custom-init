@@ -41,8 +41,9 @@ case "$1" in
 		if [[ "${LIVE}" == true ]]; then
 			apg -m10 -a0 -n 1 -E \' > "/home/gsmaster/.password"
 			GSMASTER_PASSWORD="`cat /home/gsmaster/.password`"
+			chown gsmaster "/home/gsmaster/.password"
 			chmod 400 "/home/gsmaster/.password"
-			echo -e "${GSMASTER_PASSWORD}\n${GSMASTER_PASSWORD}" | (passwd --stdin gsmaster)
+			echo -e "${GSMASTER_PASSWORD}\n${GSMASTER_PASSWORD}" | (passwd gsmaster)
 		fi
 
 		# Database setup
