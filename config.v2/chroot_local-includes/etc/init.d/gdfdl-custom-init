@@ -16,6 +16,13 @@
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 set -e
 
+if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
+	then
+	LIVE=true
+else
+	LIVE=false
+fi
+
 case "$1" in
 	start)
 		# Post-Installation setup for Gemeinschaft 5
@@ -29,6 +36,14 @@ case "$1" in
 		usermod -g ${GS_GROUP} gsmaster 2>&1 >/dev/null
 		groupdel gsmaster 2>&1 >/dev/null
 		set -e
+
+		# Generate new password for gsmaster system administrator for live system
+		if [[ "${LIVE}" == true ]]; then
+			apg -m10 -a0 -n 1 -E \' > "/home/gsmaster/.password"
+			GSMASTER_PASSWORD="`cat /home/gsmaster/.password`"
+			chmod 400 "/home/gsmaster/.password"
+			echo -e "${GSMASTER_PASSWORD}\n${GSMASTER_PASSWORD}" | (passwd --stdin gsmaster)
+		fi
 
 		# Database setup
 		#

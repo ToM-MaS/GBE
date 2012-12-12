@@ -76,13 +76,15 @@ echo "***
 if [[ ${LIVE} == true ]]
 	then
 	echo "***     LIVE SYSTEM - ALL CHANGES WILL BE LOST AFTER REBOOT" >> /etc/issue
+	echo "***" >> /etc/issue
+	echo "***     LOGIN: gsmaster, PASSWORD: `cat /home/gsmaster/.password`" >> /etc/issue
 else
+	echo "***" >> /etc/issue
+	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue
 fi
 
 echo "***
-***
-***
 ***
 ***    _____________________________________________________________
 ***              brought to you by AMOOMA - www.amooma.de
