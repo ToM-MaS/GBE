@@ -39,6 +39,7 @@ case "$1" in
 
 		# Generate new password for gsmaster system administrator for live system
 		if [[ "${LIVE}" == true ]]; then
+			echo "** Generating individual password for live-system user 'gsmaster'"
 			apg -m10 -a0 -n 1 -E \' > "/home/gsmaster/.password"
 			GSMASTER_PASSWORD="`cat /home/gsmaster/.password`"
 			chown gsmaster "/home/gsmaster/.password"
