@@ -18,14 +18,14 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft installation\n\n"
 
-# use master branch if no explicit branch was given
-[ x"${GS_BRANCH}" == x"" ] && GS_BRANCH="master"
-echo "${GS_BRANCH}" > /etc/gemeinschaft_branch
-
 # Clone the git repository
 #
 if [[ ! -d "${GS_DIR}" ]];
 	then
+
+	# use master branch if no explicit branch was given
+	[ x"${GS_BRANCH}" == x"" ] && GS_BRANCH="master"
+	[[ ! -f /etc/gemeinschaft_branch ]] && echo "${GS_BRANCH}" > /etc/gemeinschaft_branch
 
 	echo -e "GBE: Downloading GS from ${GS_GIT_URL} (branch: ${GS_BRANCH}) ...\n"
 
@@ -59,6 +59,9 @@ password ${GS_GIT_PASSWORD}
 	set -e
 
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
+else
+	# This information should come from the CI system, e.g. Jenkins' environment variables
+	[[ ! -f /etc/gemeinschaft_branch ]] && echo "${GIT_BRANCH}" > /etc/gemeinschaft_branch
 fi
 
 #  Create alias
