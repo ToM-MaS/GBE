@@ -62,12 +62,17 @@ echo "***     Hostname: \n Console: \l
 ***     You can reach the web configuration here:
 ***" >> /etc/issue
 
-for ADDRESS in ${FQDN} ${IPS}
-do
-	[[ ${ADDRESS} =~ "localhost" ]] && echo "***" >> /etc/issue && continue
-	[[ ${ADDRESS} =~ ":" ]] && ADDRESS="["${ADDRESS}"]" 
-	echo "***     http://${ADDRESS}/" >> /etc/issue
-done
+if [[ -z "${IPS}" ]]; then
+	echo "***     - FAILED network configuration detection -" >> /etc/issue
+	echo "***" >> /etc/issue
+else
+	for ADDRESS in ${FQDN} ${IPS}
+	do
+		[[ ${ADDRESS} =~ "localhost" ]] && echo "***" >> /etc/issue && continue
+		[[ ${ADDRESS} =~ ":" ]] && ADDRESS="["${ADDRESS}"]" 
+		echo "***     http://${ADDRESS}/" >> /etc/issue
+	done
+fi
 
 echo "***
 ***

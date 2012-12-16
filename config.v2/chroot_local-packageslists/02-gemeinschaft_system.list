@@ -6,7 +6,7 @@
 #
 
 # tools
-wget inetutils-ping inetutils-telnet traceroute
+wget inetutils-ping inetutils-telnet traceroute resolvconf
 
 # services
 mysql-server-5.1 mysql-server mysql-client-5.1 mysql-client mysql-common
