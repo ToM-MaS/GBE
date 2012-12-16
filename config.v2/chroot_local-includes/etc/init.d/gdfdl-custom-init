@@ -40,7 +40,7 @@ case "$1" in
 		# Generate new password for gsmaster system administrator for live system
 		if [[ "${LIVE}" == true ]]; then
 			echo "** Generating individual password for live-system user 'gsmaster'"
-			apg -m10 -a0 -n 1 -E \' > "/home/gsmaster/.password"
+			apg -m10 -a0 -n 1 -M l > "/home/gsmaster/.password"
 			GSMASTER_PASSWORD="`cat /home/gsmaster/.password`"
 			chown gsmaster "/home/gsmaster/.password"
 			chmod 400 "/home/gsmaster/.password"
@@ -54,7 +54,7 @@ case "$1" in
 		if [ ! -f /root/.mysql_root_password ]
 			then
 			echo "** Generating individual password for MySQL user 'root'"
-			apg -m30 -a0 -n 1 -E \' > /root/.mysql_root_password
+			apg -m30 -a0 -n 1 -M NCL > /root/.mysql_root_password
 			chmod 0440 /root/.mysql_root_password
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
 			mysql -e "USE mysql; DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1'); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1'); FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD}"
@@ -66,7 +66,7 @@ case "$1" in
 		if [ ! -f "/var/lib/${GS_USER}/.gs_mysql_password" ]
 			then
 			echo "** Creating MySQL user 'gemeinschaft'"
-			apg -m30 -a0 -n 1 -E \' > "/var/lib/${GS_USER}/.gs_mysql_password"
+			apg -m30 -a0 -n 1 -M NCL > "/var/lib/${GS_USER}/.gs_mysql_password"
 			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.gs_mysql_password"
 			chmod 0440 "/var/lib/${GS_USER}/.gs_mysql_password"
 			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.gs_mysql_password"`"
