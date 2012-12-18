@@ -74,7 +74,6 @@ else
 fi
 
 echo "***
-***
 ***" >> /etc/issue
 
 if [[ ${LIVE} == true ]]
@@ -84,6 +83,7 @@ if [[ ${LIVE} == true ]]
 	echo "***     LOGIN   : gsmaster" >> /etc/issue
     echo "***     PASSWORD: `cat /home/gsmaster/.password`" >> /etc/issue
 else
+	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue

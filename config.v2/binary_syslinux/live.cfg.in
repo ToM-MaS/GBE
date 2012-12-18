@@ -1,5 +1,5 @@
 label live-de
-	menu label Live (^DE)
+	menu label Demo Live-System (^DE)
 	menu default
 	text help
  Boot live system with german keyboard layout
@@ -8,7 +8,7 @@ label live-de
 	append initrd=@INITRD@ boot=live config @LB_BOOTAPPEND_LIVE_DE@ quiet
 
 label live-ch
-	menu label Live (^CH)
+	menu label Demo Live-System (^CH)
 	text help
  Boot live system with swiss keyboard layout
 	endtext
@@ -16,7 +16,7 @@ label live-ch
 	append initrd=@INITRD@ boot=live config @LB_BOOTAPPEND_LIVE_CH@ quiet
 
 label live-en
-	menu label Live (^EN)
+	menu label Demo Live-System (^EN)
 	text help
  Boot live system with english keyboard layout
 	endtext
