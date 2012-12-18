@@ -148,6 +148,9 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	fi
 
 	echo "... done"
+	
+	echo "GBE: Updating GS branch information ..."
+	echo "${GIT_BRANCH}" > "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
 else
 	echo "ERROR: No existing build environment installation found. Run installer first."
 	exit 1

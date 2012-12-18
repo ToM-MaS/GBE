@@ -61,9 +61,6 @@ password ${GS_GIT_PASSWORD}
 	set -e
 
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
-else
-	# This information should come from the CI system, e.g. Jenkins' environment variables
-	[[ ! -f /etc/gemeinschaft_branch ]] && echo "${GIT_BRANCH}" > /etc/gemeinschaft_branch
 fi
 
 #  Create alias
