@@ -36,7 +36,7 @@ If you want a working version **use the master branch instead** or download a re
 You may install from the development branches by adjusting the install command as followed:
 `curl -sL -o .i -w "URL=\"%{url_effective}\" bash .i \$@" get-gbe.profhost.eu | bash -s <BRANCH>`
 
-where <BRANCH> stands for the actual branch of GBE on Github.
+where `<BRANCH>` stands for the actual branch of GBE on Github.
 
 
 ### How can I support the development of GBE?
