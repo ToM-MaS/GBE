@@ -400,6 +400,9 @@ FREESWITCH_PARAMS=\"-rp -nc\"
 DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
 " > /etc/default/freeswitch
 
+# Fix homedir, should be a persistent directory, not under /var/run
+usermod -d /var/lib/freeswitch freeswitch
+
 #echo -e "GBE: Activating SNMP monitoring for FreeSwitch ...\n"
 #echo "
 ##  Listen on default named socket /var/agentx/master
