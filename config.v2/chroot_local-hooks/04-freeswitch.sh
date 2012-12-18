@@ -400,6 +400,10 @@ FREESWITCH_PARAMS=\"-rp -nc\"
 DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
 " > /etc/default/freeswitch
 
+# fix boot dependencies
+sed -i 's/# Required-Start: $network $remote_fs $local_fs/# Required-Start: $network $remote_fs $local_fs mysql/' /etc/init.d/freeswitch
+update-rc.d freeswitch defaults
+
 # Fix homedir, should be a persistent directory, not under /var/run
 usermod -d /var/lib/freeswitch freeswitch
 
