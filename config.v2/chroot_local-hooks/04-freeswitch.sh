@@ -404,15 +404,5 @@ DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
 sed -i 's/# Required-Start: $network $remote_fs $local_fs/# Required-Start: $network $remote_fs $local_fs mysql/' /etc/init.d/freeswitch
 update-rc.d freeswitch defaults
 
-# Fix homedir, should be a persistent directory, not under /var/run
-usermod -d /var/lib/freeswitch freeswitch
-
-#echo -e "GBE: Activating SNMP monitoring for FreeSwitch ...\n"
-#echo "
-##  Listen on default named socket /var/agentx/master
-##  agentXPerms  SOCKPERMS [DIRPERMS [USER|UID [GROUP|GID]]]
-#agentXPerms     0755 0755 freeswitch daemon
-#" >> /etc/snmp/snmpd.conf
-
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*
