@@ -161,25 +161,6 @@ Timeout 100
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
 
-	RewriteEngine on
-
-	# Workaround for Apache2 exploit
-	# http://mail-archives.apache.org/mod_mbox/httpd-announce/201108.mbox/%3C20110826103531.998348F82@minotaur.apache.org%3E
-	RewriteCond %{REQUEST_METHOD} ^(HEAD|GET) [NC]
-	RewriteCond %{HTTP:Range} ([0-9]*-[0-9]*)(\s*,\s*[0-9]*-[0-9]*)+
-	RewriteRule .* - [F]
-
-	RewriteCond %{HTTP_HOST} 127.0.0.1|localhost
-	RewriteRule ^.* - [L]
-	RewriteCond %{REQUEST_URI} ^/(settings)
-	RewriteRule ^.* - [L]
-
-	RewriteRule ^/(.*) https://%{HTTP_HOST}/$1 [R,L]
-
-	SetEnvIf Request_URI \"^/freeswitch-call-processing/actions\" downgrade-1.0 no-gzip no-cache
-	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
-	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
-
 	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
 	PassengerEnabled on
@@ -211,18 +192,6 @@ Timeout 100
 	ErrorLog \${APACHE_LOG_DIR}/error.log
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
-
-	RewriteEngine on
-
-	# Workaround for Apache2 exploit
-	# http://mail-archives.apache.org/mod_mbox/httpd-announce/201108.mbox/%3C20110826103531.998348F82@minotaur.apache.org%3E
-	RewriteCond %{REQUEST_METHOD} ^(HEAD|GET) [NC]
-	RewriteCond %{HTTP:Range} ([0-9]*-[0-9]*)(\s*,\s*[0-9]*-[0-9]*)+
-	RewriteRule .* - [F]
-
-	SetEnvIf Request_URI \"^/freeswitch-call-processing/actions\" downgrade-1.0 no-gzip no-cache
-	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
-	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
 
 	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
