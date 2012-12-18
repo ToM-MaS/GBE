@@ -74,6 +74,7 @@ else
 fi
 
 echo "***
+***
 ***" >> /etc/issue
 
 if [[ ${LIVE} == true ]]
