@@ -45,7 +45,7 @@ fi
 
 echo "
 ***      _____                                               _____
-***     (.---.)                GEMEINSCHAFT 5               (.---.)
+***     (.---.)              GEMEINSCHAFT 5.0               (.---.)
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
 ***      -----                                               -----" > /etc/issue
 
@@ -56,10 +56,9 @@ else
 	echo "***     GS Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}" >> /etc/issue
 fi
 
-echo "***     Hostname: \n Console: \l
 ***    -------------------------------------------------------------
 ***
-***     You can reach the web configuration here:
+***     You have to configure Gemeinschaft with a web browser:
 ***" >> /etc/issue
 
 if [[ -z "${IPS}" ]]; then
@@ -70,7 +69,7 @@ else
 	do
 		[[ ${ADDRESS} =~ "localhost" ]] && echo "***" >> /etc/issue && continue
 		[[ ${ADDRESS} =~ ":" ]] && ADDRESS="["${ADDRESS}"]" 
-		echo "***     http://${ADDRESS}/" >> /etc/issue
+		echo "***     http://${ADDRESS}" >> /etc/issue
 	done
 fi
 
@@ -80,9 +79,10 @@ echo "***
 
 if [[ ${LIVE} == true ]]
 	then
-	echo "***     LIVE SYSTEM - ALL CHANGES WILL BE LOST AFTER REBOOT" >> /etc/issue
+	echo "***     DEMO LIVE SYSTEM - ALL CHANGES WILL BE LOST AFTER A REBOOT!" >> /etc/issue
 	echo "***" >> /etc/issue
-	echo "***     LOGIN: gsmaster, PASSWORD: `cat /home/gsmaster/.password`" >> /etc/issue
+	echo "***     LOGIN   : gsmaster" >> /etc/issue
+    echo "***     PASSWORD: `cat /home/gsmaster/.password`" >> /etc/issue
 else
 	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue
@@ -90,7 +90,6 @@ else
 fi
 
 echo "***
-***
 ***    _____________________________________________________________
-***              brought to you by AMOOMA - www.amooma.de
+***          brought to you by AMOOMA GmbH  - http://amooma.de
 " >> /etc/issue
