@@ -13,6 +13,7 @@ set -e
 
 # General settings
 source /gdfdl.conf
+GDFDL_BRANCH="`cat /${GDFDL_BRANDNAME,,}_branch`"
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 
 echo -e "\n###########################################################
@@ -23,8 +24,9 @@ echo -e "\n###########################################################
 if [[ ! -d "${GS_DIR}" ]];
 	then
 
-	# use master branch if no explicit branch was given
-	[ x"${GS_BRANCH}" == x"" ] && GS_BRANCH="master"
+	# use master branch if no explicit branch was given and GBE branch is master
+	[ x"${GS_BRANCH}" == x"" && x"${GDFDL_BRANCH}" == x"develop" ] && GS_BRANCH="develop"
+	[ x"${GS_BRANCH}" == x"" && x"${GDFDL_BRANCH}" != x"develop" ] && GS_BRANCH="master"
 	[[ ! -f /etc/gemeinschaft_branch ]] && echo "${GS_BRANCH}" > /etc/gemeinschaft_branch
 
 	echo -e "GBE: Downloading GS from ${GS_GIT_URL} (branch: ${GS_BRANCH}) ...\n"
