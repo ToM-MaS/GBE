@@ -150,12 +150,12 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	echo "... done"
 	
 	echo "GBE: Updating GS branch information ..."
-	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 777 "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/etc"
+	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 777 "${GDFDL_DIR}/config/chroot_local-includes/etc"
 	echo "${GIT_BRANCH}" > "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 755 "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/etc"
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 644 "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
-	"${GDFDL_ENTRYWRAPPER}" chroot chown -f root.root "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 755 "${GDFDL_DIR}/config/chroot_local-includes/etc"
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 644 "${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
+	"${GDFDL_ENTRYWRAPPER}" chroot chown -f root.root "${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
 else
 	echo "ERROR: No existing build environment installation found. Run installer first."
 	exit 1
