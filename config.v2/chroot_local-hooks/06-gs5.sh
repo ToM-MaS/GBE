@@ -13,8 +13,9 @@ set -e
 
 # General settings
 source /gdfdl.conf
-GDFDL_BRANCH="`cat /${GDFDL_BRANDNAME,,}_branch`"
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
+GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
+[[ ${GDFDL_BUILDNAME} =~ "-" ]] && GDFDL_BRANCH=`echo ${GDFDL_BUILDNAME} | cut -d - -f2` || GDFDL_BRANCH="master"
 
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft installation\n\n"
