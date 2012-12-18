@@ -56,7 +56,7 @@ else
 	echo "***     GS Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}" >> /etc/issue
 fi
 
-***    -------------------------------------------------------------
+echo "***    -------------------------------------------------------------
 ***
 ***     You have to configure Gemeinschaft with a web browser:
 ***" >> /etc/issue
