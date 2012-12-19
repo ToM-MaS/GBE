@@ -14,6 +14,8 @@ set -e
 # General settings
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
+GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
+[[ ${GDFDL_BUILDNAME} =~ "-" ]] && GDFDL_BRANCH=`echo ${GDFDL_BUILDNAME} | cut -d - -f2` || GDFDL_BRANCH="master"
 
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft installation\n\n"
@@ -23,8 +25,9 @@ echo -e "\n###########################################################
 if [[ ! -d "${GS_DIR}" ]];
 	then
 
-	# use master branch if no explicit branch was given
-	[ x"${GS_BRANCH}" == x"" ] && GS_BRANCH="master"
+	# use master branch if no explicit branch was given and GBE branch is master
+	[ x"${GS_BRANCH}" == x"" && x"${GDFDL_BRANCH}" == x"develop" ] && GS_BRANCH="develop"
+	[ x"${GS_BRANCH}" == x"" && x"${GDFDL_BRANCH}" != x"develop" ] && GS_BRANCH="master"
 	[[ ! -f /etc/gemeinschaft_branch ]] && echo "${GS_BRANCH}" > /etc/gemeinschaft_branch
 
 	echo -e "GBE: Downloading GS from ${GS_GIT_URL} (branch: ${GS_BRANCH}) ...\n"
@@ -59,9 +62,6 @@ password ${GS_GIT_PASSWORD}
 	set -e
 
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
-else
-	# This information should come from the CI system, e.g. Jenkins' environment variables
-	[[ ! -f /etc/gemeinschaft_branch ]] && echo "${GIT_BRANCH}" > /etc/gemeinschaft_branch
 fi
 
 #  Create alias
@@ -161,25 +161,6 @@ Timeout 100
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
 
-	RewriteEngine on
-
-	# Workaround for Apache2 exploit
-	# http://mail-archives.apache.org/mod_mbox/httpd-announce/201108.mbox/%3C20110826103531.998348F82@minotaur.apache.org%3E
-	RewriteCond %{REQUEST_METHOD} ^(HEAD|GET) [NC]
-	RewriteCond %{HTTP:Range} ([0-9]*-[0-9]*)(\s*,\s*[0-9]*-[0-9]*)+
-	RewriteRule .* - [F]
-
-	RewriteCond %{HTTP_HOST} 127.0.0.1|localhost
-	RewriteRule ^.* - [L]
-	RewriteCond %{REQUEST_URI} ^/(settings)
-	RewriteRule ^.* - [L]
-
-	RewriteRule ^/(.*) https://%{HTTP_HOST}/$1 [R,L]
-
-	SetEnvIf Request_URI \"^/freeswitch-call-processing/actions\" downgrade-1.0 no-gzip no-cache
-	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
-	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
-
 	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
 	PassengerEnabled on
@@ -211,18 +192,6 @@ Timeout 100
 	ErrorLog \${APACHE_LOG_DIR}/error.log
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
-
-	RewriteEngine on
-
-	# Workaround for Apache2 exploit
-	# http://mail-archives.apache.org/mod_mbox/httpd-announce/201108.mbox/%3C20110826103531.998348F82@minotaur.apache.org%3E
-	RewriteCond %{REQUEST_METHOD} ^(HEAD|GET) [NC]
-	RewriteCond %{HTTP:Range} ([0-9]*-[0-9]*)(\s*,\s*[0-9]*-[0-9]*)+
-	RewriteRule .* - [F]
-
-	SetEnvIf Request_URI \"^/freeswitch-call-processing/actions\" downgrade-1.0 no-gzip no-cache
-	BrowserMatch \"^freeswitch-spidermonkey-curl/1\\.\" downgrade-1.0 no-gzip no-cache
-	BrowserMatch \"^freeswitch-xml/1\\.\" downgrade-1.0 no-gzip no-cache
 
 	DocumentRoot ${GS_DIR_NORMALIZED}/public
 

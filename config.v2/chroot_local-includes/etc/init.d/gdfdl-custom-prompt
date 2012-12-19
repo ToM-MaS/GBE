@@ -16,6 +16,7 @@ IPS="`/bin/hostname -I`"
 FQDN="`/bin/hostname -f`"
 GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
 GS_BRANCH="`cat /etc/gemeinschaft_branch`"
+[ -f "/opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb" ] && GEMEINSCHAFT_VERSION=`cat /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb | grep GEMEINSCHAFT_VERSION | sed "s/.*'\(.*\)'[^']*$/\1/"` || GEMEINSCHAFT_VERSION="5.x"
 
 if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
 	then
@@ -32,34 +33,26 @@ else
 	PRODUCTION=false
 fi
 
-[ -f /etc/gemeinschaft_release ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
-if [[ `expr length ${BUILD}` == 10 ]]
-	then
-	PRODUCTION=true
-	VERSION=`cat /etc/gemeinschaft_release`
-else
-	PRODUCTION=false
-	VERSION="5.0"
-fi
-
+#
+# Write login screen to /etc/issue
+#
 
 echo "
 ***      _____                                               _____
-***     (.---.)                GEMEINSCHAFT 5               (.---.)
+***     (.---.)              GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}               (.---.)
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
 ***      -----                                               -----" > /etc/issue
 
 if [[ ${PRODUCTION} == true ]]
 	then
-	echo "***     Release Version: ${VERSION}.${GDFDL_BUILDNAME}" >> /etc/issue
+	echo "***     Release Version: ${GEMEINSCHAFT_VERSION}.${GDFDL_BUILDNAME}" >> /etc/issue
 else
 	echo "***     GS Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}" >> /etc/issue
 fi
 
-echo "***     Hostname: \n Console: \l
-***    -------------------------------------------------------------
+echo "***    -------------------------------------------------------------
 ***
-***     You can reach the web configuration here:
+***     You have to configure Gemeinschaft with a web browser:
 ***" >> /etc/issue
 
 if [[ -z "${IPS}" ]]; then
@@ -70,27 +63,43 @@ else
 	do
 		[[ ${ADDRESS} =~ "localhost" ]] && echo "***" >> /etc/issue && continue
 		[[ ${ADDRESS} =~ ":" ]] && ADDRESS="["${ADDRESS}"]" 
-		echo "***     http://${ADDRESS}/" >> /etc/issue
+		echo "***     http://${ADDRESS}" >> /etc/issue
 	done
 fi
 
 echo "***
 ***
+***
 ***" >> /etc/issue
 
 if [[ ${LIVE} == true ]]
 	then
-	echo "***     LIVE SYSTEM - ALL CHANGES WILL BE LOST AFTER REBOOT" >> /etc/issue
+	echo "***     DEMO LIVE SYSTEM - ALL CHANGES WILL BE LOST AFTER A REBOOT!" >> /etc/issue
 	echo "***" >> /etc/issue
-	echo "***     LOGIN: gsmaster, PASSWORD: `cat /home/gsmaster/.password`" >> /etc/issue
+	echo "***     LOGIN   : gsmaster" >> /etc/issue
+    echo "***     PASSWORD: `cat /home/gsmaster/.password`" >> /etc/issue
 else
+	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue
 fi
 
 echo "***
-***
 ***    _____________________________________________________________
-***              brought to you by AMOOMA - www.amooma.de
+***          brought to you by AMOOMA GmbH  - http://amooma.de
 " >> /etc/issue
+
+
+#
+# Write motd and issue.net
+#
+echo "Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}" > /etc/issue.net
+echo "
+***   Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}
+***
+***   Need help with Gemeinschaft? We have an excellent free mailinglist
+***   and offer the best support and consulting money can buy. Have a
+***   look at http://www.amooma.de for more information.
+***
+" > /etc/motd
