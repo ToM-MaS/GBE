@@ -65,5 +65,10 @@ ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
 echo -e "GBE: Adjust syslog facilities ...\n"
 sed -i "s/filter f_syslog3 { not facility(auth, authpriv, mail) and not filter(f_debug); };/filter f_syslog3 { not facility(auth, authpriv, mail, cron) and not filter(f_debug); };/" /etc/syslog-ng/syslog-ng.conf
 
+#FIXME temporal workaround for timezone issues between GS5 call logs and actual local time
+echo -e "GBE: Setup MySQL default time zone ...\n"
+echo "[mysqld]" > /etc/mysql/conf.d/gemeinschaft.cnf
+echo "default-time-zone='+00:00'" >> /etc/mysql/conf.d/gemeinschaft.cnf
+
 echo - "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
