@@ -16,6 +16,7 @@ IPS="`/bin/hostname -I`"
 FQDN="`/bin/hostname -f`"
 GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
 GS_BRANCH="`cat /etc/gemeinschaft_branch`"
+[ -f "/opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb" ] && GEMEINSCHAFT_VERSION=`cat /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb | grep GEMEINSCHAFT_VERSION | sed "s/.*'\(.*\)'[^']*$/\1/"` || GEMEINSCHAFT_VERSION="5.x"
 
 if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
 	then
@@ -32,26 +33,19 @@ else
 	PRODUCTION=false
 fi
 
-[ -f /etc/gemeinschaft_release ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
-if [[ `expr length ${BUILD}` == 10 ]]
-	then
-	PRODUCTION=true
-	VERSION=`cat /etc/gemeinschaft_release`
-else
-	PRODUCTION=false
-	VERSION="5.0"
-fi
-
+#
+# Write login screen to /etc/issue
+#
 
 echo "
 ***      _____                                               _____
-***     (.---.)              GEMEINSCHAFT 5.0               (.---.)
+***     (.---.)              GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}               (.---.)
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
 ***      -----                                               -----" > /etc/issue
 
 if [[ ${PRODUCTION} == true ]]
 	then
-	echo "***     Release Version: ${VERSION}.${GDFDL_BUILDNAME}" >> /etc/issue
+	echo "***     Release Version: ${GEMEINSCHAFT_VERSION}.${GDFDL_BUILDNAME}" >> /etc/issue
 else
 	echo "***     GS Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}" >> /etc/issue
 fi
@@ -95,3 +89,17 @@ echo "***
 ***    _____________________________________________________________
 ***          brought to you by AMOOMA GmbH  - http://amooma.de
 " >> /etc/issue
+
+
+#
+# Write motd and issue.net
+#
+echo "Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}" > /etc/issue.net
+echo "
+***   Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}
+***
+***   Need help with Gemeinschaft? We have an excellent free mailinglist
+***   and offer the best support and consulting money can buy. Have a
+***   look at http://www.amooma.de for more information.
+***
+" > /etc/motd
