@@ -36,6 +36,7 @@ echo -e "GBE: Correcting file permissions ...\n"
 chmod -R g+w /var/lib/${GS_USER}
 chmod 0770 /var/lib/${GS_USER}
 chmod 0440 /etc/sudoers.d/*
+ln -s ${GS_USER} /var/lib/gemeinschaft
 
 echo -e "GBE: Configuring Postfix ...\n"
 # Disable TLS for INCOMING mails to avoid certificate issues
