@@ -62,6 +62,11 @@ case "$1" in
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
 		fi
 
+		# Load timezone information into database
+		echo "** Loading timezone information into MySQL database"
+		mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql mysql --user=root --password="${MYSQL_PASSWD_ROOT}"
+		/etc/init.d/mysql restart
+
 		# Create MySQL user for Gemeinschaft
 		if [ ! -f "/var/lib/${GS_USER}/.gs_mysql_password" ]
 			then
@@ -98,7 +103,7 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
-		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft;" --user=root --password="${MYSQL_PASSWD_ROOT}"
+		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft CHARACTER SET utf8 COLLATE utf8_general_ci;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 
 		# Update database password in Gemeinschaft config
 		echo "** Updating Gemeinschaft with new MySQL password"
