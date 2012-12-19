@@ -36,6 +36,7 @@ echo -e "GBE: Correcting file permissions ...\n"
 chmod -R g+w /var/lib/${GS_USER}
 chmod 0770 /var/lib/${GS_USER}
 chmod 0440 /etc/sudoers.d/*
+ln -s ${GS_USER} /var/lib/gemeinschaft
 
 echo -e "GBE: Configuring Postfix ...\n"
 # Disable TLS for INCOMING mails to avoid certificate issues
@@ -61,6 +62,7 @@ echo "server 3.de.pool.ntp.org" >> /etc/ntp.conf
 echo -e "GBE: Setup name resolution ...\n"
 rm -rf /etc/resolv.conf
 ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
+echo "REPORT_ABSENT_SYMLINK=no" > /etc/default/resolvconf
 
 echo -e "GBE: Adjust syslog facilities ...\n"
 sed -i "s/filter f_syslog3 { not facility(auth, authpriv, mail) and not filter(f_debug); };/filter f_syslog3 { not facility(auth, authpriv, mail, cron) and not filter(f_debug); };/" /etc/syslog-ng/syslog-ng.conf
