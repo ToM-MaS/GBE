@@ -98,7 +98,7 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
-		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft;" --user=root --password="${MYSQL_PASSWD_ROOT}"
+		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft CHARACTER SET utf8 COLLATE utf8_general_ci;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 
 		# Update database password in Gemeinschaft config
 		echo "** Updating Gemeinschaft with new MySQL password"
