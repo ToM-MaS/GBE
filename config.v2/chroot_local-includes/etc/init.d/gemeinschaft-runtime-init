@@ -41,6 +41,7 @@ start)
 		if [[ -f /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb ]]; then
 			sed -i "s/^HOMEBASE_IP_ADDRESS =.*/HOMEBASE_IP_ADDRESS = '${ADDRESS}'/" /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb
 		fi
+	done
 
 	;;
 *)
