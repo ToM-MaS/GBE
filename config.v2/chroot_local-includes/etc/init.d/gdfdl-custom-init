@@ -107,14 +107,14 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 
 		# Update database password in Gemeinschaft config
 		echo "** Updating Gemeinschaft with new MySQL password"
-		sed -i "s/password: gemeinschaft/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
+		sed -i "s/password:.*/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
 
 		# Update database password in FreeSwitch configs
 		echo "** Updating FreeSwitch with new MySQL password"
-		sed -i "s/password = gemeinschaft/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini"
-		sed -i "s/odbc-dsn = gemeinschaft:gemeinschaft:gemeinschaft/odbc-dsn = gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini"
-		sed -i "s/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:gemeinschaft\"\/>/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
-		sed -i "s/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:gemeinschaft\"\/>/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+		sed -i "s/password =.*/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini"
+		sed -i "s/odbc-dsn =.*/odbc-dsn = gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini"
+		sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<param name=\"odbc-dsn\".*/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
 
 		# Lower debug levels for productive installations
 		[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
