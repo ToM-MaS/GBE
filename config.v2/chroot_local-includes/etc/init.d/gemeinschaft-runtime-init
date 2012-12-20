@@ -33,6 +33,15 @@ start)
 		ln -sf /etc/ssl/certs/${FQDN}.crt /etc/ssl/gemeinschaft.crt
 	fi
 
+	# Update Gemeinschaft config with current IPv4 address
+	for ADDRESS in ${IPS}
+	do
+		[[ ${ADDRESS} =~ ":" ]] && continue
+		echo "Updating Gemeinschaft configurations ..."
+		if [[ -f /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb ]]; then
+			sed -i "s/^HOMEBASE_IP_ADDRESS =.*/HOMEBASE_IP_ADDRESS = '${ADDRESS}'/" /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb
+		fi
+
 	;;
 *)
 	# nothing to do
