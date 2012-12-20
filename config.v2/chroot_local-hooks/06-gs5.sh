@@ -242,3 +242,6 @@ chmod -R g+w "${GS_DIR}"
 chmod 0770 "${GS_DIR}/config" /var/log/gemeinschaft
 # add GS system user to freeswitch group
 usermod -a -G freeswitch ${GS_USER} 
+# Set permissions for FreeSwitch configurations
+chmod 0640 "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+chown .freeswitch "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
