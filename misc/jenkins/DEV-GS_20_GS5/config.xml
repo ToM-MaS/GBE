@@ -12,28 +12,51 @@
   <keepDependencies>true</keepDependencies>
   <properties>
     <hudson.security.AuthorizationMatrixProperty>
-      <permission>hudson.model.Item.Workspace:authenticated</permission>
-      <permission>hudson.model.Item.Discover:authenticated</permission>
-      <permission>hudson.model.Run.Update:authenticated</permission>
+      <permission>hudson.model.Item.Workspace:spag</permission>
+      <permission>hudson.model.Item.Workspace:jpawlowski</permission>
+      <permission>hudson.model.Item.Workspace:saschadaniels</permission>
+      <permission>hudson.model.Item.Workspace:wintermeyer</permission>
+      <permission>hudson.model.Item.Delete:jpawlowski</permission>
+      <permission>hudson.model.Item.Read:spag</permission>
       <permission>hudson.model.Item.Read:authenticated</permission>
-      <permission>hudson.model.Item.Build:authenticated</permission>
+      <permission>hudson.model.Item.Read:jpawlowski</permission>
+      <permission>hudson.model.Item.Read:saschadaniels</permission>
+      <permission>hudson.model.Item.Read:wintermeyer</permission>
+      <permission>hudson.model.Item.Build:spag</permission>
+      <permission>hudson.model.Item.Build:jpawlowski</permission>
+      <permission>hudson.model.Item.Build:saschadaniels</permission>
+      <permission>hudson.model.Item.Build:wintermeyer</permission>
+      <permission>hudson.model.Item.Configure:jpawlowski</permission>
+      <permission>hudson.model.Run.Update:spag</permission>
+      <permission>hudson.model.Run.Update:jpawlowski</permission>
+      <permission>hudson.model.Run.Update:saschadaniels</permission>
+      <permission>hudson.model.Run.Update:wintermeyer</permission>
+      <permission>hudson.model.Run.Delete:jpawlowski</permission>
+      <permission>hudson.model.Item.Cancel:jpawlowski</permission>
+      <permission>hudson.scm.SCM.Tag:jpawlowski</permission>
+      <permission>hudson.model.Item.Discover:anonymous</permission>
+      <permission>hudson.model.Item.Discover:spag</permission>
+      <permission>hudson.model.Item.Discover:authenticated</permission>
+      <permission>hudson.model.Item.Discover:jpawlowski</permission>
+      <permission>hudson.model.Item.Discover:saschadaniels</permission>
+      <permission>hudson.model.Item.Discover:wintermeyer</permission>
     </hudson.security.AuthorizationMatrixProperty>
-    <com.coravy.hudson.plugins.github.GithubProjectProperty>
-      <projectUrl>https://github.com/jpawlowski/GS5/</projectUrl>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.4">
+      <projectUrl>https://github.com/amooma/GS5/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@1.1.26">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <name>GS5</name>
         <refspec></refspec>
-        <url>git@github-gs5:jpawlowski/GS5.git</url>
+        <url>git@github-gs5:amooma/GS5.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>master</name>
+        <name>develop</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <disableSubmodules>false</disableSubmodules>
@@ -45,6 +68,7 @@
     <pruneBranches>false</pruneBranches>
     <remotePoll>false</remotePoll>
     <ignoreNotifyCommit>false</ignoreNotifyCommit>
+    <useShallowClone>false</useShallowClone>
     <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
     <gitTool>Default</gitTool>
     <submoduleCfg class="list"/>
@@ -64,15 +88,20 @@
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
   <triggers class="vector">
+    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.4">
+      <spec></spec>
+    </com.cloudbees.jenkins.GitHubPushTrigger>
     <hudson.triggers.SCMTrigger>
-      <spec>0 4,8,12,16,20 * * *</spec>
+      <spec>0 8,12,16,20 * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <customWorkspace>workspace/DEV-GS_00_GBE</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>./gdfdl-ci/03-build/00-run.sh
+      <command>export GIT_BRANCH
+./gdfdl-ci/03-build/00-run.sh
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -82,12 +111,12 @@
       <excludes>.ci/GEMEINSCHAFT*/be/iso/*_latest*</excludes>
       <latestOnly>true</latestOnly>
     </hudson.tasks.ArtifactArchiver>
-    <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder/>
+    <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder plugin="display-upstream-changes@0.1"/>
     <hudson.tasks.Fingerprinter>
       <targets></targets>
       <recordBuildArtifacts>true</recordBuildArtifacts>
     </hudson.tasks.Fingerprinter>
-    <hudson.plugins.postbuildtask.PostbuildTask>
+    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
       <tasks>
         <hudson.plugins.postbuildtask.TaskProperties>
           <logTexts>
@@ -105,10 +134,10 @@
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.tasks.Mailer>
+    <hudson.tasks.Mailer plugin="mailer@1.4">
       <recipients>jp@jps-networks.eu</recipients>
-      <dontNotifyEveryUnstableBuild>true</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers/>

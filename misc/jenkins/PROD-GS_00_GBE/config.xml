@@ -12,15 +12,16 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.security.AuthorizationMatrixProperty>
-      <permission>hudson.model.Item.Discover:authenticated</permission>
-      <permission>hudson.scm.SCM.Tag:authenticated</permission>
       <permission>hudson.model.Run.Update:authenticated</permission>
       <permission>hudson.model.Item.Build:authenticated</permission>
+      <permission>hudson.scm.SCM.Tag:authenticated</permission>
       <permission>hudson.model.Item.Read:anonymous</permission>
       <permission>hudson.model.Item.Read:authenticated</permission>
+      <permission>hudson.model.Item.Discover:anonymous</permission>
+      <permission>hudson.model.Item.Discover:authenticated</permission>
     </hudson.security.AuthorizationMatrixProperty>
-    <com.coravy.hudson.plugins.github.GithubProjectProperty>
-      <projectUrl>https://github.com/jpawlowski/GBE/</projectUrl>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.4">
+      <projectUrl>https://github.com/amooma/GBE/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
@@ -38,13 +39,13 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@1.1.26">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec></refspec>
-        <url>git@github-gbe:jpawlowski/GBE.git</url>
+        <url>git@github-gbe:amooma/GBE.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -61,6 +62,7 @@
     <pruneBranches>false</pruneBranches>
     <remotePoll>false</remotePoll>
     <ignoreNotifyCommit>false</ignoreNotifyCommit>
+    <useShallowClone>false</useShallowClone>
     <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
     <gitTool>Default</gitTool>
     <submoduleCfg class="list"/>
@@ -80,11 +82,12 @@
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers class="vector">
-    <com.cloudbees.jenkins.GitHubPushTrigger>
+    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.4">
       <spec></spec>
     </com.cloudbees.jenkins.GitHubPushTrigger>
     <hudson.triggers.SCMTrigger>
       <spec>0 */3 * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
@@ -102,7 +105,7 @@ fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer>
+    <hudson.tasks.Mailer plugin="mailer@1.4">
       <recipients>jp@jps-networks.eu</recipients>
       <dontNotifyEveryUnstableBuild>true</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
@@ -118,7 +121,7 @@ fi</command>
         <color>BLUE</color>
       </threshold>
     </hudson.tasks.BuildTrigger>
-    <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder/>
+    <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder plugin="display-upstream-changes@0.1"/>
   </publishers>
   <buildWrappers/>
 </project>

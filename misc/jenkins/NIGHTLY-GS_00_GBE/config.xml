@@ -2,7 +2,7 @@
 <project>
   <actions/>
   <description>Provides the workspace basis for building Gemeinschaft 5</description>
-  <displayName>GBE (Development)</displayName>
+  <displayName>GBE (Nightly Build)</displayName>
   <logRotator>
     <daysToKeep>-1</daysToKeep>
     <numToKeep>10</numToKeep>
@@ -82,11 +82,8 @@
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers class="vector">
-    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.4">
-      <spec></spec>
-    </com.cloudbees.jenkins.GitHubPushTrigger>
     <hudson.triggers.SCMTrigger>
-      <spec>0 */3 * * *</spec>
+      <spec>25 6 * * *</spec>
       <ignorePostCommitHooks>false</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
@@ -108,13 +105,13 @@ fi</command>
     <hudson.tasks.Mailer plugin="mailer@1.4">
       <recipients>jp@jps-networks.eu</recipients>
       <dontNotifyEveryUnstableBuild>true</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
+      <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.tasks.test.AggregatedTestResultPublisher>
       <includeFailedBuilds>false</includeFailedBuilds>
     </hudson.tasks.test.AggregatedTestResultPublisher>
     <hudson.tasks.BuildTrigger>
-      <childProjects>DEV-GS_20_GS5</childProjects>
+      <childProjects>NIGHTLY-GS_20_GS5</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>

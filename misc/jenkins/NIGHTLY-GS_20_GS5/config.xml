@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Gemeinschaft 5 production state build</description>
-  <displayName>Gemeinschaft 5 (Production)</displayName>
+  <description>Gemeinschaft 5 nightly development build</description>
+  <displayName>Gemeinschaft 5 (Nightly Build)</displayName>
   <logRotator>
     <daysToKeep>-1</daysToKeep>
     <numToKeep>10</numToKeep>
     <artifactDaysToKeep>-1</artifactDaysToKeep>
     <artifactNumToKeep>-1</artifactNumToKeep>
   </logRotator>
-  <keepDependencies>true</keepDependencies>
+  <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.security.AuthorizationMatrixProperty>
       <permission>hudson.model.Item.Delete:jpawlowski</permission>
@@ -56,7 +56,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>master</name>
+        <name>develop</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <disableSubmodules>false</disableSubmodules>
@@ -89,29 +89,21 @@
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
   <triggers class="vector">
     <hudson.triggers.SCMTrigger>
-      <spec>0 4,8,12,16,20 * * *</spec>
+      <spec>30 6 * * *</spec>
       <ignorePostCommitHooks>false</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>workspace/PROD-GS_00_GBE</customWorkspace>
+  <customWorkspace>workspace/DEV-GS_00_GBE</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>export GIT_BRANCH
-./gdfdl-ci/03-build/00-run.sh</command>
+./gdfdl-ci/03-build/00-run.sh
+</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>.ci/GEMEINSCHAFT*/be/iso/*</artifacts>
-      <excludes>.ci/GEMEINSCHAFT*/be/iso/*_latest*</excludes>
-      <latestOnly>true</latestOnly>
-    </hudson.tasks.ArtifactArchiver>
     <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder plugin="display-upstream-changes@0.1"/>
-    <hudson.tasks.Fingerprinter>
-      <targets></targets>
-      <recordBuildArtifacts>true</recordBuildArtifacts>
-    </hudson.tasks.Fingerprinter>
     <jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin plugin="publish-over-ssh@1.9">
       <consolePrefix>SSH: </consolePrefix>
       <delegate>
@@ -174,14 +166,14 @@
         <hudson.plugins.postbuildtask.TaskProperties>
           <logTexts>
             <hudson.plugins.postbuildtask.LogProperties>
-              <logText>Archiving artifacts</logText>
+              <logText>Removing files older</logText>
               <operator>AND</operator>
             </hudson.plugins.postbuildtask.LogProperties>
           </logTexts>
           <EscalateStatus>false</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>#./gdfdl-ci/04-QA/00-run.sh&#xd;
-#./gdfdl-ci/05-deploy/00-run.sh&#xd;
+          <script>./gdfdl-ci/04-QA/00-run.sh&#xd;
+./gdfdl-ci/05-deploy/00-run.sh&#xd;
 ./gdfdl-ci/06-cleanup/00-run.sh&#xd;
 </script>
         </hudson.plugins.postbuildtask.TaskProperties>
@@ -190,23 +182,9 @@
     <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.25">
       <recipientList>$DEFAULT_RECIPIENTS</recipientList>
       <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger>
-          <email>
-            <recipientList>jp@jps-networks.eu, stefan.wintermeyer@amooma.de</recipientList>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <sendToDevelopers>true</sendToDevelopers>
-            <sendToRequester>true</sendToRequester>
-            <includeCulprits>false</includeCulprits>
-            <sendToRecipientList>true</sendToRecipientList>
-            <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
-            <replyTo></replyTo>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
-            <recipientList>jp@jps-networks.eu, stefan.wintermeyer@amooma.de</recipientList>
+            <recipientList>stefan.wintermeyer@amooma.de</recipientList>
             <subject>$PROJECT_DEFAULT_SUBJECT</subject>
             <body>$PROJECT_DEFAULT_CONTENT</body>
             <sendToDevelopers>true</sendToDevelopers>
