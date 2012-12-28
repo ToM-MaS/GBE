@@ -36,10 +36,12 @@ start)
 	for ADDRESS in ${IPS}
 	do
 		[[ ${ADDRESS} =~ ":" ]] && continue
+
 		echo "Updating Gemeinschaft configurations ..."
-		if [[ -f /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb ]]; then
-			sed -i "s/^HOMEBASE_IP_ADDRESS =.*/HOMEBASE_IP_ADDRESS = '${ADDRESS}'/" /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb
-		fi
+		[[ -f /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb ]] && sed -i "s/^HOMEBASE_IP_ADDRESS =.*/HOMEBASE_IP_ADDRESS = '${ADDRESS}'/" /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb
+		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image\/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
+		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
+		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
 	done
 
 	;;
