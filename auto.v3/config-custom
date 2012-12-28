@@ -14,7 +14,6 @@ lb config noauto \
 	--archive-areas "main" \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
-	--distribution squeeze \
 	--iso-application "Gemeinschaft 5" \
 	--iso-preparer "Gemeinschaft Build Environment" \
 	--iso-publisher "AMOOMA GmbH; http://www.amooma.de/" \
@@ -22,8 +21,6 @@ lb config noauto \
 	--linux-flavours 686 \
 	--memtest none \
 	--mode debian \
-	--package-lists minimal \
 	--root-command sudo \
 	--win32-loader disabled \
-	--includes none \
 	"${@}"
