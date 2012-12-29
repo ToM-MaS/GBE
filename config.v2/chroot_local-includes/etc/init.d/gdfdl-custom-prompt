@@ -100,6 +100,6 @@ echo "
 ***
 ***   Need help with Gemeinschaft? We have an excellent free mailinglist
 ***   and offer the best support and consulting money can buy. Have a
-***   look at http://www.amooma.de for more information.
+***   look at http://amooma.de/gemeinschaft/gs5 for more information.
 ***
 " > /etc/motd

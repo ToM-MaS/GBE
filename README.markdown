@@ -26,7 +26,7 @@ Run `./gemeinschaft.sh help` to see a complete list of available options.
 
 ### Where can I download a ready to run ISO file? Or do I have to run my own build?
 No, building your own image is optional and mostly useful if you would like to check out new functionality from the development branch.
-Please visit the website of AMOOMA for available ISO files: http://www.amooma.de/gemeinschaft
+Please visit the website of AMOOMA for available ISO files: http://amooma.de/gemeinschaft/gs5
 
 
 ### How can I build from one of the other branches beside *master*?
