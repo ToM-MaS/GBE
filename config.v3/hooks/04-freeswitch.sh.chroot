@@ -373,9 +373,9 @@ if [[ ! -f /usr/bin/freeswitch ]]
 else
 	# for Debian package based installations we still need to do some additional work for music and sounds
 	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-en-us-callie-8000-1.0.22.tar.gz"
-	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-en-us-callie-16000-1.0.22.tar.gz"
+	# wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-en-us-callie-16000-1.0.22.tar.gz"
 	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-8000-1.0.8.tar.gz"
-	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-16000-1.0.8.tar.gz"
+	# wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-16000-1.0.8.tar.gz"
 	mkdir -p /usr/share/freeswitch/sounds
 	chmod 755 /usr/share/freeswitch/sounds
 	find /usr/local/src -name 'freeswitch-*.tar.gz' -type f -exec tar xfz {} -C /usr/share/freeswitch/sounds \;
