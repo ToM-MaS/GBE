@@ -111,7 +111,7 @@ ln -s /usr/share/freeswitch/scripts /usr/scripts
 ln -s /var/lib/freeswitch/db /usr/db
 ln -s /var/lib/freeswitch/recordings /usr/recordings
 ln -s /var/lib/freeswitch/storage /usr/storage
-ln -s /usr/lib/lua /usr/local/lib/lua
+ln -s /usr/lib/i386-linux-gnu/lua /usr/local/lib/lua
 
 #FIXME another hack for ruby/rails environment as GS scripts explicitly uses this path for sourcing
 #      (although excplicit sourcing is deprecated from GBE perspective)
