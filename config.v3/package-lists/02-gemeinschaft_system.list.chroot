@@ -5,7 +5,7 @@
 # Julian Pawlowski <julian.pawlowski@gmail.com> 2012.
 #
 
-user-setup sudo
+user-setup sudo less
 
 # tools
 wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates
