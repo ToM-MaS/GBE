@@ -71,6 +71,3 @@ sed -i "s/filter f_syslog3 { not facility(auth, authpriv, mail) and not filter(f
 echo -e "GBE: Setup MySQL default time zone ...\n"
 echo "[mysqld]" > /etc/mysql/conf.d/gemeinschaft.cnf
 echo "default-time-zone='+00:00'" >> /etc/mysql/conf.d/gemeinschaft.cnf
-
-echo - "GBE: Enable bootlog ...\n"
-sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
