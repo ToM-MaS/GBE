@@ -37,9 +37,13 @@ fi
 # Write login screen to /etc/issue
 #
 
+VERSION_LENGTH=`expr length ${GEMEINSCHAFT_VERSION}`
+VERSION_DIFF=`expr ${VERSION_LENGTH} - 3`
+[[ ${VERSION_DIFF} -eq 0 ]] && VERSION_LINE_END="               (.---.)" || VERSION_LINE_END=`echo "              (.---.)" | cut -c ${VERSION_DIFF}-`
+
 echo "
 ***      _____                                               _____
-***     (.---.)              GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}               (.---.)
+***     (.---.)              GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}${VERSION_LINE_END}
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
 ***      -----                                               -----" > /etc/issue
 

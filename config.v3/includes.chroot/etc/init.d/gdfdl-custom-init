@@ -126,6 +126,11 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 			/usr/local/bin/gs-change-state.sh development
 		fi
 
+		# Randomize secret token for cookies
+		#
+		COOKIE_SECRET=`apg -m128 -a0 -n 1 -M NCL`
+		sed -i "s/Gemeinschaft42c::Application.config.secret_token =.*/Gemeinschaft42c::Application.config.secret_token = '${COOKIE_SECRET}'/" "${GS_DIR}/config/initializers/secret_token.rb"
+
 		# Load database structure into DB
 		#
 		echo "** Initializing database"
