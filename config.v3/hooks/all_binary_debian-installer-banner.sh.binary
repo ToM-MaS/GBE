@@ -25,7 +25,7 @@ then
                 gzip -d < ../${TARGET_INITRD} | cpio -i --make-directories --no-absolute-filenames
 
                 # Overwrite banner
-                cp ../config/binary_debian-installer/banner.png ./usr/share/graphics/logo_debian.png
+                cp ../config/debian-installer/banner.png ./usr/share/graphics/logo_debian.png
 
                 find | cpio -H newc -o | gzip -9 > ../${TARGET_INITRD}
                 cd ..
