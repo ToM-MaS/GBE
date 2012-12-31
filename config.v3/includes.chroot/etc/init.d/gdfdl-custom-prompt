@@ -26,7 +26,7 @@ else
 fi
 
 [ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
-if [[ `expr length ${BUILD}` == 10 ]]
+if [[ `expr length ${BUILD}` == 10 && x${GS_BRANCH} = x"master" ]]
 	then
 	PRODUCTION=true
 else
@@ -37,13 +37,9 @@ fi
 # Write login screen to /etc/issue
 #
 
-VERSION_LENGTH=`expr length ${GEMEINSCHAFT_VERSION}`
-VERSION_DIFF=`expr ${VERSION_LENGTH} - 3`
-[[ ${VERSION_DIFF} -eq 0 ]] && VERSION_LINE_END="               (.---.)" || VERSION_LINE_END=`echo "              (.---.)" | cut -c ${VERSION_DIFF}-`
-
 echo "
 ***      _____                                               _____
-***     (.---.)              GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}${VERSION_LINE_END}
+***     (.---.)                 GEMEINSCHAFT 5              (.---.)
 ***      /:::\\\ _.-----------------------------------------._ /:::\\\ 
 ***      -----                                               -----" > /etc/issue
 
@@ -51,7 +47,7 @@ if [[ ${PRODUCTION} == true ]]
 	then
 	echo "***     Release Version: ${GEMEINSCHAFT_VERSION}.${GDFDL_BUILDNAME}" >> /etc/issue
 else
-	echo "***     GS Branch: ${GS_BRANCH}, Build: ${GDFDL_BUILDNAME}" >> /etc/issue
+	echo "***     Development Version: ${GEMEINSCHAFT_VERSION}-${GS_BRANCH}.${GDFDL_BUILDNAME}" >> /etc/issue
 fi
 
 echo "***    -------------------------------------------------------------
