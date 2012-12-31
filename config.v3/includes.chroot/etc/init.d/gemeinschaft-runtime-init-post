@@ -22,8 +22,7 @@ start)
 		echo "Updating DNSmasq configurations ..."
 		if [[ -f /etc/dnsmasq.d/gs_phone_vendors.conf ]]; then
 			sed -i "s/^dhcp-option=SNOM,66.*\$/dhcp-option=SNOM,66,https:\/\/${ADDRESS}:443/" /etc/dnsmasq.d/gs_phone_vendors.conf
-			sed -i "s/^dhcp-option=SEC1,66.*\$/dhcp-option=SEC1,66,https:\/\/${ADDRESS}:443/" /etc/dnsmasq.d/gs_phone_vendors.conf
-			sed -i "s/^dhcp-option=SEC2,66.*\$/dhcp-option=SEC2,66,https:\/\/${ADDRESS}:443/" /etc/dnsmasq.d/gs_phone_vendors.conf
+			sed -i "s/^dhcp-option=net:OpenStage,vendor:OptiIpPhone,3.*\$/dhcp-option=net:OpenStage,vendor:OptiIpPhone,3,\"sdlp:\/\/${ADDRESS}:443\"/" /etc/dnsmasq.d/gs_phone_vendors.conf
 			sed -i "s/^dhcp-option=POLYCOM,66.*\$/dhcp-option=POLYCOM,66,https:\/\/${ADDRESS}:443/" /etc/dnsmasq.d/gs_phone_vendors.conf
 		fi
 		if [[ -f /etc/dnsmasq.d/gemeinschaft_simple.conf ]]; then
