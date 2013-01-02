@@ -64,7 +64,7 @@ case "$1" in
 
 		# Load timezone information into database
 		echo "** Loading timezone information into MySQL database"
-		mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql mysql --user=root --password="${MYSQL_PASSWD_ROOT}"
+		mysql_tzinfo_to_sql /usr/share/zoneinfo 2>/dev/null | mysql mysql --user=root --password="${MYSQL_PASSWD_ROOT}" 2>&1 >/dev/null
 		/etc/init.d/mysql restart
 
 		# Create MySQL user for Gemeinschaft
