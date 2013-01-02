@@ -134,12 +134,12 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 		# Load database structure into DB
 		#
 		echo "** Initializing database"
-		su - ${GS_USER} -c "cd ${GS_DIR}; RAILS_ENV=production bundle exec rake db:migrate --trace 2>&1 >/var/log/gemeinschaft/setup.log"
+		su - ${GS_USER} -c "cd ${GS_DIR}; RAILS_ENV=production bundle exec rake db:migrate --trace"
 
 		# Generate assets (like CSS)
 		#
 		echo "** Precompile GS assets"
-		su - ${GS_USER} -c "cd \"${GS_DIR}\"; RAILS_ENV=production bundle exec rake assets:precompile --trace 2>&1 >>/var/log/gemeinschaft/setup.log"
+		su - ${GS_USER} -c "cd \"${GS_DIR}\"; RAILS_ENV=production bundle exec rake assets:precompile --trace"
 
 		# self destruction
 		#
