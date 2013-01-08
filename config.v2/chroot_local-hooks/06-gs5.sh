@@ -65,13 +65,13 @@ password ${GS_GIT_PASSWORD}
 fi
 
 #  Create alias
-GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
-ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
+GS_DIR_SHORT=`dirname "${GS_DIR}"`/GS5
+ln -s `basename "${GS_DIR}"` "${GS_DIR_SHORT}"
 
 # Install delayed worker job
 #
 echo -e "GBE: Install delayed worker job ...\n"
-echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work 2>&1 >/dev/null\"" >> /etc/inittab
+echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR}; RAILS_ENV=production bundle exec rake jobs:work 2>&1 >/dev/null\"" >> /etc/inittab
 
 # Install cronjobs
 #
@@ -80,9 +80,9 @@ echo -e "GBE: Install cronjobs ...\n"
 echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin" > /etc/cron.d/gemeinschaft_rvm
 echo "SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell" >> /etc/cron.d/gemeinschaft_rvm
 echo "RAILS_ENV=production" >> /etc/cron.d/gemeinschaft_rvm
-echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones" >> /etc/cron.d/gemeinschaft_rvm
-echo "* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )" >> /etc/cron.d/gemeinschaft_rvm
-echo "* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" >> /etc/cron.d/gemeinschaft_rvm
+echo "23 1 * * * ${GS_USER} ${GS_DIR}/script/logout_phones" >> /etc/cron.d/gemeinschaft_rvm
+echo "* * * * * ${GS_USER} ( cd ${GS_DIR}; bundle exec rake send_voicemail_notifications )" >> /etc/cron.d/gemeinschaft_rvm
+echo "* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR}; bundle exec rake send_fax_notifications )" >> /etc/cron.d/gemeinschaft_rvm
 
 # Create log dir
 #
@@ -95,16 +95,16 @@ su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 echo -e "GBE: Linking FreeSWITCH configuration ...\n"
 [ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
-ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
-ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
+ln -s "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
+ln -s "${GS_DIR}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
 echo -e "GBE: Setup loggin directory ...\n"
 rm -rf "${GS_DIR}/log"
 ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
 
 #FIXME compatibility with manual installation and GS default directories
-ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/conf" /opt/freeswitch/conf
-ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /opt/freeswitch/scripts
+ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
+ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
 
 #FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
 ln -s /usr/share/freeswitch/scripts /usr/scripts
@@ -128,7 +128,7 @@ PassengerRuby /var/lib/${GS_USER}/.rvm/wrappers/default/ruby
 PassengerMaxPoolSize 4
 PassengerMaxInstancesPerApp 3
 # http://stackoverflow.com/questions/821820/how-does-phusion-passenger-reuse-threads-and-processes
-# Both virtual hosts (PassengerAppRoot ${GS_DIR_NORMALIZED}) are actually
+# Both virtual hosts (PassengerAppRoot ${GS_DIR}) are actually
 # the same application!
 
 PassengerPoolIdleTime 200
@@ -161,10 +161,10 @@ Timeout 100
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
 
-	DocumentRoot ${GS_DIR_NORMALIZED}/public
+	DocumentRoot ${GS_DIR}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR_NORMALIZED}
+	PassengerAppRoot ${GS_DIR}
 	PassengerMinInstances 1
 	PassengerPreStart http://127.0.0.1:80/
 	PassengerStatThrottleRate 10
@@ -180,7 +180,7 @@ Timeout 100
 	RailsEnv development
 	#RackEnv  development
 
-	<Directory ${GS_DIR_NORMALIZED}/public>
+	<Directory ${GS_DIR}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
@@ -193,10 +193,10 @@ Timeout 100
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
 
-	DocumentRoot ${GS_DIR_NORMALIZED}/public
+	DocumentRoot ${GS_DIR}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR_NORMALIZED}
+	PassengerAppRoot ${GS_DIR}
 	PassengerMinInstances 1
 	PassengerPreStart https://127.0.0.1:443/
 	PassengerStatThrottleRate 10
@@ -212,7 +212,7 @@ Timeout 100
 	RailsEnv development
 	#RackEnv  development
 
-	<Directory ${GS_DIR_NORMALIZED}/public>
+	<Directory ${GS_DIR}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
