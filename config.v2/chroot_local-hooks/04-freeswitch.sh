@@ -389,6 +389,8 @@ else
 	ln -s /var/lib/freeswitch/storage /opt/freeswitch/storage
 	ln -s /var/lib/freeswitch/recordings /opt/freeswitch/recordings
 	ln -s /var/lib/freeswitch/db /opt/freeswitch/db
+	ln -s /etc/freeswitch /opt/freeswitch/conf
+	ln -s /usr/share/freeswitch/scripts /opt/freeswitch/scripts
 fi
 
 echo -e "GBE: Enabling FreeSwitch ...\n"

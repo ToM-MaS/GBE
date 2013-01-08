@@ -104,16 +104,16 @@ mkdir -p ${GS_DIR_LOCAL}/freeswitch/scripts/ini
 
 # Make initial copy of local configuration files
 #
-cp -r ${GS_DIR}/config ${GS_DIR_LOCAL}
-cp -r ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
-cp -r ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
+cp -rp ${GS_DIR}/config ${GS_DIR_LOCAL}
+cp -rp ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
+cp -rp ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
 
 # Link FS configs
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
 [ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
 ln -s "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
-ln -s "${GS_DIR}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
+ln -s "${GS_DIR_LOCAL}/freeswitch/scripts" /usr/share/freeswitch/scripts
 
 # Move Freeswitch storage files
 mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db
@@ -123,14 +123,14 @@ ln -s ${GS_DIR_LOCAL}/freeswitch/db /var/lib/freeswitch/db
 ln -s ${GS_DIR_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
 ln -s ${GS_DIR_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
 
+#FIXME temporal symlink of files from GS5 git to local path until Lua scripts are more flexible
+rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini/*
+find ${GS_DIR_LOCAL}/freeswitch/scripts/ini -type f -exec ln -s {} ${GS_DIR}/misc/freeswitch/scripts/ini \;
+
 #FIXME this should be avoided in the future, /var/log/gemeinschaft should be used directly
 echo -e "GBE: Setup loggin directory ...\n"
 rm -rf "${GS_DIR}/log"
 ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
-
-# compatibility with manual installation and GS default directories
-ln -s /etc/freeswitch /opt/freeswitch/conf
-ln -s /usr/share/freeswitch/scripts /opt/freeswitch/scripts
 
 #FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
 ln -s /usr/share/freeswitch/scripts /usr/scripts
