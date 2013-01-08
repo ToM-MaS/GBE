@@ -103,8 +103,8 @@ mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 
 # Make initial copy of local configuration files
 #
-cp -r ${GS_DIR}/config ${GS_DIR_LOCAL}/config
-cp -r ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch/conf
+cp -r ${GS_DIR}/config ${GS_DIR_LOCAL}
+cp -r ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
 
 # Link FS configs
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
