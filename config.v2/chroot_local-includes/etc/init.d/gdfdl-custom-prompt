@@ -18,6 +18,17 @@ GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
 GS_BRANCH="`cat /etc/gemeinschaft_branch`"
 [ -f "/opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb" ] && GEMEINSCHAFT_VERSION=`cat /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb | grep GEMEINSCHAFT_VERSION | sed "s/.*'\(.*\)'[^']*$/\1/"` || GEMEINSCHAFT_VERSION="5.x"
 
+# Read GS version from database
+#
+if [ -f /var/lib/gs5/.gs_mysql_password ]; then
+	MYSQL_PASSWD="`cat /var/lib/gs5/.gs_mysql_password`"
+	GEMEINSCHAFT_VERSION=$(mysql --skip-column-names -e "SELECT value FROM gs_parameters WHERE name = 'GEMEINSCHAFT_VERSION';" --user=gemeinschaft --password="${MYSQL_PASSWD}" gemeinschaft || echo "5.x")
+else
+	echo "ERROR: GS lost it's database password in /var/lib/gs5/.gs_mysql_password !"
+fi
+
+# Check for live status
+#
 if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
 	then
 	LIVE=true
@@ -25,6 +36,8 @@ else
 	LIVE=false
 fi
 
+#
+#
 [ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
 if [[ `expr length ${BUILD}` == 10 && x${GS_BRANCH} = x"master" ]]
 	then
