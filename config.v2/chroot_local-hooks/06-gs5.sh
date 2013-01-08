@@ -108,24 +108,24 @@ ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 #
 cp -rp ${GS_DIR}/config ${GS_DIR_LOCAL}
 cp -rp ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
-cp -rp ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
 
 # Link FS configs
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
 [ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
-ln -s "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
-ln -s "${GS_DIR_LOCAL}/freeswitch/scripts" /usr/share/freeswitch/scripts
+ln -s "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
+ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
 # Move Freeswitch storage files
 mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db
 mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage
 mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings
-ln -s ${GS_DIR_LOCAL}/freeswitch/db /var/lib/freeswitch/db
-ln -s ${GS_DIR_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
-ln -s ${GS_DIR_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
 
 #FIXME temporal symlink of files from GS5 git to local path until Lua scripts are more flexible
+cp -rp ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
 rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini/*
 find ${GS_DIR_LOCAL}/freeswitch/scripts/ini -type f -exec ln -s {} ${GS_DIR}/misc/freeswitch/scripts/ini \;
 
