@@ -109,7 +109,7 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 
 		# Update database password in Gemeinschaft config
 		echo "** Updating Gemeinschaft with new MySQL password"
-		sed -i "s/password:.*/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR_LOCAL}/config/database.yml"
+		sed -i "s/password:.*/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
 
 		# Update database password in FreeSwitch configs
 		echo "** Updating FreeSwitch with new MySQL password"
@@ -132,7 +132,7 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 		#
 		echo "** Randomize Cookie secret token"
 		COOKIE_SECRET=`apg -m128 -a0 -n 1 -M NCL`
-		sed -i "s/Gemeinschaft42c::Application.config.secret_token =.*/Gemeinschaft42c::Application.config.secret_token = '${COOKIE_SECRET}'/" "${GS_DIR_LOCAL}/config/initializers/secret_token.rb"
+		sed -i "s/Gemeinschaft42c::Application.config.secret_token =.*/Gemeinschaft42c::Application.config.secret_token = '${COOKIE_SECRET}'/" "${GS_DIR}/config/initializers/secret_token.rb"
 
 		# Load database structure into DB
 		#

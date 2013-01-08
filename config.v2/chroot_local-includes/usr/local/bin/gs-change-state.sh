@@ -28,7 +28,7 @@ case "$1" in
 		sed -i "s/#RackEnv development/#RackEnv production/" "/etc/apache2/sites-available/gemeinschaft"
 
 		echo "** Updating Gemeinschaft debugging to production level"
-		sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "/opt/gemeinschaft-local/config/environments/production.rb"
+		sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "/opt/gemeinschaft/config/environments/production.rb"
 
 		echo "** Updating monAMI debugging to production level"
 		sed -i "s/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log\"/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log --log-level=2\"/" "/etc/init.d/mon_ami"
@@ -48,7 +48,7 @@ case "$1" in
 		sed -i "s/#RackEnv production/#RackEnv development/" "/etc/apache2/sites-available/gemeinschaft"
 
 		echo "** Updating Gemeinschaft debugging to development level"
-		sed -i "s/config.log_level = :warn/# config.log_level = :debug/" "/opt/gemeinschaft-local/config/environments/production.rb"
+		sed -i "s/config.log_level = :warn/# config.log_level = :debug/" "/opt/gemeinschaft/config/environments/production.rb"
 
 		echo "** Updating monAMI debugging to development level"
 		sed -i "s/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log --log-level=2\"/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log\"/" "/etc/init.d/mon_ami"

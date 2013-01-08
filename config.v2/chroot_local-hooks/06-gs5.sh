@@ -99,14 +99,14 @@ echo -e "GBE: Create logfile directory ...\n"
 #
 GS_DIR_LOCAL="${GS_DIR}-local"
 GS_DIR_NORMALIZED_LOCAL="${GS_DIR_NORMALIZED}-local"
-mkdir -p ${GS_DIR_LOCAL}/config
+#mkdir -p ${GS_DIR_LOCAL}/config
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/scripts/ini
 ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
 # Make initial copy of local configuration files
 #
-cp -rp ${GS_DIR}/config ${GS_DIR_LOCAL}
+#cp -rp ${GS_DIR}/config ${GS_DIR_LOCAL}
 cp -rp ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
 
 # Link FS configs
@@ -263,11 +263,11 @@ echo -e "GBE: Setup runtime user for MonAMI ...\n"
 sed -i "s/^USER=.*/USER=\"${GS_USER}\"/" /etc/init.d/mon_ami
 
 echo -e "GBE: Set permissions ...\n"
-chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" "${GS_DIR_LOCAL}/config" /var/log/gemeinschaft
+chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
 # Allow members of the GS system group to modify+upgrade files
-chmod -R g+w "${GS_DIR}" "${GS_DIR_LOCAL}/config"
+chmod -R g+w "${GS_DIR}"
 # Restrict access to configuration and logfiles
-chmod 0770 "${GS_DIR_LOCAL}/config" /var/log/gemeinschaft
+chmod 0770 /var/log/gemeinschaft
 # add GS system user to freeswitch group
 usermod -a -G freeswitch ${GS_USER} 
 # Set permissions for FreeSwitch configurations
