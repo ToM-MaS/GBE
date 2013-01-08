@@ -404,5 +404,8 @@ DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
 sed -i 's/# Required-Start: $network $remote_fs $local_fs/# Required-Start: $network $remote_fs $local_fs mysql/' /etc/init.d/freeswitch
 update-rc.d freeswitch defaults
 
+# Create spool directory
+mkdir -p /var/spool/freeswitch
+
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*
