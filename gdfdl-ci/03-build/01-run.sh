@@ -141,10 +141,10 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 		cp -rpf "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
 	fi
 
-	if [ -d "${GDFDL_BASEDIR}/.ci/GS5" ]
+	if [ -d "${GDFDL_BASEDIR}/.ci/gemeinschaft" ]
 		then
 		echo -n "GS5 "
-		cp -rpf "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/"
+		cp -rpf "${GDFDL_BASEDIR}/.ci/gemeinschaft" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/"
 	fi
 
 	echo "... done"
