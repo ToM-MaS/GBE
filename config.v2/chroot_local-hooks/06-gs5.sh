@@ -64,9 +64,15 @@ password ${GS_GIT_PASSWORD}
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
 fi
 
-#  Create alias
+#  Create alias for GS5 backwards compatibility
+#
 GS_DIR_SHORT=`dirname "${GS_DIR}"`/GS5
 ln -s `basename "${GS_DIR}"` "${GS_DIR_SHORT}"
+
+# Install GS related Gems
+#
+echo -e "GBE: Install GS gems ...\n"
+su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 # Install delayed worker job
 #
@@ -77,34 +83,51 @@ echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR}; RAILS_ENV=produ
 #
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin" > /etc/cron.d/gemeinschaft_rvm
-echo "SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell" >> /etc/cron.d/gemeinschaft_rvm
-echo "RAILS_ENV=production" >> /etc/cron.d/gemeinschaft_rvm
-echo "23 1 * * * ${GS_USER} ${GS_DIR}/script/logout_phones" >> /etc/cron.d/gemeinschaft_rvm
-echo "* * * * * ${GS_USER} ( cd ${GS_DIR}; bundle exec rake send_voicemail_notifications )" >> /etc/cron.d/gemeinschaft_rvm
-echo "* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR}; bundle exec rake send_fax_notifications )" >> /etc/cron.d/gemeinschaft_rvm
+echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin
+SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell
+RAILS_ENV=production
+23 1 * * * ${GS_USER} ${GS_DIR}/script/logout_phones
+* * * * * ${GS_USER} ( cd ${GS_DIR}; bundle exec rake send_voicemail_notifications )
+* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR}; bundle exec rake send_fax_notifications )" > /etc/cron.d/gemeinschaft_rvm
 
 # Create log dir
 #
 echo -e "GBE: Create logfile directory ...\n"
 [ ! -d /var/log/gemeinschaft ] && mkdir -p /var/log/gemeinschaft
 
-echo -e "GBE: Installing GS gems ...\n"
-su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
+# Create local configuration dir
+#
+GS_DIR_LOCAL="${GS_DIR}-local"
+mkdir -p ${GS_DIR_LOCAL}
 
-echo -e "GBE: Linking FreeSWITCH configuration ...\n"
+# Make initial copy of local configuration files
+#
+cp -r ${GS_DIR}/config ${GS_DIR_LOCAL}/config
+cp -r ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch/conf
+
+# Link FS configs
+echo -e "GBE: Link FreeSWITCH configuration ...\n"
 [ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
-ln -s "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
+ln -s "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
 ln -s "${GS_DIR}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
+# Move Freeswitch storage files
+mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db
+mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage
+mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings
+ln -s ${GS_DIR_LOCAL}/freeswitch/db /var/lib/freeswitch/db
+ln -s ${GS_DIR_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
+ln -s ${GS_DIR_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
+
+#FIXME this should be avoided in the future, /var/log/gemeinschaft should be used directly
 echo -e "GBE: Setup loggin directory ...\n"
 rm -rf "${GS_DIR}/log"
 ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
 
-#FIXME compatibility with manual installation and GS default directories
-ln -s "${GS_DIR}/misc/freeswitch/conf" /opt/freeswitch/conf
-ln -s "${GS_DIR}/misc/freeswitch/scripts" /opt/freeswitch/scripts
+# compatibility with manual installation and GS default directories
+ln -s /etc/freeswitch /opt/freeswitch/conf
+ln -s /usr/share/freeswitch/scripts /opt/freeswitch/scripts
 
 #FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
 ln -s /usr/share/freeswitch/scripts /usr/scripts
@@ -120,7 +143,7 @@ ln -s /var/lib/${GS_USER}/.rvm/scripts/rvm /usr/local/rvm/scripts/rvm
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
-echo -e "GBE: Adjusting Apache2 configuration ...\n"
+echo -e "GBE: Adjust Apache2 configuration ...\n"
 echo "LoadModule passenger_module ${PASSENGER_ROOT}/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
 echo "PassengerRoot ${PASSENGER_ROOT}
 PassengerRuby /var/lib/${GS_USER}/.rvm/wrappers/default/ruby
@@ -234,12 +257,12 @@ a2ensite gemeinschaft 2>&1
 echo -e "GBE: Setup runtime user for MonAMI ...\n"
 sed -i "s/^USER=.*/USER=\"${GS_USER}\"/" /etc/init.d/mon_ami
 
-echo -e "GBE: Setting permissions ...\n"
-chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
+echo -e "GBE: Set permissions ...\n"
+chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" "${GS_DIR_LOCAL}" /var/log/gemeinschaft
 # Allow members of the GS system group to modify+upgrade files
-chmod -R g+w "${GS_DIR}"
+chmod -R g+w "${GS_DIR}" "${GS_DIR_LOCAL}"
 # Restrict access to configuration and logfiles
-chmod 0770 "${GS_DIR}/config" /var/log/gemeinschaft
+chmod 0770 "${GS_DIR_LOCAL}/config" /var/log/gemeinschaft
 # add GS system user to freeswitch group
 usermod -a -G freeswitch ${GS_USER} 
 # Set permissions for FreeSwitch configurations
