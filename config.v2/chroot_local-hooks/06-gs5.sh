@@ -98,7 +98,8 @@ echo -e "GBE: Create logfile directory ...\n"
 # Create local configuration dir
 #
 GS_DIR_LOCAL="${GS_DIR}-local"
-mkdir -p ${GS_DIR_LOCAL}
+mkdir -p ${GS_DIR_LOCAL}/config
+mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 
 # Make initial copy of local configuration files
 #
