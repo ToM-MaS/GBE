@@ -108,12 +108,21 @@ echo "***
 #
 # Write motd and issue.net
 #
-echo "Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}" > /etc/issue.net
+if [[ ${PRODUCTION} == true ]]
+	then
+	echo "Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}" > /etc/issue.net
 echo "
-***   Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}
-***
+***   Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}" > /etc/motd
+else
+	echo "Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}-${GS_BRANCH}" > /etc/issue.net
+echo "
+***   Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}-${GS_BRANCH}" > /etc/motd
+fi
+
+
+echo "***
 ***   Need help with Gemeinschaft? We have an excellent free mailinglist
 ***   and offer the best support and consulting money can buy. Have a
 ***   look at http://amooma.de/gemeinschaft/gs5 for more information.
 ***
-" > /etc/motd
+" >> /etc/motd
