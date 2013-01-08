@@ -21,14 +21,14 @@ case "$1" in
 	# Lower debug levels for productive installations
 	production)
 		echo "** Updating FreeSwitch debugging to production level"
-		sed -i "s/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/" "/opt/gemeinschaft/misc/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/" "/opt/gemeinschaft-local/freeswitch/conf/freeswitch.xml"
 
 		echo "** Updating Apache Passenger environment to production level"
 		sed -i "s/RailsEnv development/RailsEnv production/" "/etc/apache2/sites-available/gemeinschaft"
 		sed -i "s/#RackEnv development/#RackEnv production/" "/etc/apache2/sites-available/gemeinschaft"
 
 		echo "** Updating Gemeinschaft debugging to production level"
-		sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "/opt/gemeinschaft/config/environments/production.rb"
+		sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "/opt/gemeinschaft-local/config/environments/production.rb"
 
 		echo "** Updating monAMI debugging to production level"
 		sed -i "s/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log\"/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log --log-level=2\"/" "/etc/init.d/mon_ami"
@@ -41,14 +41,14 @@ case "$1" in
 	# Higher debug levels for development installations
 	development)
 		echo "** Updating FreeSwitch debugging to development level"
-		sed -i "s/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/" "/opt/gemeinschaft/misc/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/" "/opt/gemeinschaft-local/freeswitch/conf/freeswitch.xml"
 
 		echo "** Updating Apache Passenger environment to development level"
 		sed -i "s/RailsEnv production/RailsEnv development/" "/etc/apache2/sites-available/gemeinschaft"
 		sed -i "s/#RackEnv production/#RackEnv development/" "/etc/apache2/sites-available/gemeinschaft"
 
 		echo "** Updating Gemeinschaft debugging to development level"
-		sed -i "s/config.log_level = :warn/# config.log_level = :debug/" "/opt/gemeinschaft/config/environments/production.rb"
+		sed -i "s/config.log_level = :warn/# config.log_level = :debug/" "/opt/gemeinschaft-local/config/environments/production.rb"
 
 		echo "** Updating monAMI debugging to development level"
 		sed -i "s/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log --log-level=2\"/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log\"/" "/etc/init.d/mon_ami"

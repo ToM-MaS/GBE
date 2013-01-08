@@ -66,8 +66,8 @@ fi
 
 #  Create alias for GS5 backwards compatibility
 #
-GS_DIR_SHORT=`dirname "${GS_DIR}"`/GS5
-ln -s `basename "${GS_DIR}"` "${GS_DIR_SHORT}"
+GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
+ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 
 # Install GS related Gems
 #
@@ -77,7 +77,7 @@ su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 # Install delayed worker job
 #
 echo -e "GBE: Install delayed worker job ...\n"
-echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR}; RAILS_ENV=production bundle exec rake jobs:work 2>&1 >/dev/null\"" >> /etc/inittab
+echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work 2>&1 >/dev/null\"" >> /etc/inittab
 
 # Install cronjobs
 #
@@ -86,9 +86,9 @@ echo -e "GBE: Install cronjobs ...\n"
 echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin
 SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell
 RAILS_ENV=production
-23 1 * * * ${GS_USER} ${GS_DIR}/script/logout_phones
-* * * * * ${GS_USER} ( cd ${GS_DIR}; bundle exec rake send_voicemail_notifications )
-* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR}; bundle exec rake send_fax_notifications )" > /etc/cron.d/gemeinschaft_rvm
+23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones
+* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )
+* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" > /etc/cron.d/gemeinschaft_rvm
 
 # Create log dir
 #
@@ -98,9 +98,11 @@ echo -e "GBE: Create logfile directory ...\n"
 # Create local configuration dir
 #
 GS_DIR_LOCAL="${GS_DIR}-local"
+GS_DIR_NORMALIZED_LOCAL="${GS_DIR_NORMALIZED}-local"
 mkdir -p ${GS_DIR_LOCAL}/config
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/scripts/ini
+ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
 # Make initial copy of local configuration files
 #

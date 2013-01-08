@@ -17,7 +17,7 @@
 #
 ### END INIT INFO
 
-DAEMON=/opt/GS5/misc/mon_ami/mon_ami
+DAEMON=/opt/gemeinschaft/misc/mon_ami/mon_ami
 EXECUTABLE=`basename 'mon_ami'`
 DESC="MonAMI Asterisk Manger Interface Emulator"
 ARGS="--log-file=/var/log/gemeinschaft/mon_ami.log"
