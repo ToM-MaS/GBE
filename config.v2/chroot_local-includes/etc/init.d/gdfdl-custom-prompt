@@ -36,7 +36,8 @@ else
 	LIVE=false
 fi
 
-#
+# Check if we have a production or development state build
+# (production = master-branch was used from GS5 and GBE repo)
 #
 [ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
 if [[ `expr length ${BUILD}` == 10 && x${GS_BRANCH} = x"master" ]]
