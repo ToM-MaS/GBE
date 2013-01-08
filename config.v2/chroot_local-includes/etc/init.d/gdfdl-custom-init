@@ -128,6 +128,7 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 
 		# Randomize secret token for cookies
 		#
+		echo "** Randomize Cookie secret token"
 		COOKIE_SECRET=`apg -m128 -a0 -n 1 -M NCL`
 		sed -i "s/Gemeinschaft42c::Application.config.secret_token =.*/Gemeinschaft42c::Application.config.secret_token = '${COOKIE_SECRET}'/" "${GS_DIR}/config/initializers/secret_token.rb"
 
