@@ -37,10 +37,23 @@ start)
 		[[ ${ADDRESS} =~ ":" ]] && continue
 
 		echo "Updating Gemeinschaft configurations ..."
-		[[ -f /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb ]] && sed -i "s/^HOMEBASE_IP_ADDRESS =.*/HOMEBASE_IP_ADDRESS = '${ADDRESS}'/" /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb
+
+		# Update static files
 		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
 		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
 		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
+
+		# Update database settings
+		if [ -f /var/lib/gs5/.gs_mysql_password ];
+			then
+				MYSQL_PASSWD="`cat /var/lib/gs5/.gs_mysql_password`"
+				mysql -e "UPDATE gs_parameters SET value = '127.0.0.1' WHERE name = 'HOMEBASE_IP_ADDRESS';" --user=gemeinschaft --password="${MYSQL_PASSWD}" gemeinschaft
+		else
+			echo "ERROR: GS lost it's database password in /var/lib/gs5/.gs_mysql_password !"
+		fi
+
+
+
 	done
 
 	;;
