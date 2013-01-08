@@ -39,9 +39,9 @@ start)
 		echo "Updating Gemeinschaft configurations ..."
 
 		# Update static files
-		[[ -f /opt/gemeinschaft-local/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image/" /opt/gemeinschaft-local/freeswitch/scripts/ini/dialplan.ini
-		[[ -f /opt/gemeinschaft-local/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" /opt/gemeinschaft-local/freeswitch/scripts/ini/dialplan.ini
-		[[ -f /opt/gemeinschaft-local/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" /opt/gemeinschaft-local/freeswitch/scripts/ini/dialplan.ini
+		[[ -f /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image/" /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini
+		[[ -f /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini
+		[[ -f /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini
 
 		# Update database settings
 		if [ -f /var/lib/gs5/.gs_mysql_password ];

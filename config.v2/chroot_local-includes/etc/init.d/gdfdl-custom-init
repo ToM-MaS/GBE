@@ -16,7 +16,7 @@
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 set -e
 
-GS_DIR_LOCAL="${GS_DIR}-local"
+GS_DIR_LOCAL="/var/opt/gemeinschaft"
 
 if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
 	then

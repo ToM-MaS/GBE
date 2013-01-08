@@ -21,7 +21,7 @@ case "$1" in
 	# Lower debug levels for productive installations
 	production)
 		echo "** Updating FreeSwitch debugging to production level"
-		sed -i "s/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/" "/opt/gemeinschaft-local/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/" "/var/opt/gemeinschaft/freeswitch/conf/freeswitch.xml"
 
 		echo "** Updating Apache Passenger environment to production level"
 		sed -i "s/RailsEnv development/RailsEnv production/" "/etc/apache2/sites-available/gemeinschaft"
@@ -41,7 +41,7 @@ case "$1" in
 	# Higher debug levels for development installations
 	development)
 		echo "** Updating FreeSwitch debugging to development level"
-		sed -i "s/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/" "/opt/gemeinschaft-local/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<map name=\"all\" value=\"info,notice,warning,err,crit,alert\"\/>/<map name=\"all\" value=\"debug,info,notice,warning,err,crit,alert\"\/>/" "/var/opt/gemeinschaft/freeswitch/conf/freeswitch.xml"
 
 		echo "** Updating Apache Passenger environment to development level"
 		sed -i "s/RailsEnv production/RailsEnv development/" "/etc/apache2/sites-available/gemeinschaft"
