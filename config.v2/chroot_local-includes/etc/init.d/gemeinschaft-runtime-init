@@ -10,6 +10,8 @@
 # Description:       Updates certain configurations after reboot to comply with current network settings
 ### END INIT INFO
 
+# General settings
+[ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 
 case "$1" in
 start)

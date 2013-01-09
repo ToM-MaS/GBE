@@ -17,6 +17,9 @@
 #
 ### END INIT INFO
 
+# General settings
+[ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
+
 DAEMON=/opt/gemeinschaft/misc/mon_ami/mon_ami
 EXECUTABLE=`basename 'mon_ami'`
 DESC="MonAMI Asterisk Manger Interface Emulator"

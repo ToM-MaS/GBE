@@ -14,9 +14,8 @@
 # General settings
 [ -f /gdfdl.conf ] && source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
+[ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 set -e
-
-GS_DIR_LOCAL="/var/opt/gemeinschaft"
 
 if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
 	then
@@ -100,8 +99,6 @@ OPTION       = 67108864
 USER         = gemeinschaft
 PASSWORD     = ${MYSQL_PASSWD_GS}
 " >/var/lib/freeswitch/.odbc.ini
-chmod 644 /var/lib/freeswitch/.odbc.ini
-chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
@@ -113,14 +110,13 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 
 		# Update database password in FreeSwitch configs
 		echo "** Updating FreeSwitch with new MySQL password"
-		sed -i "s/password =.*/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR_LOCAL}/freeswitch/scripts/ini/database.ini"
-		sed -i "s/odbc-dsn =.*/odbc-dsn = gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}/" "${GS_DIR_LOCAL}/freeswitch/scripts/ini/sofia.ini"
-		sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml"
-		sed -i "s/<param name=\"odbc-dsn\".*/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml"
+		sed -i "s/password =.*/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/database.ini"
+		sed -i "s/odbc-dsn =.*/odbc-dsn = gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/sofia.ini"
+		sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<param name=\"odbc-dsn\".*/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
 
 		# Lower debug levels for productive installations
-		[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
-		if [[ `expr length ${BUILD}` == 10 ]]; then
+		if [[ `expr length ${GS_BUILDNAME}` == 10 ]]; then
 			/usr/local/bin/gs-change-state.sh production
 
 		# Enforce higher debug levels for development installations

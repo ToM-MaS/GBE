@@ -10,6 +10,8 @@
 # Description:       Updates certain configurations after reboot to comply with current network settings
 ### END INIT INFO
 
+# General settings
+[ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 
 case "$1" in
 start)
@@ -39,22 +41,24 @@ start)
 		echo "Updating Gemeinschaft configurations ..."
 
 		# Update static files
-		[[ -f /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image/" /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini
-		[[ -f /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini
-		[[ -f /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" /var/opt/gemeinschaft/freeswitch/scripts/ini/dialplan.ini
+		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
+		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
+		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
 
 		# Update database settings
-		if [ -f /var/lib/gs5/.gs_mysql_password ];
+		if [ -f "${GS_MYSQL_PASSWORD_FILE}" ];
 			then
-				MYSQL_PASSWD="`cat /var/lib/gs5/.gs_mysql_password`"
-				mysql -e "UPDATE gs_parameters SET value = '127.0.0.1' WHERE name = 'HOMEBASE_IP_ADDRESS';" --user=gemeinschaft --password="${MYSQL_PASSWD}" gemeinschaft
+				MYSQL_PASSWD="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
+				mysql -e "UPDATE gs_parameters SET value = '${ADDRESS}' WHERE name = 'HOMEBASE_IP_ADDRESS';" --user=${GS_MYSQL_USER} --password="${MYSQL_PASSWD}" ${GS_MYSQL_DB}
 		else
-			echo "ERROR: GS lost it's database password in /var/lib/gs5/.gs_mysql_password !"
+			echo "ERROR: GS database password file ${GS_MYSQL_PASSWORD_FILE} not found"
 		fi
 
-
-
 	done
+
+	# Enforce file permissions
+	echo "Enforcing file permissions ..."
+	/usr/local/bin/gs-set-file-permissions.sh
 
 	;;
 *)

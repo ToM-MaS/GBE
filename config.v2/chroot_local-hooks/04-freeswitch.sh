@@ -408,6 +408,7 @@ update-rc.d freeswitch defaults
 
 # Create spool directory
 mkdir -p /var/spool/freeswitch
+chown -R freeswitch.root /var/spool/freeswitch
 
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*

@@ -105,8 +105,7 @@ ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
 # Make initial copy of local configuration files
 #
-#cp -rp ${GS_DIR}/config ${GS_DIR_LOCAL}
-cp -rp ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
+cp -a ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
 
 # Link FS configs
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
@@ -124,7 +123,7 @@ ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
 
 #FIXME temporal symlink of files from GS5 git to local path until Lua scripts are more flexible
-cp -rp ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
+cp -a ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
 rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini/*
 find ${GS_DIR_LOCAL}/freeswitch/scripts/ini -type f -exec ln -s {} ${GS_DIR}/misc/freeswitch/scripts/ini \;
 
@@ -261,14 +260,22 @@ a2ensite gemeinschaft 2>&1
 echo -e "GBE: Setup runtime user for MonAMI ...\n"
 sed -i "s/^USER=.*/USER=\"${GS_USER}\"/" /etc/init.d/mon_ami
 
-echo -e "GBE: Set permissions ...\n"
-chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
-# Allow members of the GS system group to modify+upgrade files
-chmod -R g+w "${GS_DIR}"
-# Restrict access to configuration and logfiles
-chmod 0770 /var/log/gemeinschaft
-# add GS system user to freeswitch group
-usermod -a -G freeswitch ${GS_USER} 
-# Set permissions for FreeSwitch configurations
-chmod 0640 "${GS_DIR_LOCAL}/freeswitch/scripts/ini/database.ini" "${GS_DIR_LOCAL}/freeswitch/scripts/ini/sofia.ini" "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml"
-chown .freeswitch "${GS_DIR_LOCAL}/freeswitch/scripts/ini/database.ini" "${GS_DIR_LOCAL}/freeswitch/scripts/ini/sofia.ini" "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml"
+echo -e "GBE: Write local settings file ..."
+mkdir -p /etc/gemeinschaft
+echo "# Do not change anything here" > /etc/gemeinschaft/system.conf
+echo "GS_DIR=\"${GS_DIR}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_DIR_LOCAL=\"${GS_DIR_LOCAL}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_DIR_NORMALIZED=\"${GS_DIR_NORMALIZED}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_DIR_NORMALIZED_LOCAL=\"${GS_DIR_NORMALIZED_LOCAL}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_USER=\"${GS_USER}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_GROUP=\"${GS_GROUP}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_BRANCH=\"`cat /etc/gemeinschaft_branch`\""  >> /etc/gemeinschaft/system.conf
+echo "GS_BUILDNAME=\"`cat /etc/gdfdl_build`\""  >> /etc/gemeinschaft/system.conf
+echo "GS_MYSQL_USER=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
+echo "GS_MYSQL_DB=\"\${GS_MYSQL_USER}\""  >> /etc/gemeinschaft/system.conf
+echo "GS_MYSQL_PASSWORD_FILE=\"/var/lib/\${GS_USER}/.gs_mysql_password\""  >> /etc/gemeinschaft/system.conf
+echo "GS_GIT_URL=\"${GS_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
+rm -f /etc/gemeinschaft_branch /etc/gdfdl_build
+
+echo -e "GBE: Set initial file permissions ...\n"
+/usr/local/bin/gs-set-file-permissions.sh
