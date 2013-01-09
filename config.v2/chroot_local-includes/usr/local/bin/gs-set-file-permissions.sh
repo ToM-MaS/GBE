@@ -29,5 +29,7 @@ usermod -a -G freeswitch ${GS_USER}
 chmod 0640 "${GS_DIR_LOCAL}/freeswitch/scripts/ini/database.ini" "${GS_DIR_LOCAL}/freeswitch/scripts/ini/sofia.ini" "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml"
 chown .freeswitch "${GS_DIR_LOCAL}/freeswitch/scripts/ini/database.ini" "${GS_DIR_LOCAL}/freeswitch/scripts/ini/sofia.ini" "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml"
 
-chmod 440 /var/lib/freeswitch/.odbc.ini
-chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
+if [ -f /var/lib/freeswitch/.odbc.ini ]; then
+	chmod 440 /var/lib/freeswitch/.odbc.ini
+	chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
+fi
