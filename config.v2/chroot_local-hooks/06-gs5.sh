@@ -84,7 +84,7 @@ echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAIL
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
 echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin
-SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell
+SHELL=/var/lib/gemeinschaft/.rvm/bin/rvm-shell
 RAILS_ENV=production
 23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones
 * * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )
@@ -142,14 +142,14 @@ ln -s /usr/lib/lua /usr/local/lib/lua
 #FIXME another hack for ruby/rails environment as GS scripts explicitly uses this path for sourcing
 #      (although excplicit sourcing is deprecated from GBE perspective)
 mkdir -p /usr/local/rvm/scripts
-ln -s /var/lib/${GS_USER}/.rvm/scripts/rvm /usr/local/rvm/scripts/rvm
+ln -s /var/lib/gemeinschaft/.rvm/scripts/rvm /usr/local/rvm/scripts/rvm
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
 echo -e "GBE: Adjust Apache2 configuration ...\n"
 echo "LoadModule passenger_module ${PASSENGER_ROOT}/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
 echo "PassengerRoot ${PASSENGER_ROOT}
-PassengerRuby /var/lib/${GS_USER}/.rvm/wrappers/default/ruby
+PassengerRuby /var/lib/gemeinschaft/.rvm/wrappers/default/ruby
 
 PassengerMaxPoolSize 4
 PassengerMaxInstancesPerApp 3

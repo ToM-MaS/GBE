@@ -22,11 +22,11 @@ echo -e "GBE: Install RVM version ${RVM_VERSION} ...\n"
 su - ${GS_USER} -c "curl --retry 5 --fail --silent -L get.rvm.io | bash -s ${RVM_VERSION} 2>&1"
 
 echo -e "GBE: Modify Shell enviroment for RVM usage ...\n"
-echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> /var/lib/${GS_USER}/.bashrc
+echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> /var/lib/gemeinschaft/.bashrc
 
 echo -e "GBE: Disable ri and rdoc generation ...\n"
-echo "gem: --no-ri --no-rdoc" > /var/lib/${GS_USER}/.gemrc
-chown ${GS_USER}.${GS_GROUP} /var/lib/${GS_USER}/.gemrc
+echo "gem: --no-ri --no-rdoc" > /var/lib/gemeinschaft/.gemrc
+chown ${GS_USER}.${GS_GROUP} /var/lib/gemeinschaft/.gemrc
 
 echo -e "GBE: Install Ruby version ${RUBY_VERSION} ...\n"
 su - ${GS_USER} -c "rvm install ${RUBY_VERSION} 2>&1"
