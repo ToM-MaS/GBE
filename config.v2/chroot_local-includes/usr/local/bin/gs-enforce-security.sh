@@ -14,13 +14,17 @@
 #
 set -e
 
-# group memberships for GS_GROUP
-usermod -g ${GS_GROUP} ${GS_USER} 2>&1 >/dev/null
-usermod -g ${GS_GROUP} gsmaster 2>&1 >/dev/null
+# Group memberships for GS_USER
+if id -u ${GS_USER} >/dev/null 2>&1; then
+	usermod -g ${GS_GROUP} ${GS_USER} 2>&1 >/dev/null
+	usermod -a -G freeswitch ${GS_USER} 2>&1 >/dev/null
+fi
 
-# group memberships for freeswitch
-usermod -a -G freeswitch ${GS_USER} 2>&1 >/dev/null
-usermod -a -G freeswitch gsmaster 2>&1 >/dev/null
+# Group memberships for user gsmaster
+if id -u gsmaster >/dev/null 2>&1; then
+	usermod -g ${GS_GROUP} gsmaster 2>&1 >/dev/null
+	usermod -a -G freeswitch gsmaster 2>&1 >/dev/null
+fi
 
 # GS program files
 chown -vR "${GS_USER}"."${GS_GROUP}" "${GS_DIR}"
