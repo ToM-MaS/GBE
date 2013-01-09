@@ -109,9 +109,9 @@ cp -a ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
 
 # Link FS configs
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
-[ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
+[ -d /etc/freeswitch ] && rm -rf /etc/freeswitch
+ln -s "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf" /etc/freeswitch
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
-ln -s "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
 ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
 # Move Freeswitch storage files
