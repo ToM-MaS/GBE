@@ -31,12 +31,6 @@ case "$1" in
 
 		echo -e "Preparing Gemeinschaft for 1st start ...\n"
 
-		# Change primary group of GS system admin to GS_GROUP
-		#
-		set +e
-		groupdel gsmaster 2>&1 >/dev/null
-		set -e
-
 		# Generate new password for gsmaster system administrator for live system
 		if [[ "${LIVE}" == true ]]; then
 			echo "** Generating individual password for live-system user 'gsmaster'"

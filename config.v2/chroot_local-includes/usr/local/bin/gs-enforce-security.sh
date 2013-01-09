@@ -24,6 +24,10 @@ fi
 if id -u gsmaster >/dev/null 2>&1; then
 	usermod -g ${GS_GROUP} gsmaster 2>&1 >/dev/null
 	usermod -a -G freeswitch gsmaster 2>&1 >/dev/null
+
+	if id -g gsmaster >/dev/null 2>&1; then
+		groupdel gsmaster 2>&1 >/dev/null
+	fi
 fi
 
 # GS program files
