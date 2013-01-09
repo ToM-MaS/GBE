@@ -68,3 +68,5 @@ echo - "GBE: Installing nodejs ...\n"
 cd /usr/local/src
 wget -c -t 5 --waitretry=3 http://nodejs.org/dist/node-${NODEJS_VERSION}.tar.gz
 tar xzvf node-*.tar.gz && cd `ls -rd node-v*` && ./configure && make install
+cd ..
+rm -rf node-*
