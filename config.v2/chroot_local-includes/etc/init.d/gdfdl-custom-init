@@ -107,10 +107,8 @@ chmod -v 0440 /var/lib/freeswitch/.odbc.ini
 		echo "** Updating Gemeinschaft with new MySQL password"
 		sed -i "s/password:.*/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
 
-		# Update database password in FreeSwitch configs
+		# Update database password in FreeSwitch config
 		echo "** Updating FreeSwitch with new MySQL password"
-		sed -i "s/password =.*/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/database.ini"
-		sed -i "s/odbc-dsn =.*/odbc-dsn = ${GS_MYSQL_DB}:${GS_MYSQL_USER}:${MYSQL_PASSWD_GS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/sofia.ini"
 		sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
 		sed -i "s/<param name=\"odbc-dsn\".*/<param name=\"odbc-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
 
