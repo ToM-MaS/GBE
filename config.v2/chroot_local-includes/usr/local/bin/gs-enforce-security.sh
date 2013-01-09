@@ -51,7 +51,7 @@ find /usr/share/freeswitch/sounds -type f -exec chmod -vR 0644 {} \;
 # GS_USER homedir
 chown -vR ${GS_USER}.${GS_GROUP} /var/lib/${GS_USER}
 chmod -vR 0770 /var/lib/${GS_USER}
-chmod -v 0440 "${GS_MYSQL_PASSWORD_FILE}"
+[ -f "${GS_MYSQL_PASSWORD_FILE}" ] && chmod -v 0440 "${GS_MYSQL_PASSWORD_FILE}"
 
 # Logfiles
 chown -vR "${GS_USER}"."${GS_GROUP}" /var/log/gemeinschaft
