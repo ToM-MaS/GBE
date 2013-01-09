@@ -69,16 +69,16 @@ case "$1" in
 		/etc/init.d/mysql restart
 
 		# Create MySQL user for Gemeinschaft
-		if [ ! -f "/var/lib/${GS_USER}/.gs_mysql_password" ]
+		if [ ! -f "${GS_MYSQL_PASSWORD_FILE}" ]
 			then
-			echo "** Creating MySQL user 'gemeinschaft'"
-			apg -m30 -a0 -n 1 -M NCL > "/var/lib/${GS_USER}/.gs_mysql_password"
-			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.gs_mysql_password"
-			chmod 0440 "/var/lib/${GS_USER}/.gs_mysql_password"
-			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.gs_mysql_password"`"
-			mysql -e "GRANT ALL PRIVILEGES ON gemeinschaft.* TO gemeinschaft @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_GS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}"
+			echo "** Creating MySQL user '${GS_MYSQL_USER}'"
+			apg -m30 -a0 -n 1 -M NCL > "${GS_MYSQL_PASSWORD_FILE}"
+			chown ${GS_USER}.${GS_GROUP} "${GS_MYSQL_PASSWORD_FILE}"
+			chmod 0440 "${GS_MYSQL_PASSWORD_FILE}"
+			MYSQL_PASSWD_GS="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
+			mysql -e "GRANT ALL PRIVILEGES ON ${GS_MYSQL_DB}.* TO ${GS_MYSQL_USER} @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_GS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 		else
-			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.gs_mysql_password"`"
+			MYSQL_PASSWD_GS="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
 		fi
 
 		# Generate ODBC configuration files
@@ -94,9 +94,9 @@ Description  = MySQL database for Gemeinschaft
 Driver       = /usr/lib/odbc/libmyodbc.so
 SERVER       = localhost
 PORT         = 3306
-DATABASE     = gemeinschaft
+DATABASE     = ${GS_MYSQL_DB}
 OPTION       = 67108864
-USER         = gemeinschaft
+USER         = ${GS_MYSQL_USER}
 PASSWORD     = ${MYSQL_PASSWD_GS}
 " >/var/lib/freeswitch/.odbc.ini
 
@@ -111,9 +111,9 @@ PASSWORD     = ${MYSQL_PASSWD_GS}
 		# Update database password in FreeSwitch configs
 		echo "** Updating FreeSwitch with new MySQL password"
 		sed -i "s/password =.*/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/database.ini"
-		sed -i "s/odbc-dsn =.*/odbc-dsn = gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/sofia.ini"
-		sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
-		sed -i "s/<param name=\"odbc-dsn\".*/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
+		sed -i "s/odbc-dsn =.*/odbc-dsn = ${GS_MYSQL_DB}:${GS_MYSQL_USER}:${MYSQL_PASSWD_GS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/sofia.ini"
+		sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<param name=\"odbc-dsn\".*/<param name=\"odbc-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
 
 		# Lower debug levels for productive installations
 		if [[ `expr length ${GS_BUILDNAME}` == 10 ]]; then
