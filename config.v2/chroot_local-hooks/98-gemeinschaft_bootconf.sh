@@ -22,3 +22,6 @@ echo -e "GBE: Enabling system services ...\n"
 update-rc.d gemeinschaft-runtime-init defaults 2>&1
 update-rc.d gemeinschaft-runtime-init-post defaults 2>&1
 update-rc.d mon_ami defaults 2>&1
+
+echo -e "GBE: Set initial file permissions and security settings ...\n"
+/usr/local/bin/gs-enforce-security.sh

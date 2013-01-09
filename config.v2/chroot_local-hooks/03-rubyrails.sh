@@ -26,7 +26,6 @@ echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> /
 
 echo -e "GBE: Disable ri and rdoc generation ...\n"
 echo "gem: --no-ri --no-rdoc" > /var/lib/gemeinschaft/.gemrc
-chown ${GS_USER}.${GS_GROUP} /var/lib/gemeinschaft/.gemrc
 
 echo -e "GBE: Install Ruby version ${RUBY_VERSION} ...\n"
 su - ${GS_USER} -c "rvm install ${RUBY_VERSION} 2>&1"

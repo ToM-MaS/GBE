@@ -377,11 +377,7 @@ else
 	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-8000-1.0.8.tar.gz"
 	# wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-16000-1.0.8.tar.gz"
 	mkdir -p /usr/share/freeswitch/sounds
-	chmod 755 /usr/share/freeswitch/sounds
 	find /usr/local/src -name 'freeswitch-*.tar.gz' -type f -exec tar xfz {} -C /usr/share/freeswitch/sounds \;
-	chown -R root.root /usr/share/freeswitch/sounds
-	find /usr/share/freeswitch/sounds -type d -exec chmod 755 {} \;
-	find /usr/share/freeswitch/sounds -type f -exec chmod 644 {} \;
 
 	# compatibility with manual installation and GS default directories
 	mkdir -p /opt/freeswitch
@@ -408,7 +404,6 @@ update-rc.d freeswitch defaults
 
 # Create spool directory
 mkdir -p /var/spool/freeswitch
-chown -R freeswitch.root /var/spool/freeswitch
 
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*

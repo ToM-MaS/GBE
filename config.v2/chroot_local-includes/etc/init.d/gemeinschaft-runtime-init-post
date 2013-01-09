@@ -17,6 +17,13 @@ case "$1" in
 start)
 	IPS="`hostname -I`"
 
+	if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
+		then
+		LIVE=true
+	else
+		LIVE=false
+	fi
+
 	# Update dnsmasq configuration with current IPv4 address for auto-provisioning
 	for ADDRESS in ${IPS}
 	do
@@ -56,9 +63,13 @@ start)
 
 	done
 
-	# Enforce file permissions
-	echo "Enforcing file permissions ..."
-	/usr/local/bin/gs-set-file-permissions.sh
+	if [[ ${LIVE} == false ]]
+		then
+
+		# Enforce file permissions
+		echo "Enforcing file permissions and security settings ..."
+		/usr/local/bin/gs-enforce-security.sh | grep -Ev retained | grep -Ev "no changes"
+	fi
 
 	;;
 *)

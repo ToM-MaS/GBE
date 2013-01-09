@@ -34,7 +34,6 @@ case "$1" in
 		# Change primary group of GS system admin to GS_GROUP
 		#
 		set +e
-		usermod -g ${GS_GROUP} gsmaster 2>&1 >/dev/null
 		groupdel gsmaster 2>&1 >/dev/null
 		set -e
 
@@ -73,8 +72,6 @@ case "$1" in
 			then
 			echo "** Creating MySQL user '${GS_MYSQL_USER}'"
 			apg -m30 -a0 -n 1 -M NCL > "${GS_MYSQL_PASSWORD_FILE}"
-			chown ${GS_USER}.${GS_GROUP} "${GS_MYSQL_PASSWORD_FILE}"
-			chmod 0440 "${GS_MYSQL_PASSWORD_FILE}"
 			MYSQL_PASSWD_GS="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
 			mysql -e "GRANT ALL PRIVILEGES ON ${GS_MYSQL_DB}.* TO ${GS_MYSQL_USER} @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_GS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 		else
@@ -99,6 +96,8 @@ OPTION       = 67108864
 USER         = ${GS_MYSQL_USER}
 PASSWORD     = ${MYSQL_PASSWD_GS}
 " >/var/lib/freeswitch/.odbc.ini
+chown -v freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
+chmod -v 0440 /var/lib/freeswitch/.odbc.ini
 
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
