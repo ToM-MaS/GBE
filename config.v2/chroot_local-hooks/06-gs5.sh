@@ -122,13 +122,12 @@ ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
 
-#FIXME temporal symlink of files from GS5 git to local path until Lua scripts are more flexible
+# make local copy of Lua dialplan script configurations
 cp -a ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
-rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini/*
-find ${GS_DIR_LOCAL}/freeswitch/scripts/ini -type f -exec ln -s {} ${GS_DIR}/misc/freeswitch/scripts/ini \;
+rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini
+ln -s ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini
 
-#FIXME this should be avoided in the future, /var/log/gemeinschaft should be used directly
-echo -e "GBE: Setup loggin directory ...\n"
+echo -e "GBE: Setup logging directory ...\n"
 rm -rf "${GS_DIR}/log"
 ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
 

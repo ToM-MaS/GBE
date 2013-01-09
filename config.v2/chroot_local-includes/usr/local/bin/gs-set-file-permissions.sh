@@ -26,8 +26,9 @@ chmod 0770 /var/log/gemeinschaft
 usermod -a -G freeswitch ${GS_USER} 
 
 # Set permissions for FreeSwitch configurations
-chmod 0640 "${GS_DIR_LOCAL}/freeswitch/scripts/ini/database.ini" "${GS_DIR_LOCAL}/freeswitch/scripts/ini/sofia.ini" "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml"
-chown .freeswitch "${GS_DIR_LOCAL}/freeswitch/scripts/ini/database.ini" "${GS_DIR_LOCAL}/freeswitch/scripts/ini/sofia.ini" "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.xml"
+chown -R ${GS_USER}.freeswitch "${GS_DIR_LOCAL}/freeswitch/scripts/ini"
+find "${GS_DIR_LOCAL}/freeswitch/scripts/ini" -type d -exec chmod 0750 {} \;
+find "${GS_DIR_LOCAL}/freeswitch/scripts/ini" -type f -exec chmod 0640 {} \;
 
 if [ -f /var/lib/freeswitch/.odbc.ini ]; then
 	chmod 440 /var/lib/freeswitch/.odbc.ini
