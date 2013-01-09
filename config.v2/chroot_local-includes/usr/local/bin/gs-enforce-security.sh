@@ -45,12 +45,12 @@ find "${GS_DIR_LOCAL}/freeswitch/db" "${GS_DIR_LOCAL}/freeswitch/recordings" "${
 
 # FreeSwitch files
 chown -v ${GS_USER}.root /usr/share/freeswitch/sounds
-find /usr/share/freeswitch/sounds -type d -exec chmod -vR 0755 {} \;
-find /usr/share/freeswitch/sounds -type f -exec chmod -vR 0644 {} \;
+find /usr/share/freeswitch/sounds -type d -exec chmod -v 0755 {} \;
+find /usr/share/freeswitch/sounds -type f -exec chmod -v 0644 {} \;
 
 # GS_USER homedir
 chown -vR ${GS_USER}.${GS_GROUP} /var/lib/${GS_USER}
-chmod -vR 0770 /var/lib/${GS_USER}
+chmod -v 0770 /var/lib/${GS_USER}
 [ -f "${GS_MYSQL_PASSWORD_FILE}" ] && chmod -v 0440 "${GS_MYSQL_PASSWORD_FILE}"
 
 # Logfiles

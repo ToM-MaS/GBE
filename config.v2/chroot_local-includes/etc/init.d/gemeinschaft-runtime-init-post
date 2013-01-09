@@ -68,7 +68,7 @@ start)
 
 		# Enforce file permissions
 		echo "Enforcing file permissions and security settings ..."
-		/usr/local/bin/gs-enforce-security.sh | grep -Ev retained | grep -Ev "no changes"
+		/usr/local/bin/gs-enforce-security.sh | grep -Ev retained | grep -Ev "no changes" | grep -Ev "nor referent has been changed"
 	fi
 
 	;;
