@@ -22,6 +22,7 @@ FQDN="`/bin/hostname -f`"
 if [ -f "${GS_MYSQL_PASSWORD_FILE}" ]; then
 	MYSQL_PASSWD="`cat ${GS_MYSQL_PASSWORD_FILE}`"
 	GS_VERSION=$(mysql --skip-column-names -e "SELECT value FROM gs_parameters WHERE name = 'GEMEINSCHAFT_VERSION';" --user=${GS_MYSQL_USER} --password="${MYSQL_PASSWD}" ${GS_MYSQL_DB} || echo "5.x")
+	[[ x"${GS_VERSION}" == x"" ]] && GS_VERSION="5.x"
 	mv -f /etc/gemeinschaft/system.conf /etc/gemeinschaft/system.conf.bak
 	grep -Ev ^GS_VERSION= /etc/gemeinschaft/system.conf.bak > /etc/gemeinschaft/system.conf
 	echo "GS_VERSION=\"${GS_VERSION}\"" >> /etc/gemeinschaft/system.conf
