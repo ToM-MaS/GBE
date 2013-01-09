@@ -125,7 +125,7 @@ ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recor
 # make local copy of Lua dialplan script configurations
 cp -a ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
 rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini
-ln -s ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini ${GS_DIR}/misc/freeswitch/scripts/ini
 
 echo -e "GBE: Setup logging directory ...\n"
 rm -rf "${GS_DIR}/log"
