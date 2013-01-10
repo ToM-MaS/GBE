@@ -377,11 +377,7 @@ else
 	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-8000-1.0.8.tar.gz"
 	# wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-16000-1.0.8.tar.gz"
 	mkdir -p /usr/share/freeswitch/sounds
-	chmod 755 /usr/share/freeswitch/sounds
 	find /usr/local/src -name 'freeswitch-*.tar.gz' -type f -exec tar xfz {} -C /usr/share/freeswitch/sounds \;
-	chown -R root.root /usr/share/freeswitch/sounds
-	find /usr/share/freeswitch/sounds -type d -exec chmod 755 {} \;
-	find /usr/share/freeswitch/sounds -type f -exec chmod 644 {} \;
 
 	# compatibility with manual installation and GS default directories
 	mkdir -p /opt/freeswitch
@@ -389,6 +385,8 @@ else
 	ln -s /var/lib/freeswitch/storage /opt/freeswitch/storage
 	ln -s /var/lib/freeswitch/recordings /opt/freeswitch/recordings
 	ln -s /var/lib/freeswitch/db /opt/freeswitch/db
+	ln -s /etc/freeswitch /opt/freeswitch/conf
+	ln -s /usr/share/freeswitch/scripts /opt/freeswitch/scripts
 fi
 
 echo -e "GBE: Enabling FreeSwitch ...\n"
@@ -403,6 +401,9 @@ DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
 # fix boot dependencies
 sed -i 's/# Required-Start: $network $remote_fs $local_fs/# Required-Start: $network $remote_fs $local_fs mysql/' /etc/init.d/freeswitch
 update-rc.d freeswitch defaults
+
+# Create spool directory
+mkdir -p /var/spool/freeswitch
 
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*

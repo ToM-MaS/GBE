@@ -10,10 +10,19 @@
 # Description:       Updates certain configurations after reboot to comply with current network settings
 ### END INIT INFO
 
+# General settings
+[ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 
 case "$1" in
 start)
 	IPS="`hostname -I`"
+
+	if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
+		then
+		LIVE=true
+	else
+		LIVE=false
+	fi
 
 	# Update dnsmasq configuration with current IPv4 address for auto-provisioning
 	for ADDRESS in ${IPS}
@@ -37,11 +46,30 @@ start)
 		[[ ${ADDRESS} =~ ":" ]] && continue
 
 		echo "Updating Gemeinschaft configurations ..."
-		[[ -f /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb ]] && sed -i "s/^HOMEBASE_IP_ADDRESS =.*/HOMEBASE_IP_ADDRESS = '${ADDRESS}'/" /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb
-		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
-		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
-		[[ -f /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" /opt/gemeinschaft/misc/freeswitch/scripts/ini/dialplan.ini
+
+		# Update static files
+		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
+		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
+		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
+
+		# Update database settings
+		if [ -f "${GS_MYSQL_PASSWORD_FILE}" ];
+			then
+				MYSQL_PASSWD="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
+				mysql -e "UPDATE gs_parameters SET value = '${ADDRESS}' WHERE name = 'HOMEBASE_IP_ADDRESS';" --user=${GS_MYSQL_USER} --password="${MYSQL_PASSWD}" ${GS_MYSQL_DB}
+		else
+			echo "ERROR: GS database password file ${GS_MYSQL_PASSWORD_FILE} not found"
+		fi
+
 	done
+
+	if [[ ${LIVE} == false ]]
+		then
+
+		# Enforce file permissions
+		echo "Enforcing file permissions and security settings ..."
+		/usr/local/bin/gs-enforce-security.sh | grep -Ev retained | grep -Ev "no changes" | grep -Ev "nor referent has been changed"
+	fi
 
 	;;
 *)

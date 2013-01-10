@@ -12,12 +12,26 @@
 # Create customized login screen for Gemeinschaft 5
 #
 
+# General settings
+[ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 IPS="`/bin/hostname -I`"
 FQDN="`/bin/hostname -f`"
-GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
-GS_BRANCH="`cat /etc/gemeinschaft_branch`"
-[ -f "/opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb" ] && GEMEINSCHAFT_VERSION=`cat /opt/gemeinschaft/config/initializers/gemeinschaft_parameters.rb | grep GEMEINSCHAFT_VERSION | sed "s/.*'\(.*\)'[^']*$/\1/"` || GEMEINSCHAFT_VERSION="5.x"
 
+# Read GS version from database and update local config file
+#
+if [ -f "${GS_MYSQL_PASSWORD_FILE}" ]; then
+	MYSQL_PASSWD="`cat ${GS_MYSQL_PASSWORD_FILE}`"
+	GS_VERSION=$(mysql --skip-column-names -e "SELECT value FROM gs_parameters WHERE name = 'GEMEINSCHAFT_VERSION';" --user=${GS_MYSQL_USER} --password="${MYSQL_PASSWD}" ${GS_MYSQL_DB} || echo "5.x")
+	[[ x"${GS_VERSION}" == x"" ]] && GS_VERSION="5.x"
+	mv -f /etc/gemeinschaft/system.conf /etc/gemeinschaft/system.conf.bak
+	grep -Ev ^GS_VERSION= /etc/gemeinschaft/system.conf.bak > /etc/gemeinschaft/system.conf
+	echo "GS_VERSION=\"${GS_VERSION}\"" >> /etc/gemeinschaft/system.conf
+else
+	echo "ERROR: GS database password file ${GS_MYSQL_PASSWORD_FILE} not found"
+fi
+
+# Check for live status
+#
 if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
 	then
 	LIVE=true
@@ -25,8 +39,10 @@ else
 	LIVE=false
 fi
 
-[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
-if [[ `expr length ${BUILD}` == 10 && x${GS_BRANCH} = x"master" ]]
+# Check if we have a production or development state build
+# (production = master-branch was used from GS5 and GBE repo)
+#
+if [[ `expr length ${GS_BUILDNAME}` == 10 && x${GS_BRANCH} = x"master" ]]
 	then
 	PRODUCTION=true
 else
@@ -45,9 +61,9 @@ echo "
 
 if [[ ${PRODUCTION} == true ]]
 	then
-	echo "***     Release Version: ${GEMEINSCHAFT_VERSION}.${GDFDL_BUILDNAME}" >> /etc/issue
+	echo "***     Release Version: ${GS_VERSION}.${GS_BUILDNAME}" >> /etc/issue
 else
-	echo "***     Development Version: ${GEMEINSCHAFT_VERSION}-${GS_BRANCH}.${GDFDL_BUILDNAME}" >> /etc/issue
+	echo "***     Development Version: ${GS_VERSION}-${GS_BRANCH}.${GS_BUILDNAME}" >> /etc/issue
 fi
 
 echo "***    -------------------------------------------------------------
@@ -94,12 +110,21 @@ echo "***
 #
 # Write motd and issue.net
 #
-echo "Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}" > /etc/issue.net
+if [[ ${PRODUCTION} == true ]]
+	then
+	echo "Welcome to GEMEINSCHAFT ${GS_VERSION}.${GS_BUILDNAME}" > /etc/issue.net
 echo "
-***   Welcome to GEMEINSCHAFT ${GEMEINSCHAFT_VERSION}
-***
+***   Welcome to GEMEINSCHAFT ${GS_VERSION}.${GS_BUILDNAME}" > /etc/motd
+else
+	echo "Welcome to GEMEINSCHAFT ${GS_VERSION}-${GS_BRANCH}.${GS_BUILDNAME}" > /etc/issue.net
+echo "
+***   Welcome to GEMEINSCHAFT ${GS_VERSION}-${GS_BRANCH}.${GS_BUILDNAME}" > /etc/motd
+fi
+
+
+echo "***
 ***   Need help with Gemeinschaft? We have an excellent free mailinglist
 ***   and offer the best support and consulting money can buy. Have a
 ***   look at http://amooma.de/gemeinschaft/gs5 for more information.
 ***
-" > /etc/motd
+" >> /etc/motd

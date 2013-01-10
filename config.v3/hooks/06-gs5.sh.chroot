@@ -64,9 +64,15 @@ password ${GS_GIT_PASSWORD}
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
 fi
 
-#  Create alias
+#  Create alias for GS5 backwards compatibility
+#
 GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
 ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
+
+# Install GS related Gems
+#
+echo -e "GBE: Install GS gems ...\n"
+su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 # Install delayed worker job
 #
@@ -77,34 +83,53 @@ echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAIL
 #
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin" > /etc/cron.d/gemeinschaft_rvm
-echo "SHELL=/var/lib/${GS_USER}/.rvm/bin/rvm-shell" >> /etc/cron.d/gemeinschaft_rvm
-echo "RAILS_ENV=production" >> /etc/cron.d/gemeinschaft_rvm
-echo "23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones" >> /etc/cron.d/gemeinschaft_rvm
-echo "* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )" >> /etc/cron.d/gemeinschaft_rvm
-echo "* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" >> /etc/cron.d/gemeinschaft_rvm
+echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin
+SHELL=/var/lib/gemeinschaft/.rvm/bin/rvm-shell
+RAILS_ENV=production
+23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones
+* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )
+* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" > /etc/cron.d/gemeinschaft_rvm
 
 # Create log dir
 #
 echo -e "GBE: Create logfile directory ...\n"
 [ ! -d /var/log/gemeinschaft ] && mkdir -p /var/log/gemeinschaft
 
-echo -e "GBE: Installing GS gems ...\n"
-su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
+# Create local configuration dir
+#
+GS_DIR_LOCAL="/var/opt/`basename "${GS_DIR}"`"
+GS_DIR_NORMALIZED_LOCAL="`dirname "${GS_DIR_LOCAL}"`/`basename "${GS_DIR_NORMALIZED}"`"
+mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
+mkdir -p ${GS_DIR_LOCAL}/freeswitch/scripts/ini
+ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
-echo -e "GBE: Linking FreeSWITCH configuration ...\n"
-[ ! -d /etc/freeswitch ] && mkdir -p /etc/freeswitch
+# Make initial copy of local configuration files
+#
+cp -a ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
+
+# Link FS configs
+echo -e "GBE: Link FreeSWITCH configuration ...\n"
+[ -d /etc/freeswitch ] && rm -rf /etc/freeswitch
+ln -s "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf" /etc/freeswitch
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
-ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/conf/freeswitch.xml" /etc/freeswitch/freeswitch.xml
 ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
-echo -e "GBE: Setup loggin directory ...\n"
+# Move Freeswitch storage files
+mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db
+mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage
+mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
+
+# make local copy of Lua dialplan script configurations
+cp -a ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
+rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini ${GS_DIR}/misc/freeswitch/scripts/ini
+
+echo -e "GBE: Setup logging directory ...\n"
 rm -rf "${GS_DIR}/log"
 ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
-
-#FIXME compatibility with manual installation and GS default directories
-ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/conf" /opt/freeswitch/conf
-ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /opt/freeswitch/scripts
 
 #FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
 ln -s /usr/share/freeswitch/scripts /usr/scripts
@@ -116,19 +141,19 @@ ln -s /usr/lib/i386-linux-gnu/lua /usr/local/lib/lua
 #FIXME another hack for ruby/rails environment as GS scripts explicitly uses this path for sourcing
 #      (although excplicit sourcing is deprecated from GBE perspective)
 mkdir -p /usr/local/rvm/scripts
-ln -s /var/lib/${GS_USER}/.rvm/scripts/rvm /usr/local/rvm/scripts/rvm
+ln -s /var/lib/gemeinschaft/.rvm/scripts/rvm /usr/local/rvm/scripts/rvm
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
-echo -e "GBE: Adjusting Apache2 configuration ...\n"
+echo -e "GBE: Adjust Apache2 configuration ...\n"
 echo "LoadModule passenger_module ${PASSENGER_ROOT}/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
 echo "PassengerRoot ${PASSENGER_ROOT}
-PassengerRuby /var/lib/${GS_USER}/.rvm/wrappers/default/ruby
+PassengerRuby /var/lib/gemeinschaft/.rvm/wrappers/default/ruby
 
 PassengerMaxPoolSize 4
 PassengerMaxInstancesPerApp 3
 # http://stackoverflow.com/questions/821820/how-does-phusion-passenger-reuse-threads-and-processes
-# Both virtual hosts (PassengerAppRoot ${GS_DIR_NORMALIZED}) are actually
+# Both virtual hosts (PassengerAppRoot ${GS_DIR}) are actually
 # the same application!
 
 PassengerPoolIdleTime 200
@@ -161,10 +186,10 @@ Timeout 100
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
 
-	DocumentRoot ${GS_DIR_NORMALIZED}/public
+	DocumentRoot ${GS_DIR}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR_NORMALIZED}
+	PassengerAppRoot ${GS_DIR}
 	PassengerMinInstances 1
 	PassengerPreStart http://127.0.0.1:80/
 	PassengerStatThrottleRate 10
@@ -180,7 +205,7 @@ Timeout 100
 	RailsEnv development
 	#RackEnv  development
 
-	<Directory ${GS_DIR_NORMALIZED}/public>
+	<Directory ${GS_DIR}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
@@ -193,10 +218,10 @@ Timeout 100
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
 
-	DocumentRoot ${GS_DIR_NORMALIZED}/public
+	DocumentRoot ${GS_DIR}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR_NORMALIZED}
+	PassengerAppRoot ${GS_DIR}
 	PassengerMinInstances 1
 	PassengerPreStart https://127.0.0.1:443/
 	PassengerStatThrottleRate 10
@@ -212,7 +237,7 @@ Timeout 100
 	RailsEnv development
 	#RackEnv  development
 
-	<Directory ${GS_DIR_NORMALIZED}/public>
+	<Directory ${GS_DIR}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
@@ -234,14 +259,19 @@ a2ensite gemeinschaft 2>&1
 echo -e "GBE: Setup runtime user for MonAMI ...\n"
 sed -i "s/^USER=.*/USER=\"${GS_USER}\"/" /etc/init.d/mon_ami
 
-echo -e "GBE: Setting permissions ...\n"
-chown -R "${GS_USER}"."${GS_GROUP}" "${GS_DIR}" /var/log/gemeinschaft
-# Allow members of the GS system group to modify+upgrade files
-chmod -R g+w "${GS_DIR}"
-# Restrict access to configuration and logfiles
-chmod 0770 "${GS_DIR}/config" /var/log/gemeinschaft
-# add GS system user to freeswitch group
-usermod -a -G freeswitch ${GS_USER} 
-# Set permissions for FreeSwitch configurations
-chmod 0640 "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
-chown .freeswitch "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+echo -e "GBE: Write local settings file ..."
+mkdir -p /etc/gemeinschaft
+echo "# Do not change anything here" > /etc/gemeinschaft/system.conf
+echo "GS_DIR=\"${GS_DIR}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_DIR_LOCAL=\"${GS_DIR_LOCAL}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_DIR_NORMALIZED=\"${GS_DIR_NORMALIZED}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_DIR_NORMALIZED_LOCAL=\"${GS_DIR_NORMALIZED_LOCAL}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_USER=\"${GS_USER}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_GROUP=\"${GS_GROUP}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_BRANCH=\"`cat /etc/gemeinschaft_branch`\""  >> /etc/gemeinschaft/system.conf
+echo "GS_BUILDNAME=\"`cat /etc/gdfdl_build`\""  >> /etc/gemeinschaft/system.conf
+echo "GS_MYSQL_USER=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
+echo "GS_MYSQL_DB=\"\${GS_MYSQL_USER}\""  >> /etc/gemeinschaft/system.conf
+echo "GS_MYSQL_PASSWORD_FILE=\"/var/lib/gemeinschaft/.gs_mysql_password\""  >> /etc/gemeinschaft/system.conf
+echo "GS_GIT_URL=\"${GS_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
+rm -f /etc/gemeinschaft_branch /etc/gdfdl_build

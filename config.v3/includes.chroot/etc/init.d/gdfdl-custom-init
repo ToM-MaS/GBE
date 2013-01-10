@@ -14,6 +14,7 @@
 # General settings
 [ -f /gdfdl.conf ] && source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
+[ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 set -e
 
 if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
@@ -29,13 +30,6 @@ case "$1" in
 		#
 
 		echo -e "Preparing Gemeinschaft for 1st start ...\n"
-
-		# Change primary group of GS system admin to GS_GROUP
-		#
-		set +e
-		usermod -g ${GS_GROUP} gsmaster 2>&1 >/dev/null
-		groupdel gsmaster 2>&1 >/dev/null
-		set -e
 
 		# Generate new password for gsmaster system administrator for live system
 		if [[ "${LIVE}" == true ]]; then
@@ -68,16 +62,14 @@ case "$1" in
 		/etc/init.d/mysql restart
 
 		# Create MySQL user for Gemeinschaft
-		if [ ! -f "/var/lib/${GS_USER}/.gs_mysql_password" ]
+		if [ ! -f "${GS_MYSQL_PASSWORD_FILE}" ]
 			then
-			echo "** Creating MySQL user 'gemeinschaft'"
-			apg -m30 -a0 -n 1 -M NCL > "/var/lib/${GS_USER}/.gs_mysql_password"
-			chown ${GS_USER}.${GS_GROUP} "/var/lib/${GS_USER}/.gs_mysql_password"
-			chmod 0440 "/var/lib/${GS_USER}/.gs_mysql_password"
-			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.gs_mysql_password"`"
-			mysql -e "GRANT ALL PRIVILEGES ON gemeinschaft.* TO gemeinschaft @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_GS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}"
+			echo "** Creating MySQL user '${GS_MYSQL_USER}'"
+			apg -m30 -a0 -n 1 -M NCL > "${GS_MYSQL_PASSWORD_FILE}"
+			MYSQL_PASSWD_GS="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
+			mysql -e "GRANT ALL PRIVILEGES ON ${GS_MYSQL_DB}.* TO ${GS_MYSQL_USER} @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_GS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 		else
-			MYSQL_PASSWD_GS="`cat "/var/lib/${GS_USER}/.gs_mysql_password"`"
+			MYSQL_PASSWD_GS="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
 		fi
 
 		# Generate ODBC configuration files
@@ -93,13 +85,13 @@ Description  = MySQL database for Gemeinschaft
 Driver       = /usr/lib/odbc/libmyodbc.so
 SERVER       = localhost
 PORT         = 3306
-DATABASE     = gemeinschaft
+DATABASE     = ${GS_MYSQL_DB}
 OPTION       = 67108864
-USER         = gemeinschaft
+USER         = ${GS_MYSQL_USER}
 PASSWORD     = ${MYSQL_PASSWD_GS}
 " >/var/lib/freeswitch/.odbc.ini
-chmod 644 /var/lib/freeswitch/.odbc.ini
-chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
+chown -v freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
+chmod -v 0440 /var/lib/freeswitch/.odbc.ini
 
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
@@ -109,16 +101,13 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 		echo "** Updating Gemeinschaft with new MySQL password"
 		sed -i "s/password:.*/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
 
-		# Update database password in FreeSwitch configs
+		# Update database password in FreeSwitch config
 		echo "** Updating FreeSwitch with new MySQL password"
-		sed -i "s/password =.*/password = ${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/database.ini"
-		sed -i "s/odbc-dsn =.*/odbc-dsn = gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}/" "${GS_DIR}/misc/freeswitch/scripts/ini/sofia.ini"
-		sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
-		sed -i "s/<param name=\"odbc-dsn\".*/<param name=\"odbc-dsn\" value=\"gemeinschaft:gemeinschaft:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR}/misc/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
+		sed -i "s/<param name=\"odbc-dsn\".*/<param name=\"odbc-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${MYSQL_PASSWD_GS}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
 
 		# Lower debug levels for productive installations
-		[ -f /etc/gdfdl_build ] && BUILD=`cat /etc/gdfdl_build` || BUILD=1234567890
-		if [[ `expr length ${BUILD}` == 10 ]]; then
+		if [[ `expr length ${GS_BUILDNAME}` == 10 ]]; then
 			/usr/local/bin/gs-change-state.sh production
 
 		# Enforce higher debug levels for development installations
@@ -128,6 +117,7 @@ chown freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 
 		# Randomize secret token for cookies
 		#
+		echo "** Randomize Cookie secret token"
 		COOKIE_SECRET=`apg -m128 -a0 -n 1 -M NCL`
 		sed -i "s/Gemeinschaft42c::Application.config.secret_token =.*/Gemeinschaft42c::Application.config.secret_token = '${COOKIE_SECRET}'/" "${GS_DIR}/config/initializers/secret_token.rb"
 
