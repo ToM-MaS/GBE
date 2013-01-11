@@ -14,6 +14,14 @@
 #
 set -e
 
+# Enforce root rights
+#
+if [[ ${EUID} -ne 0 ]];
+	then
+	echo "ERROR: $0 needs to be run as root. Aborting ..."
+	exit 1
+fi
+
 # Group memberships for GS_USER
 if id -u ${GS_USER} >/dev/null 2>&1; then
 	usermod -g ${GS_GROUP} ${GS_USER} 2>&1 >/dev/null

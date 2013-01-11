@@ -14,8 +14,11 @@
 #
 set -e
 
-if [[ ${EUID} -ne 0 ]]; then
-	echo "$0 needs to be run as root."
+# Enforce root rights
+#
+if [[ ${EUID} -ne 0 ]];
+	then
+	echo "ERROR: $0 needs to be run as root. Aborting ..."
 	exit 1
 fi
 

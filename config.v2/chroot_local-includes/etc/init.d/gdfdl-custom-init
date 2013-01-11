@@ -17,6 +17,14 @@
 [ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 set -e
 
+# Enforce root rights
+#
+if [[ ${EUID} -ne 0 ]];
+	then
+	echo "ERROR: $0 needs to be run as root. Aborting ..."
+	exit 1
+fi
+
 if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
 	then
 	LIVE=true
