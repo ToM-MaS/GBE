@@ -180,7 +180,7 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	echo "** Remove Git remote reference"
 	GS_GIT_REMOTE="`git --git-dir="${GS_DIR_NORMALIZED}/.git" remote`"
 	for _REMOTE in ${GS_GIT_REMOTE}; do
-		su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; git remote rm ${_REMOTE}"
+		cd "${GS_DIR_NORMALIZED}"; git remote rm ${_REMOTE}
 	done
 
 	echo "** Setup logging directory"
