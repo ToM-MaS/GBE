@@ -49,7 +49,7 @@ find "${GS_DIR_LOCAL}/freeswitch/scripts/ini" "${GS_DIR_LOCAL}/freeswitch/conf" 
 find "${GS_DIR_LOCAL}/freeswitch/scripts/ini" "${GS_DIR_LOCAL}/freeswitch/conf" -type f -exec chmod -v 0640 {} \;
 if [ -f /var/lib/freeswitch/.odbc.ini ]; then
 	chown -v freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
-	chmod -v 0440 /var/lib/freeswitch/.odbc.ini
+	chmod -v 0640 /var/lib/freeswitch/.odbc.ini
 fi
 
 # FreeSwitch variable files
