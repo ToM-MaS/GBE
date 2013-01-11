@@ -75,6 +75,7 @@ case "$1" in
 ***     GEMEINSCHAFT UPDATE
 ***     Current version: ${GS_VERSION}
 ***     Branch: ${GS_BRANCH}
+***     Base System Build: ${GS_BUILDNAME}
 ***    ------------------------------------------------------------------
 ***
 ***     ATTENTION! Please read the following information CAREFULLY!
@@ -92,7 +93,6 @@ case "$1" in
 ***     The system environment is not fully upgradeable which might lead
 ***     to a non-functional system after the update. If that is the case
 ***     you need to do a clean installation and restore from your backup.
-***
 "
 
 	while true; do
