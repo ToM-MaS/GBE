@@ -11,6 +11,7 @@
 [ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 [ -f "${GS_MYSQL_PASSWORD_FILE}" ] && GS_MYSQL_PASSWD="`cat "${GS_MYSQL_PASSWORD_FILE}"`" || echo "FATAL ERROR: GS lost it's database password in ${GS_MYSQL_PASSWORD_FILE}"
 [[ x"${GS_DIR}" == x"" || x"${GS_MYSQL_PASSWD}" == x"" ]] && exit 1
+GS_UPDATE_DIR="${GS_DIR}.update"
 
 # check each command return codes for errors
 #
@@ -28,8 +29,20 @@ fi
 #
 case "$1" in
 	--help|-h|help)
-	echo "Usage: $0"
+	echo "Usage: $0 [--cancel]"
 	exit 0
+	;;
+
+	--cancel)
+	MODE="cancel"
+	if [[ -d "${GS_UPDATE_DIR}" ]]
+		rm -rf ${GS_UPDATE_DIR}
+		echo "Planned update task was canceled."
+		exit 0
+	else
+		echo "No planned update task found."
+		exit 1
+	fi
 	;;
 
 	--force-init)
@@ -83,8 +96,6 @@ esac
 # Prepare for system update
 #
 if [[ "${MODE}" == "update-init" ]]; then
-	
-	GS_UPDATE_DIR="${GS_DIR}.update"
 
 	# Clone the git repository
 	#
@@ -141,7 +152,7 @@ fi
 # Initialize update
 #
 if [[ "${MODE}" == "update" ]]; then
-	if [[ -d "${GS_DIR}.update" ]]
+	if [[ -d "${GS_UPDATE_DIR}" ]]
 		# make sure only mysql is running
 		service mom_ami stop
 		service freeswitch stop
@@ -150,9 +161,9 @@ if [[ "${MODE}" == "update" ]]; then
 		
 		echo "** Rename and backup old files in \"${GS_DIR}\""
 		mv ${GS_DIR} ${GS_DIR}.bak
-		mv ${GS_DIR}.update ${GS_DIR}
+		mv ${GS_UPDATE_DIR} ${GS_DIR}
 	else
-		echo "ERROR: No new version found in \"${GS_DIR}.update\" - aborting ..."
+		echo "ERROR: No new version found in \"${GS_UPDATE_DIR}\" - aborting ..."
 		exit 1
 	fi	
 fi
