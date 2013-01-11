@@ -18,7 +18,7 @@ fi
 
 # Enforce root rights
 #
-if [[ ${EUID} -ne 0 ]];
+if [ `id -u` -ne 0 ]; then
 	then
 	echo "ERROR: $0 needs to be run as root. Aborting ..."
 	exit 1
