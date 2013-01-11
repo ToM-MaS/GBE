@@ -34,7 +34,7 @@ case "$1" in
 		sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "${GS_DIR_NORMALIZED}/config/environments/production.rb"
 
 		echo "** Updating monAMI debugging to production level"
-		sed -i "s/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log\"/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log --log-level=2\"/" "/etc/init.d/mon_ami"
+		sed -i "s/ARGS=\"--log-file=\/var\/log\/mon_ami\/mon_ami.log\"/ARGS=\"--log-file=\/var\/log\/mon_ami\/mon_ami.log --log-level=2\"/" "/etc/init.d/mon_ami"
 
 		echo "** Updating Cron logging to production level"
 		sed -i "s/# EXTRA_OPTS=\"-L 2\"/EXTRA_OPTS=\"-L 0\"/" /etc/syslog-ng/syslog-ng.conf
