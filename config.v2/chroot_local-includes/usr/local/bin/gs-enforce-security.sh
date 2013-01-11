@@ -35,7 +35,7 @@ if id -u gsmaster >/dev/null 2>&1; then
 	usermod -a -G freeswitch gsmaster 2>&1 >/dev/null
 	usermod -a -G mon_ami gsmaster 2>&1 >/dev/null
 
-	if id -g gsmaster >/dev/null 2>&1; then
+	if [ x"`cat /etc/group | grep ^gsmaster`" != x"" ]; then
 		groupdel gsmaster 2>&1 >/dev/null
 	fi
 fi
