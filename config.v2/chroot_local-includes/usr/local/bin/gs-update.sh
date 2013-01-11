@@ -61,6 +61,14 @@ case "$1" in
 	*)
 	MODE="update-init"
 
+	# Check for live status
+	#
+	if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
+		then
+		echo "LIVE mode detected. Aborting ..."
+		exit 1
+	fi
+
 	clear
 	echo "
 ***    ------------------------------------------------------------------
