@@ -239,3 +239,10 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	echo "** Precompile GS assets"
 	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=production bundle exec rake assets:precompile --trace"
 fi
+
+# Finalize update
+#
+if [[ "${MODE}" == "update" ]]; then
+	# let normal bootup scripts start mysql
+	service mysql stop
+fi
