@@ -256,9 +256,6 @@ a2enmod passenger 2>&1
 a2dissite default 2>&1
 a2ensite gemeinschaft 2>&1
 
-echo -e "GBE: Setup runtime user for MonAMI ...\n"
-sed -i "s/^USER=.*/USER=\"${GS_USER}\"/" /etc/init.d/mon_ami
-
 echo -e "GBE: Write local settings file ..."
 mkdir -p /etc/gemeinschaft
 echo "# Do not change anything here" > /etc/gemeinschaft/system.conf
