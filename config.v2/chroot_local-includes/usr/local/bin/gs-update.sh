@@ -142,7 +142,7 @@ password ${GS_GIT_PASSWORD}
 	done
 	set -e
 
-	if [ -f "${GS_DIR}/config/application.rb" ];
+	if [[ -f "${GS_DIR}/config/application.rb" ]];
 		then
 		rm -rf ~/.netrc
 		echo -e "\n\nUpdate preparation SUCCESSFUL. Please reboot the system to start the update process.\n\n"
@@ -156,7 +156,7 @@ fi
 # Initialize update
 #
 if [[ "${MODE}" == "update" ]]; then
-	if [[ -d "${GS_UPDATE_DIR}" ]]
+	if [[ -d "${GS_UPDATE_DIR}" ]]; then
 		# make sure only mysql is running
 		service mom_ami stop
 		service freeswitch stop
