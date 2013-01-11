@@ -35,7 +35,8 @@ case "$1" in
 
 	--cancel)
 	MODE="cancel"
-	if [[ -d "${GS_UPDATE_DIR}" ]]
+	if [[ -d "${GS_UPDATE_DIR}" ]];
+		then
 		rm -rf ${GS_UPDATE_DIR}
 		echo "Planned update task was canceled."
 		exit 0
