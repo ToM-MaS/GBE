@@ -35,6 +35,12 @@ start)
 		ln -sf /etc/ssl/certs/${FQDN}.crt /etc/ssl/gemeinschaft.crt
 	fi
 
+	# Check for available system update
+	if [[ -d "${GS_DIR}.update" ]]
+		echo "*** Found update files, processing update tasks now ..."
+		/usr/local/bin/gs-update.sh --force-update
+	fi
+
 	;;
 *)
 	# nothing to do

@@ -104,10 +104,6 @@ mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/scripts/ini
 ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
-# Make initial copy of local configuration files
-#
-cp -a ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
-
 # Link FS configs
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
 [ -d /etc/freeswitch ] && rm -rf /etc/freeswitch
@@ -122,15 +118,6 @@ mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
-
-# make local copy of Lua dialplan script configurations
-cp -a ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
-rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini
-ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini ${GS_DIR}/misc/freeswitch/scripts/ini
-
-echo -e "GBE: Setup logging directory ...\n"
-rm -rf "${GS_DIR}/log"
-ln -sf /var/log/gemeinschaft "${GS_DIR}/log"
 
 #FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
 ln -s /usr/share/freeswitch/scripts /usr/scripts
