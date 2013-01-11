@@ -77,9 +77,11 @@ chmod -v 0770 /var/log/mon_ami
 chown -vR freeswitch.root /var/spool/freeswitch
 
 # Allow GS service account some system commands via sudo
-echo "Cmnd_Alias SHUTDOWN = /sbin/shutdown -h now" > /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias UPDATE = /usr/local/bin/gs-update.sh --force-update-init" > /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias UPDATE_CANCEL = /usr/local/bin/gs-update.sh --cancel" >> /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias SHUTDOWN = /sbin/shutdown -h now" >> /etc/sudoers.d/gemeinschaft
 echo "Cmnd_Alias REBOOT = /sbin/shutdown -r now" >> /etc/sudoers.d/gemeinschaft
-echo "${GS_USER} ALL = (ALL) NOPASSWD: SHUTDOWN, REBOOT" >> /etc/sudoers.d/gemeinschaft
+echo "${GS_USER} ALL = (ALL) NOPASSWD: UPDATE, UPDATE_CANCEL, SHUTDOWN, REBOOT" >> /etc/sudoers.d/gemeinschaft
 
 # System configurations
 chown -v root.root /etc/sudoers.d/*

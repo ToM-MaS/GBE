@@ -52,6 +52,10 @@ case "$1" in
 	--force-update)
 	MODE="update"
 	;;
+
+	--force-update-init)
+	MODE="update-init"
+	;;
 	
 	*)
 	MODE="update-init"
