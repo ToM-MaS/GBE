@@ -8,7 +8,7 @@
 
 ### BEGIN INIT INFO
 # Provides:          mon_ami 
-# Required-Start:    freeswitch 
+# Required-Start:    freeswitch gemeinschaft-runtime-init
 # Required-Stop:     freeswitch
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6

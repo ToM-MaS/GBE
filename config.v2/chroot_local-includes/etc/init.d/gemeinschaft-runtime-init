@@ -3,7 +3,7 @@
 # Provides:          gemeinschaft-runtime-init
 # Required-Start:    hostname
 # Required-Stop:     
-# X-Start-Before:    apache2
+# X-Start-Before:    apache2 freeswitch
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Updates certain configurations after reboot
