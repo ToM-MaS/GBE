@@ -164,6 +164,7 @@ if [[ "${MODE}" == "update" ]]; then
 		service mysql start
 		
 		echo "** Rename and backup old files in \"${GS_DIR}\""
+		rm -rf ${GS_DIR}.bak
 		mv ${GS_DIR} ${GS_DIR}.bak
 		mv ${GS_UPDATE_DIR} ${GS_DIR}
 	else
