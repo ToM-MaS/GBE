@@ -197,9 +197,6 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini
 	ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini ${GS_DIR}/misc/freeswitch/scripts/ini
 
-	echo "** Updating Gemeinschaft with database password"
-	sed -i "s/password:.*/password: ${GS_MYSQL_PASSWD}/" "${GS_DIR}/config/database.yml"
-
 	echo "** Updating FreeSwitch with database password"
 	sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${GS_MYSQL_PASSWD}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
 
