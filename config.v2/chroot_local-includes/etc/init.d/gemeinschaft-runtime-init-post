@@ -71,7 +71,7 @@ start)
 
 	done
 
-	if [[ ${LIVE} == false ]]
+	if [[ ${LIVE} == false && ${GS_ENFORCE_SECURITY_ON_BOOTUP} == true ]]
 		then
 
 		# Enforce file permissions
