@@ -158,7 +158,7 @@ fi
 if [[ "${MODE}" == "update" ]]; then
 	if [[ -d "${GS_UPDATE_DIR}" ]]; then
 		# make sure only mysql is running
-		service mom_ami stop
+		service mon_ami stop
 		service freeswitch stop
 		service apache2 stop
 		service mysql start
