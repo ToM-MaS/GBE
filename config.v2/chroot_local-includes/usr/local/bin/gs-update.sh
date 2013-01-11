@@ -20,7 +20,7 @@ set -e
 # Remove Git remote reference
 #
 echo "** Remove Git remote reference"
-su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; git remote rm `git remote`"
+su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; git remote rm `git --git-dir="${GS_DIR_NORMALIZED}/.git" remote`"
 
 # Update database password in Gemeinschaft config
 #
