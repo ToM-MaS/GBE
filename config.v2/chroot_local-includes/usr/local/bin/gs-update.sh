@@ -28,7 +28,7 @@ done
 # Update database password in Gemeinschaft config
 #
 echo "** Updating Gemeinschaft with database password"
-sed -i "s/password:.*/password: ${MYSQL_PASSWD_GS}/" "${GS_DIR}/config/database.yml"
+sed -i "s/password:.*/password: ${GS_MYSQL_PASSWD}/" "${GS_DIR}/config/database.yml"
 
 # Update database password in FreeSwitch config
 #
