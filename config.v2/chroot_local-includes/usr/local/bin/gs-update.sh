@@ -232,13 +232,4 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	#
 	echo "** Precompile GS assets"
 	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=production bundle exec rake assets:precompile --trace"
-
-	# Special tasks for update only
-	#
-	if [[ "${MODE}" == "update" ]]; then
-		# start/stop system services accordingly
-		service apache2 start
-		service freeswitch start
-		service mon_ami start
-	fi
 fi
