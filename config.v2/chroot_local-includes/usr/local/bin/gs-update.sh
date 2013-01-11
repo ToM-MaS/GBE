@@ -190,9 +190,8 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	echo "** Copy FreeSwitch static configuration files"
 	cp -an ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
 
-	# make local copy of Lua dialplan script configurations
 	echo "** Copy Lua dialplan static ini files"
-	cp -an ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
+	[ ! -L ${GS_DIR}/misc/freeswitch/scripts/ini ] && cp -an ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
 	rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini
 	ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini ${GS_DIR}/misc/freeswitch/scripts/ini
 
