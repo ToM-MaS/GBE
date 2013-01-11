@@ -23,7 +23,7 @@
 DAEMON="${GS_DIR_NORMALIZED}/misc/mon_ami/mon_ami"
 EXECUTABLE=`basename 'mon_ami'`
 DESC="MonAMI Asterisk Manger Interface Emulator"
-ARGS="--log-file=/var/log/gemeinschaft/mon_ami.log"
+ARGS="--log-file=/var/log/mon_ami/mon_ami.log"
 USER="mon_ami"
 
 if ! [ -x $DAEMON ] ; then

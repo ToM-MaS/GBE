@@ -18,12 +18,14 @@ set -e
 if id -u ${GS_USER} >/dev/null 2>&1; then
 	usermod -g ${GS_GROUP} ${GS_USER} 2>&1 >/dev/null
 	usermod -a -G freeswitch ${GS_USER} 2>&1 >/dev/null
+	usermod -a -G mon_ami ${GS_USER} 2>&1 >/dev/null
 fi
 
 # Group memberships for user gsmaster
 if id -u gsmaster >/dev/null 2>&1; then
 	usermod -g ${GS_GROUP} gsmaster 2>&1 >/dev/null
 	usermod -a -G freeswitch gsmaster 2>&1 >/dev/null
+	usermod -a -G mon_ami gsmaster 2>&1 >/dev/null
 
 	if id -g gsmaster >/dev/null 2>&1; then
 		groupdel gsmaster 2>&1 >/dev/null
@@ -59,7 +61,9 @@ chmod -v 0770 /var/lib/${GS_USER}
 
 # Logfiles
 chown -vR "${GS_USER}"."${GS_GROUP}" /var/log/gemeinschaft
+chown -vR mon_ami.mon_ami /var/log/mon_ami
 chmod -v 0770 /var/log/gemeinschaft
+chmod -v 0770 /var/log/mon_ami
 
 # Spooling directories
 chown -vR freeswitch.root /var/spool/freeswitch

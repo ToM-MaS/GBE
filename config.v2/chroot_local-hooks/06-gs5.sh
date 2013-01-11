@@ -94,6 +94,7 @@ RAILS_ENV=production
 #
 echo -e "GBE: Create logfile directory ...\n"
 [ ! -d /var/log/gemeinschaft ] && mkdir -p /var/log/gemeinschaft
+[ ! -d /var/log/mon_ami ] && mkdir -p /var/log/mon_ami
 
 # Create local configuration dir
 #
