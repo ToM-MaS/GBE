@@ -99,7 +99,7 @@ USER         = ${GS_MYSQL_USER}
 PASSWORD     = ${MYSQL_PASSWD_GS}
 " >/var/lib/freeswitch/.odbc.ini
 chown -v freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
-chmod -v 0440 /var/lib/freeswitch/.odbc.ini
+chmod -v 0640 /var/lib/freeswitch/.odbc.ini
 
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
