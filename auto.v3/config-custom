@@ -9,7 +9,6 @@
 
 lb config noauto \
 	--apt apt \
-	--apt-recommends false \
 	--apt-indices false \
 	--architecture i386 \
 	--archive-areas "main" \
@@ -24,5 +23,4 @@ lb config noauto \
 	--mode debian \
 	--root-command sudo \
 	--win32-loader disabled \
-	--debootstrap-options "--variant=minbase" \
 	"${@}"
