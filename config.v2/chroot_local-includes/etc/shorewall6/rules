@@ -1,0 +1,24 @@
+# remote administration via SSH
+ACCEPT all fw6 tcp ssh
+
+# web services
+ACCEPT all fw6 tcp http,https
+
+# NTP service
+ACCEPT all fw6 udp ntp
+ACCEPT all fw6 udp ntp
+
+# DNS service
+ACCEPT all fw6 udp domain
+
+# SIP services
+ACCEPT all fw6 tcp sip,sip-tls
+ACCEPT all fw6 udp sip,sip-tls
+
+# mon_ami Asterisk emulator
+ACCEPT all fw6 tcp 5038
+
+# BootP for phones
+ACCEPT all fw6 tcp bootps,bootpc
+ACCEPT all fw6 udp bootps,bootpc
+
