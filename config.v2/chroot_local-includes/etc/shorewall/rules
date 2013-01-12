@@ -22,3 +22,5 @@ ACCEPT all fw tcp 5038
 ACCEPT all fw tcp bootps,bootpc
 ACCEPT all fw udp bootps,bootpc
 
+# Allow ping
+ACCEPT all fw icmp echo-request

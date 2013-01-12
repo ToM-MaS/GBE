@@ -22,3 +22,5 @@ ACCEPT all fw6 tcp 5038
 ACCEPT all fw6 tcp bootps,bootpc
 ACCEPT all fw6 udp bootps,bootpc
 
+# Allow ping
+ACCEPT all fw6 ipv6-icmp echo-request
