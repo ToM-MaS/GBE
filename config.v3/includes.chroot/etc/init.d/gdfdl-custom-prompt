@@ -17,6 +17,14 @@
 IPS="`/bin/hostname -I`"
 FQDN="`/bin/hostname -f`"
 
+# Enforce root rights
+#
+if [[ ${EUID} -ne 0 ]];
+	then
+	echo "ERROR: $0 needs to be run as root. Aborting ..."
+	exit 1
+fi
+
 # Read GS version from database and update local config file
 #
 if [ -f "${GS_MYSQL_PASSWORD_FILE}" ]; then
@@ -61,9 +69,9 @@ echo "
 
 if [[ ${PRODUCTION} == true ]]
 	then
-	echo "***     Release Version: ${GS_VERSION}.${GS_BUILDNAME}" >> /etc/issue
+	echo "***     Release Version: ${GS_VERSION}#${GS_BUILDNAME}" >> /etc/issue
 else
-	echo "***     Development Version: ${GS_VERSION}-${GS_BRANCH}.${GS_BUILDNAME}" >> /etc/issue
+	echo "***     Development Version: ${GS_VERSION}-${GS_BRANCH}#${GS_BUILDNAME}" >> /etc/issue
 fi
 
 echo "***    -------------------------------------------------------------
@@ -112,13 +120,13 @@ echo "***
 #
 if [[ ${PRODUCTION} == true ]]
 	then
-	echo "Welcome to GEMEINSCHAFT ${GS_VERSION}.${GS_BUILDNAME}" > /etc/issue.net
+	echo "Welcome to GEMEINSCHAFT ${GS_VERSION}#${GS_BUILDNAME}" > /etc/issue.net
 echo "
-***   Welcome to GEMEINSCHAFT ${GS_VERSION}.${GS_BUILDNAME}" > /etc/motd
+***   Welcome to GEMEINSCHAFT ${GS_VERSION}#${GS_BUILDNAME}" > /etc/motd
 else
-	echo "Welcome to GEMEINSCHAFT ${GS_VERSION}-${GS_BRANCH}.${GS_BUILDNAME}" > /etc/issue.net
+	echo "Welcome to GEMEINSCHAFT ${GS_VERSION}-${GS_BRANCH}#${GS_BUILDNAME}" > /etc/issue.net
 echo "
-***   Welcome to GEMEINSCHAFT ${GS_VERSION}-${GS_BRANCH}.${GS_BUILDNAME}" > /etc/motd
+***   Welcome to GEMEINSCHAFT ${GS_VERSION}-${GS_BRANCH}#${GS_BUILDNAME}" > /etc/motd
 fi
 
 

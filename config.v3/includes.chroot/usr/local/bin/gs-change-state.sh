@@ -14,8 +14,11 @@
 #
 set -e
 
-if [[ ${EUID} -ne 0 ]]; then
-	echo "$0 needs to be run as root."
+# Enforce root rights
+#
+if [[ ${EUID} -ne 0 ]];
+	then
+	echo "ERROR: $0 needs to be run as root. Aborting ..."
 	exit 1
 fi
 
@@ -31,10 +34,10 @@ case "$1" in
 		sed -i "s/#RackEnv development/#RackEnv production/" "/etc/apache2/sites-available/gemeinschaft"
 
 		echo "** Updating Gemeinschaft debugging to production level"
-		sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "${GS_DIR_NORMALIZED}config/environments/production.rb"
+		sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "${GS_DIR_NORMALIZED}/config/environments/production.rb"
 
 		echo "** Updating monAMI debugging to production level"
-		sed -i "s/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log\"/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log --log-level=2\"/" "/etc/init.d/mon_ami"
+		sed -i "s/DEBUG=.*/DEBUG=\"--log-level=2\"/" "/etc/init.d/mon_ami"
 
 		echo "** Updating Cron logging to production level"
 		sed -i "s/# EXTRA_OPTS=\"-L 2\"/EXTRA_OPTS=\"-L 0\"/" /etc/syslog-ng/syslog-ng.conf
@@ -54,7 +57,7 @@ case "$1" in
 		sed -i "s/config.log_level = :warn/# config.log_level = :debug/" "${GS_DIR_NORMALIZED}/config/environments/production.rb"
 
 		echo "** Updating monAMI debugging to development level"
-		sed -i "s/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log --log-level=2\"/ARGS=\"--log-file=\/var\/log\/gemeinschaft\/mon_ami.log\"/" "/etc/init.d/mon_ami"
+		sed -i "s/DEBUG=.*/DEBUG=\"\"/" "/etc/init.d/mon_ami"
 
 		echo "** Updating Cron logging to development level"
 		sed -i "s/EXTRA_OPTS=\"-L 0\"/# EXTRA_OPTS=\"-L 2\"/" /etc/syslog-ng/syslog-ng.conf

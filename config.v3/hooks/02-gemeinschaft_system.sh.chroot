@@ -27,6 +27,11 @@ echo -e "GBE: Create service account ${GS_USER} ...\n"
 useradd ${GS_USER} -N -m -r -d /var/lib/${GS_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GS_GROUP}
 ln -s ${GS_USER} /var/lib/gemeinschaft
 
+echo -e "GBE: Create service account mon_ami ...\n"
+# hint: This should be a system service account (-s) or at least UID needs to be != 1000
+# otherwise live-config user setup will not work correctly.
+useradd mon_ami -m -r -d /var/lib/mon_ami -s /bin/bash -c "MonAMI Service Account"
+
 echo -e "GBE: Configuring Postfix ...\n"
 # Disable TLS for INCOMING mails to avoid certificate issues
 # when Gemeinschaft wants to send mails
