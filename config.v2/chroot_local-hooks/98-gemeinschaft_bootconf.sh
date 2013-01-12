@@ -22,6 +22,8 @@ echo -e "GBE: Enabling system services ...\n"
 update-rc.d gemeinschaft-runtime-init defaults 2>&1
 update-rc.d gemeinschaft-runtime-init-post defaults 2>&1
 update-rc.d mon_ami defaults 2>&1
+[ -f /etc/default/shorewall ] && sed -i "s/^startup=.*\$/startup=1/" /etc/default/shorewall
+[ -f /etc/default/shorewall6 ] && sed -i "s/^startup=.*\$/startup=1/" /etc/default/shorewall6
 
 echo -e "GBE: Set initial file permissions and security settings ...\n"
 /usr/local/bin/gs-enforce-security.sh | grep -Ev retained | grep -Ev "no changes" | grep -Ev "nor referent has been changed"
