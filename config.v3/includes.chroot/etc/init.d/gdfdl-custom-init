@@ -84,13 +84,15 @@ case "$1" in
 		echo "** Configuring ODBC"
 echo "[gemeinschaft]
 Description  = MySQL database for Gemeinschaft
-Driver       = /usr/lib/i386-linux-gnu/odbc/libmyodbc.so
-Setup        = /usr/lib/i386-linux-gnu/odbc/libodbcmyS.so
+Driver       = libmyodbc.so
+Setup        = libodbcmyS.so
+CPTimeout	 = 
+CPReuse      = 
 " >/etc/odbcinst.ini
 
 echo "[gemeinschaft]
 Description  = MySQL database for Gemeinschaft
-Driver       = /usr/lib/i386-linux-gnu/odbc/libmyodbc.so
+Driver       = libmyodbc.so
 SERVER       = localhost
 PORT         = 3306
 DATABASE     = ${GS_MYSQL_DB}
@@ -99,7 +101,7 @@ USER         = ${GS_MYSQL_USER}
 PASSWORD     = ${MYSQL_PASSWD_GS}
 " >/var/lib/freeswitch/.odbc.ini
 chown -v freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
-chmod -v 0440 /var/lib/freeswitch/.odbc.ini
+chmod -v 0640 /var/lib/freeswitch/.odbc.ini
 
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
