@@ -1,0 +1,26 @@
+# remote administration via SSH
+ACCEPT all fw tcp ssh
+
+# web services
+ACCEPT all fw tcp http,https
+
+# NTP service
+ACCEPT all fw tcp ntp
+ACCEPT all fw udp ntp
+
+# DNS service
+ACCEPT all fw udp domain
+
+# SIP services
+ACCEPT all fw tcp sip,sip-tls
+ACCEPT all fw udp sip,sip-tls
+
+# mon_ami Asterisk emulator
+ACCEPT all fw tcp 5038
+
+# BootP for phones
+ACCEPT all fw tcp bootps,bootpc
+ACCEPT all fw udp bootps,bootpc
+
+# Allow ping
+ACCEPT all fw icmp echo-request
