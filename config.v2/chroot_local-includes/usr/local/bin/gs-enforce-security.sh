@@ -54,8 +54,7 @@ fi
 
 # FreeSwitch variable files
 chown -vR freeswitch.freeswitch "${GS_DIR_LOCAL}/freeswitch/db" "${GS_DIR_LOCAL}/freeswitch/recordings" "${GS_DIR_LOCAL}/freeswitch/storage"
-find "${GS_DIR_LOCAL}/freeswitch/db" "${GS_DIR_LOCAL}/freeswitch/recordings" "${GS_DIR_LOCAL}/freeswitch/storage" -type d -exec chmod -v 0770 {} \;
-find "${GS_DIR_LOCAL}/freeswitch/db" "${GS_DIR_LOCAL}/freeswitch/recordings" "${GS_DIR_LOCAL}/freeswitch/storage" -type f -exec chmod -v 0660 {} \;
+chmod -v 0770 "${GS_DIR_LOCAL}/freeswitch/db" "${GS_DIR_LOCAL}/freeswitch/recordings" "${GS_DIR_LOCAL}/freeswitch/storage"
 
 # FreeSwitch files
 chown -v ${GS_USER}.root /usr/share/freeswitch/sounds
