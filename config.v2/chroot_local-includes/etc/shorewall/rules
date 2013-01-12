@@ -5,7 +5,7 @@ ACCEPT all fw tcp ssh
 ACCEPT all fw tcp http,https
 
 # NTP service
-ACCEPT all fw udp ntp
+ACCEPT all fw tcp ntp
 ACCEPT all fw udp ntp
 
 # DNS service
