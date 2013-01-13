@@ -155,12 +155,24 @@ password ${GS_GIT_PASSWORD}
 		then
 		rm -rf ~/.netrc
 		
+		# Make sure we checkout the latest tagged version in case we are in the master branch
+		if [ "${GS_BRANCH}" == "master" ]; then
+			cd "${GS_UPDATE_DIR}"
+			git checkout `git tag -l | tail -n1`
+			cd -
+		fi
+		
 		# Check version compatibility, allow auto-update only for minor versions
 		GS_GIT_VERSION="`cd ${GS_UPDATE_DIR}; git tag --contains HEAD`"
-		if [ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" || x"${GS_GIT_VERSION}" == x"" ]; then
-			echo -e "\n\nScheduled update to new version ${GS_GIT_VERSION}.\nPlease reboot the system to start the update process.\n\n"
+		if [[ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" || x"${GS_GIT_VERSION}" == x"" ]]; then
+			[ "${GS_BRANCH}" != "master" ] && GS_GIT_VERSION="from ${GS_BRANCH} branch"
+			echo -e "\n\n***    ------------------------------------------------------------------"
+			echo -e "***     Scheduled update to new version ${GS_GIT_VERSION}.\n***     Please reboot the system to start the update process."
+			echo -e "***    ------------------------------------------------------------------\n\n"
 		else
-			echo -e "\n\nUpdate to next major version ${GS_GIT_VERSION} is not supported via this script.\nPlease use backup & restore via web interface.\n\n"
+			echo -e "\n\n***    ------------------------------------------------------------------"
+			echo -e "***     Update to next major version ${GS_GIT_VERSION} is not supported via this script.\n***     Please use backup & restore via web interface."
+			echo -e "***    ------------------------------------------------------------------\n\n"
 			rm -rf "${GS_UPDATE_DIR}*"
 			exit 1
 		fi
