@@ -151,7 +151,7 @@ password ${GS_GIT_PASSWORD}
 	done
 	set -e
 
-	if [[ -f "${GS_DIR}/config/application.rb" ]];
+	if [[ -f "${GS_UPDATE_DIR}/config/application.rb" ]];
 		then
 		rm -rf ~/.netrc
 		echo -e "\n\nUpdate preparation SUCCESSFUL. Please reboot the system to start the update process.\n\n"
