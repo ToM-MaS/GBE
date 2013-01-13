@@ -64,6 +64,13 @@ password ${GS_GIT_PASSWORD}
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
 fi
 
+# Make sure we checkout the latest tagged version in case we are in the master branch
+if [ "${GS_BRANCH}" == "master" ]; then
+	cd "${GS_DIR}"
+	git checkout `git tag -l | tail -n1`
+	cd -
+fi
+
 #  Create alias for GS5 backwards compatibility
 #
 GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
