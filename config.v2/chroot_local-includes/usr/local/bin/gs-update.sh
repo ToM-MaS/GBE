@@ -29,7 +29,7 @@ fi
 #
 case "$1" in
 	--help|-h|help)
-	echo "Usage: $0 [--cancel]"
+	echo "Usage: $0 [--cancel | --factory-reset]"
 	exit 0
 	;;
 
@@ -44,6 +44,51 @@ case "$1" in
 		echo "No planned update task found."
 		exit 1
 	fi
+	;;
+
+	--factory-reset)
+	MODE="factory-reset"
+	while true; do
+    	read -p "ATTENTION! This will do a factory reset, all your data will be LOST! Continue? (y/n) : " yn
+
+    	case $yn in
+        	Y|y )
+				[ -f /root/.mysql_root_password ] && MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`" || exit 1
+
+				# use local copy of GS5 for re-installation
+				cp -pr "${GS_DIR}" "${GS_UPDATE_DIR}"
+
+				# stop services
+				service mon_ami stop
+				service freeswitch stop
+				service apache2 stop
+
+				# Purging database
+				echo -e "\nPurging database '${GS_MYSQL_DB}' ...";
+				mysql -e "DROP DATABASE IF EXISTS ${GS_MYSQL_DB}; CREATE DATABASE ${GS_MYSQL_DB};" --user=root --password="${MYSQL_PASSWD_ROOT}"
+
+				echo "Purging local FreeSwitch files ..."
+				rm -rfv "${GS_DIR_LOCAL_NORMALIZED}/freeswitch/conf/*" \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/storage/*" \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/recordings/*" \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/db/*" \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/scripts/ini/*"
+
+				echo -e "\n\n***    ------------------------------------------------------------------"
+				echo -e "***     Factory reset complete.\n***     Please reboot the system NOW."
+				echo -e "***    ------------------------------------------------------------------\n\n"
+
+				break
+			;;
+
+        	* )
+				echo "Aborting ...";
+				break
+			;;
+    	esac
+
+		exit
+	done
 	;;
 
 	--force-init)
