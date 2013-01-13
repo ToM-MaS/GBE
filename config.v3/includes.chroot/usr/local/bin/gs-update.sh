@@ -151,15 +151,44 @@ password ${GS_GIT_PASSWORD}
 	done
 	set -e
 
-	if [[ -f "${GS_DIR}/config/application.rb" ]];
+	if [[ -f "${GS_UPDATE_DIR}/config/application.rb" ]];
 		then
 		rm -rf ~/.netrc
-		echo -e "\n\nUpdate preparation SUCCESSFUL. Please reboot the system to start the update process.\n\n"
+		
+		# Make sure we checkout the latest tagged version in case we are in the master branch
+		if [ "${GS_BRANCH}" == "master" ]; then
+			cd "${GS_UPDATE_DIR}"
+			git checkout `git tag -l | tail -n1`
+			cd -
+		fi
+		
+		# Check version compatibility, allow auto-update only for minor versions
+		GS_GIT_VERSION="`cd ${GS_UPDATE_DIR}; git tag --contains HEAD`"
+		GS_REVISION="`cd ${GS_DIR}; git rev-parse HEAD`"
+		GS_GIT_REVISION="`cd ${GS_UPDATE_DIR}; git rev-parse HEAD`"
+		if [[ "${GS_GIT_REVISION}" == "${GS_REVISION}" ]]; then
+			echo -e "\n\n***    ------------------------------------------------------------------"
+			echo -e "***     You already have installed the latest version, no update needed."
+			echo -e "***    ------------------------------------------------------------------\n\n"
+			rm -rf "${GS_UPDATE_DIR}"*
+			exit 0
+		elif [[ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" || x"${GS_GIT_VERSION}" == x"" ]]; then
+			[ "${GS_BRANCH}" != "master" ] && GS_GIT_VERSION="from ${GS_BRANCH} branch"
+			echo -e "\n\n***    ------------------------------------------------------------------"
+			echo -e "***     Scheduled update to new version ${GS_GIT_VERSION}.\n***     Please reboot the system to start the update process."
+			echo -e "***    ------------------------------------------------------------------\n\n"
+		else
+			echo -e "\n\n***    ------------------------------------------------------------------"
+			echo -e "***     Update to next major version ${GS_GIT_VERSION} is not supported via this script.\n***     Please use backup & restore via web interface."
+			echo -e "***    ------------------------------------------------------------------\n\n"
+			rm -rf "${GS_UPDATE_DIR}"*
+			exit 1
+		fi
 	else
 		echo -e "\n\nCould not download current version from repository, ABORTING ...\n\n"
-		rm -rf "${GS_UPDATE_DIR}*"
+		rm -rf "${GS_UPDATE_DIR}"*
 		exit 1
-	fi
+    fi
 fi
 
 # Initialize update
