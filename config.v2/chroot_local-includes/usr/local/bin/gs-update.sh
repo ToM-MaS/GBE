@@ -157,7 +157,7 @@ password ${GS_GIT_PASSWORD}
 		
 		# Check version compatibility, allow auto-update only for minor versions
 		GS_GIT_VERSION="`cd ${GS_UPDATE_DIR}; git tag --contains HEAD`"
-		if [ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" ]; then
+		if [ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" || x"${GS_GIT_VERSION}" == x"" ]; then
 			echo -e "\n\nScheduled update to new version ${GS_GIT_VERSION}.\nPlease reboot the system to start the update process.\n\n"
 		else
 			echo -e "\n\nUpdate to next major version ${GS_GIT_VERSION} is not supported via this script.\nPlease use backup & restore via web interface.\n\n"
