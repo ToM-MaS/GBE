@@ -55,8 +55,8 @@ case "$1" in
         	Y|y )
 				[ -f /root/.mysql_root_password ] && MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`" || exit 1
 
-				# use local copy of GS5 for re-installation
-				cp -pr "${GS_DIR}" "${GS_UPDATE_DIR}"
+				# use local copy of GS5 for re-installation in case there is no update available
+				[ ! -d "${GS_UPDATE_DIR}" ] && cp -pr "${GS_DIR}" "${GS_UPDATE_DIR}"
 
 				# stop services
 				service mon_ami stop
