@@ -68,11 +68,11 @@ case "$1" in
 				mysql -e "DROP DATABASE IF EXISTS ${GS_MYSQL_DB}; CREATE DATABASE ${GS_MYSQL_DB};" --user=root --password="${MYSQL_PASSWD_ROOT}"
 
 				echo "Purging local FreeSwitch files ..."
-				rm -rfv "${GS_DIR_LOCAL_NORMALIZED}/freeswitch/conf/*" \
-					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/storage/*" \
-					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/recordings/*" \
-					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/db/*" \
-					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/scripts/ini/*"
+				rm -rfv "${GS_DIR_LOCAL_NORMALIZED}/freeswitch/conf/"* \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/storage/"* \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/recordings/"* \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/db/"* \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/scripts/ini/"*
 
 				echo -e "\n\n***    ------------------------------------------------------------------"
 				echo -e "***     Factory reset complete.\n***     Please reboot the system NOW."
