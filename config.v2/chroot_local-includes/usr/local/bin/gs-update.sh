@@ -164,11 +164,13 @@ password ${GS_GIT_PASSWORD}
 		
 		# Check version compatibility, allow auto-update only for minor versions
 		GS_GIT_VERSION="`cd ${GS_UPDATE_DIR}; git tag --contains HEAD`"
-		if [[ "${GS_GIT_VERSION}" == "${GS_VERSION}" ]]; then
+		GS_REVISION="`cd ${GS_DIR}; git rev-parse HEAD`"
+		GS_GIT_REVISION="`cd ${GS_UPDATE_DIR}; git rev-parse HEAD`"
+		if [[ "${GS_GIT_REVISION}" == "${GS_REVISION}" ]]; then
 			echo -e "\n\n***    ------------------------------------------------------------------"
 			echo -e "***     You already have installed the latest version, no update needed."
 			echo -e "***    ------------------------------------------------------------------\n\n"
-			rm -rf "${GS_UPDATE_DIR}*"
+			rm -rf "${GS_UPDATE_DIR}"*
 			exit 0
 		elif [[ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" || x"${GS_GIT_VERSION}" == x"" ]]; then
 			[ "${GS_BRANCH}" != "master" ] && GS_GIT_VERSION="from ${GS_BRANCH} branch"
@@ -179,12 +181,12 @@ password ${GS_GIT_PASSWORD}
 			echo -e "\n\n***    ------------------------------------------------------------------"
 			echo -e "***     Update to next major version ${GS_GIT_VERSION} is not supported via this script.\n***     Please use backup & restore via web interface."
 			echo -e "***    ------------------------------------------------------------------\n\n"
-			rm -rf "${GS_UPDATE_DIR}*"
+			rm -rf "${GS_UPDATE_DIR}"*
 			exit 1
 		fi
 	else
 		echo -e "\n\nCould not download current version from repository, ABORTING ...\n\n"
-		rm -rf "${GS_UPDATE_DIR}*"
+		rm -rf "${GS_UPDATE_DIR}"*
 		exit 1
     fi
 fi
