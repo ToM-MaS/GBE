@@ -156,7 +156,7 @@ password ${GS_GIT_PASSWORD}
 		rm -rf ~/.netrc
 		
 		# Check version compatibility, allow auto-update only for minor versions
-		GS_GIT_VERSION="`cd ${GS_UPDATE_DIR}; git tag | tail -n 1`"
+		GS_GIT_VERSION="`cd ${GS_UPDATE_DIR}; git tag --contains HEAD`"
 		if [ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" ]; then
 			echo -e "\n\nScheduled update to new version ${GS_GIT_VERSION}.\nPlease reboot the system to start the update process.\n\n"
 		else
