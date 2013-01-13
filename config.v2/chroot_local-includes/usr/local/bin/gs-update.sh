@@ -154,12 +154,21 @@ password ${GS_GIT_PASSWORD}
 	if [[ -f "${GS_UPDATE_DIR}/config/application.rb" ]];
 		then
 		rm -rf ~/.netrc
-		echo -e "\n\nUpdate preparation SUCCESSFUL. Please reboot the system to start the update process.\n\n"
+		
+		# Check version compatibility, allow auto-update only for minor versions
+		GS_GIT_VERSION="`cd ${GS_UPDATE_DIR}; git tag | tail -n 1`"
+		if [ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" ]; then
+			echo -e "\n\nScheduled update to new version ${GS_GIT_VERSION}.\nPlease reboot the system to start the update process.\n\n"
+		else
+			echo -e "\n\nUpdate to next major version ${GS_GIT_VERSION} is not supported via this script.\nPlease use backup & restore via web interface.\n\n"
+			rm -rf "${GS_UPDATE_DIR}*"
+			exit 1
+		fi
 	else
 		echo -e "\n\nCould not download current version from repository, ABORTING ...\n\n"
 		rm -rf "${GS_UPDATE_DIR}*"
 		exit 1
-	fi
+    fi
 fi
 
 # Initialize update
