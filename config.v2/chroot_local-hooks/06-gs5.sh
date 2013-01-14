@@ -62,6 +62,11 @@ password ${GS_GIT_PASSWORD}
 	set -e
 
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
+else
+	#FIXME lazy workaround for Jenkins who loses our branch names ...
+	cd "${GS_DIR}"
+	git checkout -b "${GS_BRANCH}"
+	cd -
 fi
 
 # Make sure we checkout the latest tagged version in case we are in the master branch
