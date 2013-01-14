@@ -63,6 +63,8 @@ password ${GS_GIT_PASSWORD}
 
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
 else
+	[ -f /etc/gemeinschaft_branch ] && GS_BRANCH="`cat /etc/gemeinschaft_branch`"
+
 	#FIXME lazy workaround for Jenkins who loses our branch names ...
 	cd "${GS_DIR}"
 	git checkout -b "${GS_BRANCH}"
@@ -265,7 +267,7 @@ echo "GS_DIR_NORMALIZED=\"${GS_DIR_NORMALIZED}\"" >> /etc/gemeinschaft/system.co
 echo "GS_DIR_NORMALIZED_LOCAL=\"${GS_DIR_NORMALIZED_LOCAL}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_USER=\"${GS_USER}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_GROUP=\"${GS_GROUP}\"" >> /etc/gemeinschaft/system.conf
-echo "GS_BRANCH=\"`cat /etc/gemeinschaft_branch`\""  >> /etc/gemeinschaft/system.conf
+echo "GS_BRANCH=\"${GS_BRANCH}\""  >> /etc/gemeinschaft/system.conf
 echo "GS_BUILDNAME=\"`cat /etc/gdfdl_build`\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_USER=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_DB=\"\${GS_MYSQL_USER}\""  >> /etc/gemeinschaft/system.conf
