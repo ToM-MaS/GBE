@@ -66,6 +66,7 @@ case "$1" in
 				# Purging database
 				echo -e "\nPurging database '${GS_MYSQL_DB}' ...";
 				mysql -e "DROP DATABASE IF EXISTS ${GS_MYSQL_DB}; CREATE DATABASE ${GS_MYSQL_DB};" --user=root --password="${MYSQL_PASSWD_ROOT}"
+				service mysql stop
 
 				echo "Purging local FreeSwitch files ..."
 				rm -rfv "${GS_DIR_LOCAL_NORMALIZED}/freeswitch/conf/"* \
@@ -75,8 +76,10 @@ case "$1" in
 					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/scripts/ini/"*
 
 				echo -e "\n\n***    ------------------------------------------------------------------"
-				echo -e "***     Factory reset complete.\n***     Please reboot the system NOW."
+				echo -e "***     Factory reset complete.\n***     The system will reboot NOW!"
 				echo -e "***    ------------------------------------------------------------------\n\n"
+				sleep 2
+				reboot
 
 				break
 			;;
