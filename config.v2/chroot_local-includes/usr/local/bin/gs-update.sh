@@ -60,13 +60,13 @@ case "$1" in
 
 				# stop services
 				service mon_ami stop
-				service freeswitch stop
-				service apache2 stop
+				[[ `service freeswitch status` ]] && service freeswitch stop
+				[[ `service apache2 status` ]] && service apache2 stop
 
 				# Purging database
 				echo -e "\nPurging database '${GS_MYSQL_DB}' ...";
 				mysql -e "DROP DATABASE IF EXISTS ${GS_MYSQL_DB}; CREATE DATABASE ${GS_MYSQL_DB};" --user=root --password="${MYSQL_PASSWD_ROOT}"
-				service mysql stop
+				[[ `service mysql status` ]] && service mysql stop
 
 				echo "Purging local FreeSwitch files ..."
 				rm -rfv "${GS_DIR_LOCAL_NORMALIZED}/freeswitch/conf/"* \
@@ -245,10 +245,10 @@ if [[ "${MODE}" == "update" ]]; then
 	if [[ -d "${GS_UPDATE_DIR}" ]]; then
 		# make sure only mysql is running
 		service mon_ami stop
-		service freeswitch stop
-		service apache2 stop
-		service mysql start
-		
+		[[ `service freeswitch status` ]] && service freeswitch stop
+		[[ `service apache2 status` ]] && service apache2 stop
+		[[ `service apache2 status` != 0 ]] && service mysql start
+
 		echo "** Rename and backup old files in \"${GS_DIR}\""
 		rm -rf ${GS_DIR}.bak
 		mv ${GS_DIR} ${GS_DIR}.bak
@@ -315,11 +315,4 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	#
 	echo "** Precompile GS assets"
 	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=production bundle exec rake assets:precompile --trace"
-fi
-
-# Finalize update
-#
-if [[ "${MODE}" == "update" ]]; then
-	# let normal bootup scripts start mysql
-	service mysql stop
 fi
