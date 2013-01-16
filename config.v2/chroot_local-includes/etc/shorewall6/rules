@@ -26,4 +26,4 @@ ACCEPT all fw6 udp bootps,bootpc
 ACCEPT all fw6 ipv6-icmp echo-request
 
 # Allow mDNS
-ACCEPT all fw udp mdns
+ACCEPT all fw6 udp mdns
