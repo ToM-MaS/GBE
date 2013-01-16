@@ -1,3 +1,7 @@
+Package: linux-image-686-pae
+Pin: release a=squeeze-backports
+Pin-Priority: 995
+
 Package: linux-image-3.2.0-0.bpo.4-686-pae
 Pin: release a=squeeze-backports
 Pin-Priority: 995
