@@ -57,8 +57,8 @@ chmod -v 0770 "${GS_DIR_LOCAL}/freeswitch/db" "${GS_DIR_LOCAL}/freeswitch/record
 
 # FreeSwitch files
 chown -v ${GS_USER}.root /usr/share/freeswitch/sounds
-find /usr/share/freeswitch/sounds -type d -exec chmod -v 0755 {} \;
-find /usr/share/freeswitch/sounds -type f -exec chmod -v 0644 {} \;
+find /usr/share/freeswitch/sounds -type d -exec chmod -v 0775 {} \;
+find /usr/share/freeswitch/sounds -type f -exec chmod -v 0664 {} \;
 
 # GS_USER homedir
 chown -vR ${GS_USER}.${GS_GROUP} /var/lib/${GS_USER}
