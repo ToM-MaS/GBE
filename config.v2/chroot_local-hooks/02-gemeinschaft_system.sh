@@ -18,6 +18,10 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft specific system configuration\n\n"
 
+# Forcing dist-upgrade to work on pinned packages
+echo -e "GBE: Dist upgrade ...\n"
+apt-get -y --force-yes dist-upgrade -qq
+
 echo -e "GBE: Create service group '${GS_GROUP}' ...\n"
 groupadd -r -f ${GS_GROUP}
 
