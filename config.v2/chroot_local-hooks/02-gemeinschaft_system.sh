@@ -18,10 +18,9 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft specific system configuration\n\n"
 
-# Forcing dist-upgrade to work on pinned packages
-echo -e "GBE: Dist upgrade ...\n"
-apt-get -y --force-yes dist-upgrade -qq
-#apt-get -y --force-yes purge linux-image-2.6-686 linux-image-2.6.32-5-686 -qq
+# Upgrade kernel to 3.2
+echo -e "GBE: Kernel upgrade ...\n"
+apt-get -t --force-yes squeeze-backports install linux-image-2.6.32-5-686 firmware-linux-free
 
 echo -e "GBE: Create service group '${GS_GROUP}' ...\n"
 groupadd -r -f ${GS_GROUP}
