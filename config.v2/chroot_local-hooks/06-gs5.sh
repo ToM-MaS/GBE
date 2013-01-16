@@ -155,7 +155,7 @@ PassengerRuby /var/lib/gemeinschaft/.rvm/wrappers/default/ruby
 PassengerMaxPoolSize 4
 PassengerMaxInstancesPerApp 3
 # http://stackoverflow.com/questions/821820/how-does-phusion-passenger-reuse-threads-and-processes
-# Both virtual hosts (PassengerAppRoot ${GS_DIR}) are actually
+# Both virtual hosts (PassengerAppRoot ${GS_DIR_NORMALIZED}) are actually
 # the same application!
 
 PassengerPoolIdleTime 200
@@ -188,10 +188,10 @@ Timeout 100
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
 
-	DocumentRoot ${GS_DIR}/public
+	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR}
+	PassengerAppRoot ${GS_DIR_NORMALIZED}
 	PassengerMinInstances 1
 	PassengerPreStart http://127.0.0.1:80/
 	PassengerStatThrottleRate 10
@@ -207,7 +207,7 @@ Timeout 100
 	RailsEnv development
 	#RackEnv  development
 
-	<Directory ${GS_DIR}/public>
+	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
@@ -220,10 +220,10 @@ Timeout 100
 	CustomLog \${APACHE_LOG_DIR}/access.log combined
 	LogLevel error
 
-	DocumentRoot ${GS_DIR}/public
+	DocumentRoot ${GS_DIR_NORMALIZED}/public
 
 	PassengerEnabled on
-	PassengerAppRoot ${GS_DIR}
+	PassengerAppRoot ${GS_DIR_NORMALIZED}
 	PassengerMinInstances 1
 	PassengerPreStart https://127.0.0.1:443/
 	PassengerStatThrottleRate 10
@@ -239,7 +239,7 @@ Timeout 100
 	RailsEnv development
 	#RackEnv  development
 
-	<Directory ${GS_DIR}/public>
+	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all
 		Options -MultiViews
 		Options FollowSymLinks
