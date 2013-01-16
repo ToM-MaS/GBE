@@ -20,7 +20,7 @@ echo -e "\n###########################################################
 
 # Upgrade kernel to 3.2
 echo -e "GBE: Kernel upgrade ...\n"
-apt-get -y --force-yes -t squeeze-backports install linux-image-2.6.32-5-686 firmware-linux-free
+apt-get -y --force-yes -t squeeze-backports install linux-image-3.2.0-0.bpo.4-686-pae firmware-linux-free
 
 echo -e "GBE: Create service group '${GS_GROUP}' ...\n"
 groupadd -r -f ${GS_GROUP}
