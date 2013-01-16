@@ -24,3 +24,6 @@ ACCEPT all fw udp bootps,bootpc
 
 # Allow ping
 ACCEPT all fw icmp echo-request
+
+# Allow mDNS
+ACCEPT all fw udp mdns
