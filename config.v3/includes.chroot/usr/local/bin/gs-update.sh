@@ -59,7 +59,7 @@ case "$1" in
 				[ ! -d "${GS_UPDATE_DIR}" ] && cp -pr "${GS_DIR}" "${GS_UPDATE_DIR}"
 
 				# stop services
-				service mon_ami stop
+				[[ `service mon_ami status` ]] && service mon_ami stop
 				[[ `service freeswitch status` ]] && service freeswitch stop
 				[[ `service apache2 status` ]] && service apache2 stop
 
@@ -244,10 +244,10 @@ fi
 if [[ "${MODE}" == "update" ]]; then
 	if [[ -d "${GS_UPDATE_DIR}" ]]; then
 		# make sure only mysql is running
-		service mon_ami stop
+		[[ `service mon_ami status` ]] && service mon_ami stop
 		[[ `service freeswitch status` ]] && service freeswitch stop
 		[[ `service apache2 status` ]] && service apache2 stop
-		[[ `service apache2 status` != 0 ]] && service mysql start
+		[[ `service mysql status` != 0 ]] && service mysql start
 
 		echo "** Rename and backup old files in \"${GS_DIR}\""
 		rm -rf ${GS_DIR}.bak

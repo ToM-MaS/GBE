@@ -45,8 +45,7 @@ chown -vR "${GS_USER}"."${GS_GROUP}" "${GS_DIR}"
 
 # FreeSwitch configurations
 chown -vR ${GS_USER}.freeswitch "${GS_DIR_LOCAL}/freeswitch/scripts/ini" "${GS_DIR_LOCAL}/freeswitch/conf"
-find "${GS_DIR_LOCAL}/freeswitch/scripts/ini" "${GS_DIR_LOCAL}/freeswitch/conf" -type d -exec chmod -v 0750 {} \;
-find "${GS_DIR_LOCAL}/freeswitch/scripts/ini" "${GS_DIR_LOCAL}/freeswitch/conf" -type f -exec chmod -v 0640 {} \;
+chmod -v 0770  "${GS_DIR_LOCAL}/freeswitch/scripts/ini" "${GS_DIR_LOCAL}/freeswitch/conf"
 if [ -f /var/lib/freeswitch/.odbc.ini ]; then
 	chown -v freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 	chmod -v 0640 /var/lib/freeswitch/.odbc.ini
@@ -58,8 +57,8 @@ chmod -v 0770 "${GS_DIR_LOCAL}/freeswitch/db" "${GS_DIR_LOCAL}/freeswitch/record
 
 # FreeSwitch files
 chown -v ${GS_USER}.root /usr/share/freeswitch/sounds
-find /usr/share/freeswitch/sounds -type d -exec chmod -v 0755 {} \;
-find /usr/share/freeswitch/sounds -type f -exec chmod -v 0644 {} \;
+find /usr/share/freeswitch/sounds -type d -exec chmod -v 0775 {} \;
+find /usr/share/freeswitch/sounds -type f -exec chmod -v 0664 {} \;
 
 # GS_USER homedir
 chown -vR ${GS_USER}.${GS_GROUP} /var/lib/${GS_USER}
