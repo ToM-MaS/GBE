@@ -101,7 +101,7 @@ else
 	echo "***" >> /etc/issue
 fi
 
-echo "***    Documentation: Visit http://amooma.de/gemeinschaft/gs5
+echo "***     Documentation: Visit http://amooma.de/gemeinschaft/gs5
 ***    _____________________________________________________________
 ***          brought to you by AMOOMA GmbH  - http://amooma.de
 " >> /etc/issue
