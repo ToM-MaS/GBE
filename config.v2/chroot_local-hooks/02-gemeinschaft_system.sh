@@ -70,12 +70,15 @@ echo -e "GBE: Setup MySQL default time zone ...\n"
 echo "[mysqld]" > /etc/mysql/conf.d/gemeinschaft.cnf
 echo "default-time-zone='+00:00'" >> /etc/mysql/conf.d/gemeinschaft.cnf
 
-echo - "GBE: Enable bootlog ...\n"
+echo -e "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
 
-echo - "GBE: Installing nodejs ...\n"
+echo -e "GBE: Installing nodejs ...\n"
 cd /usr/local/src
 wget -c -t 5 --waitretry=3 http://nodejs.org/dist/node-${NODEJS_VERSION}.tar.gz
 tar xzvf node-*.tar.gz && cd `ls -rd node-v*` && ./configure && make install
 cd ..
 rm -rf node-*
+
+echo -e "GBE: Add Debian APT sources ...\n"
+echo "deb http://cdn.debian.net/debian/ squeeze main" >> /etc/apt/sources.list
