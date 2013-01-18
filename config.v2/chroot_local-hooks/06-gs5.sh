@@ -122,6 +122,8 @@ ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
 [ -d /etc/freeswitch ] && rm -rf /etc/freeswitch
 ln -s "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf" /etc/freeswitch
+[ -d /usr/conf ] && rm -rf /usr/conf
+ln -s /etc/freeswitch /usr/conf
 [ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
 ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
 
