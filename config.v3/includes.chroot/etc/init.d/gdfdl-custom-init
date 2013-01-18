@@ -39,6 +39,12 @@ case "$1" in
 
 		echo -e "Preparing Gemeinschaft for 1st start ...\n"
 
+		# write correct APT source list
+		echo "deb http://cdn.debian.net/debian/ squeeze main contrib" > /etc/apt/sources.list
+		echo "deb-src http://cdn.debian.net/debian/ squeeze main contrib" >> /etc/apt/sources.list
+		echo "deb http://security.debian.org/ squeeze/updates main contrib" >> /etc/apt/sources.list
+		echo "deb-src http://security.debian.org/ squeeze/updates main contrib" >> /etc/apt/sources.list
+
 		# Generate new password for gsmaster system administrator for live system
 		if [[ "${LIVE}" == true ]]; then
 			echo "** Generating individual password for live-system user 'gsmaster'"
@@ -59,7 +65,7 @@ case "$1" in
 			apg -m30 -a0 -n 1 -M NCL > /root/.mysql_root_password
 			chmod 0440 /root/.mysql_root_password
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
-			mysql -e "USE mysql; DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1'); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1'); FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD}"
+			mysql -e "USE mysql; DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1' OR host='::1' ); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1' host='127.0.0.1' OR host='::1'); FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD}"
 		else
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
 		fi

@@ -3,7 +3,7 @@
 # Gemeinschaft 5
 # Change between production and development state
 #
-# Copyright (c) 2012, Julian Pawlowski <jp@jps-networks.eu>
+# Copyright (c) 2012-2013, Julian Pawlowski <jp@jps-networks.eu>
 # See LICENSE.GBE file for details.
 #
 
@@ -22,7 +22,7 @@ if [[ ${EUID} -ne 0 ]];
 	exit 1
 fi
 
-case "$1" in
+case "${GS_ENV}" in
 
 	# Lower debug levels for productive installations
 	production)
@@ -33,13 +33,8 @@ case "$1" in
 		sed -i "s/RailsEnv development/RailsEnv production/" "/etc/apache2/sites-available/gemeinschaft"
 		sed -i "s/#RackEnv development/#RackEnv production/" "/etc/apache2/sites-available/gemeinschaft"
 
-		echo "** Updating Gemeinschaft debugging to production level"
-		sed -i "s/# config.log_level = :debug/config.log_level = :warn/" "${GS_DIR_NORMALIZED}/config/environments/production.rb"
-
-		echo "** Updating monAMI debugging to production level"
-		sed -i "s/DEBUG=.*/DEBUG=\"--log-level=2\"/" "/etc/init.d/mon_ami"
-
 		echo "** Updating Cron logging to production level"
+		sed -i "s/RAILS_ENV=.*/RAILS_ENV=$RAILS_ENV/" /etc/cron.d/gemeinschaft_rvm
 		sed -i "s/# EXTRA_OPTS=\"-L 2\"/EXTRA_OPTS=\"-L 0\"/" /etc/syslog-ng/syslog-ng.conf
 
 		;;
@@ -53,18 +48,13 @@ case "$1" in
 		sed -i "s/RailsEnv production/RailsEnv development/" "/etc/apache2/sites-available/gemeinschaft"
 		sed -i "s/#RackEnv production/#RackEnv development/" "/etc/apache2/sites-available/gemeinschaft"
 
-		echo "** Updating Gemeinschaft debugging to development level"
-		sed -i "s/config.log_level = :warn/# config.log_level = :debug/" "${GS_DIR_NORMALIZED}/config/environments/production.rb"
-
-		echo "** Updating monAMI debugging to development level"
-		sed -i "s/DEBUG=.*/DEBUG=\"\"/" "/etc/init.d/mon_ami"
-
 		echo "** Updating Cron logging to development level"
+		sed -i "s/RAILS_ENV=.*/RAILS_ENV=$RAILS_ENV/" /etc/cron.d/gemeinschaft_rvm
 		sed -i "s/EXTRA_OPTS=\"-L 0\"/# EXTRA_OPTS=\"-L 2\"/" /etc/syslog-ng/syslog-ng.conf
 
 		;;
 	*)
-		echo "Usage: $0 [production | development]"
+		echo "Incorrect setting for GS_ENV in /etc/gemeinschaft/system.conf"
 		exit 3
 		;;
 esac

@@ -18,7 +18,7 @@ set -e
 TIMEOUT=${TIMEOUT-60}
 APP_ROOT="${GS_DIR_NORMALIZED}"
 PID="${APP_ROOT}/tmp/pids/unicorn.pid"
-ENVIRONMENT="production"
+ENVIRONMENT="${GS_ENV}"
 CMD="cd \"${APP_ROOT}\"; bundle exec unicorn -E $ENVIRONMENT -D -c \"${APP_ROOT}/config/unicorn.rb\""
 action="$1"
 set -u

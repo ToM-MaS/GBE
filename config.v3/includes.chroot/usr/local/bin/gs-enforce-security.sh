@@ -44,8 +44,8 @@ fi
 chown -vR "${GS_USER}"."${GS_GROUP}" "${GS_DIR}"
 
 # FreeSwitch configurations
-chown -vR ${GS_USER}.freeswitch "${GS_DIR_LOCAL}/freeswitch/scripts/ini" "${GS_DIR_LOCAL}/freeswitch/conf"
-chmod -v 0770  "${GS_DIR_LOCAL}/freeswitch/scripts/ini" "${GS_DIR_LOCAL}/freeswitch/conf"
+chown -vR ${GS_USER}.freeswitch "${GS_DIR_LOCAL}/freeswitch/conf"
+chmod -v 0770 "${GS_DIR_LOCAL}/freeswitch/conf"
 if [ -f /var/lib/freeswitch/.odbc.ini ]; then
 	chown -v freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 	chmod -v 0640 /var/lib/freeswitch/.odbc.ini

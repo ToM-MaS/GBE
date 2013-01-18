@@ -3,7 +3,7 @@
 # Gemeinschaft 5
 # live-build auto config script
 #
-# Copyright (c) 2012, Julian Pawlowski <jp@jps-networks.eu>
+# Copyright (c) 2012-2013, Julian Pawlowski <jp@jps-networks.eu>
 # See LICENSE.GBE file for details.
 #
 
@@ -11,7 +11,7 @@ lb config noauto \
 	--apt apt \
 	--apt-indices false \
 	--architecture i386 \
-	--archive-areas "main" \
+	--archive-areas "main contrib" \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
 	--iso-application "Gemeinschaft 5" \
