@@ -81,4 +81,4 @@ cd ..
 rm -rf node-*
 
 echo -e "GBE: Add Debian APT sources ...\n"
-echo "deb http://cdn.debian.net/debian/ squeeze main" >> /etc/apt/sources.list
+echo "deb http://cdn.debian.net/debian/ squeeze main contrib" >> /etc/apt/sources.list

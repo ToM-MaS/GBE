@@ -11,7 +11,7 @@ lb config noauto \
 	--apt apt \
 	--apt-recommends disabled \
 	--architecture i386 \
-	--archive-areas "main" \
+	--archive-areas "main contrib" \
 	--bootstrap-flavour minimal \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
