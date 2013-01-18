@@ -55,11 +55,6 @@ start)
 
 		echo "Updating Gemeinschaft configurations ..."
 
-		# Update static files
-		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^phone_book_entry_image_url =.*/phone_book_entry_image_url = http:\/\/${ADDRESS}\/uploads\/phone_book_entry\/image/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
-		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^user_image_url =.*/user_image_url = http:\/\/${ADDRESS}\/uploads\/user\/image/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
-		[[ -f "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini" ]] && sed -i "s/^ringtone_url =.*/ringtone_url = http:\/\/${ADDRESS}/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini/dialplan.ini"
-
 		# Update database settings
 		if [ -f "${GS_MYSQL_PASSWORD_FILE}" ];
 			then

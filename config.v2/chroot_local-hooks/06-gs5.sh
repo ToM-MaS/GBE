@@ -115,7 +115,6 @@ echo -e "GBE: Create logfile directory ...\n"
 GS_DIR_LOCAL="/var/opt/`basename "${GS_DIR}"`"
 GS_DIR_NORMALIZED_LOCAL="`dirname "${GS_DIR_LOCAL}"`/`basename "${GS_DIR_NORMALIZED}"`"
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
-mkdir -p ${GS_DIR_LOCAL}/freeswitch/scripts/ini
 ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
 # Link FS configs

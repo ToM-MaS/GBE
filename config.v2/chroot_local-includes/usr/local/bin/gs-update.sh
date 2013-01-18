@@ -72,8 +72,7 @@ case "$1" in
 				rm -rfv "${GS_DIR_LOCAL_NORMALIZED}/freeswitch/conf/"* \
 					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/storage/"* \
 					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/recordings/"* \
-					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/db/"* \
-					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/scripts/ini/"*
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/db/"*
 
 				echo -e "\n\n***    ------------------------------------------------------------------"
 				echo -e "***     Factory reset complete.\n***     The system will reboot NOW!"
@@ -276,11 +275,6 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 
 	echo "** Copy FreeSwitch static configuration files"
 	cp -an ${GS_DIR}/misc/freeswitch/conf ${GS_DIR_LOCAL}/freeswitch
-
-	echo "** Copy Lua dialplan static ini files"
-	[ ! -L ${GS_DIR}/misc/freeswitch/scripts/ini ] && cp -an ${GS_DIR}/misc/freeswitch/scripts/ini ${GS_DIR_LOCAL}/freeswitch/scripts
-	rm -rf ${GS_DIR}/misc/freeswitch/scripts/ini
-	ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/scripts/ini ${GS_DIR}/misc/freeswitch/scripts/ini
 
 	echo "** Updating FreeSwitch with database password"
 	sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${GS_MYSQL_PASSWD}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
