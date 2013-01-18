@@ -58,6 +58,9 @@ case "$1" in
 				# use local copy of GS5 for re-installation in case there is no update available
 				[ ! -d "${GS_UPDATE_DIR}" ] && cp -pr "${GS_DIR}" "${GS_UPDATE_DIR}"
 
+				# Do hard reset of repo to ensure correct files
+				git --git-dir="${GS_UPDATE_DIR}/.git" reset --hard
+
 				# stop services
 				[[ `service mon_ami status` ]] && service mon_ami stop
 				[[ `service freeswitch status` ]] && service freeswitch stop
