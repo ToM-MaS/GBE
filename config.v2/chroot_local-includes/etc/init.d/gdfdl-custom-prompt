@@ -14,8 +14,6 @@
 
 # General settings
 [ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
-IPS="`/bin/hostname -I`"
-FQDN="`/bin/hostname -f`"
 
 # Enforce root rights
 #
@@ -55,6 +53,12 @@ if [[ x`cat /proc/cmdline | grep boot=live` != x"" ]]
 else
 	LIVE=false
 fi
+
+# Get network configuration details
+#
+sleep 1
+IPS="`/bin/hostname -I`"
+FQDN="`/bin/hostname -f`"
 
 #
 # Write login screen to /etc/issue
