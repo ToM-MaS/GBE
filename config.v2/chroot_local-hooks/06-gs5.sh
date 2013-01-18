@@ -262,7 +262,7 @@ a2ensite gemeinschaft 2>&1
 # Check if we have a production or development state build
 # (production = master-branch was used from GS5 and GBE repo)
 #
-GS_BUILDNAME=\"`cat /etc/gdfdl_build`\"
+GS_BUILDNAME="`cat /etc/gdfdl_build`"
 if [[ `expr length ${GS_BUILDNAME}` == 10 && x${GS_BRANCH} = x"master" ]]
 	then
 	GS_ENV="production"
