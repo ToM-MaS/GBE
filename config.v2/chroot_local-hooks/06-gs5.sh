@@ -97,7 +97,7 @@ echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAIL
 #
 echo -e "GBE: Install cronjobs ...\n"
 [ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin
+echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
 SHELL=/var/lib/gemeinschaft/.rvm/bin/rvm-shell
 RAILS_ENV=production
 23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones
