@@ -49,7 +49,7 @@ case "${GS_ENV}" in
 		sed -i "s/#RackEnv production/#RackEnv development/" "/etc/apache2/sites-available/gemeinschaft"
 
 		echo "** Updating Cron logging to development level"
-		sed -i "s/RAILS_ENV=.*/RAILS_ENV=$RAILS_ENV}/" /etc/cron.d/gemeinschaft_rvm
+		sed -i "s/RAILS_ENV=.*/RAILS_ENV=$RAILS_ENV/" /etc/cron.d/gemeinschaft_rvm
 		sed -i "s/EXTRA_OPTS=\"-L 0\"/# EXTRA_OPTS=\"-L 2\"/" /etc/syslog-ng/syslog-ng.conf
 
 		;;
