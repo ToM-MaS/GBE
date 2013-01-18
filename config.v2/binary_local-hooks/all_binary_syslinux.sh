@@ -3,7 +3,7 @@
 # Gemeinschaft 5
 # live-helper hook to update syslinux boot menu
 #
-# Copyright (c) 2012, Julian Pawlowski <jp@jps-networks.eu>
+# Copyright (c) 2012-2013, Julian Pawlowski <jp@jps-networks.eu>
 # See LICENSE.GBE file for details.
 #
 
