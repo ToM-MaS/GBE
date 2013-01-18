@@ -39,6 +39,12 @@ case "$1" in
 
 		echo -e "Preparing Gemeinschaft for 1st start ...\n"
 
+		# write correct APT source list
+		echo "deb http://cdn.debian.net/debian/ squeeze main contrib" > /etc/apt/sources.list
+		echo "deb-src http://cdn.debian.net/debian/ squeeze main contrib" >> /etc/apt/sources.list
+		echo "deb http://security.debian.org/ squeeze/updates main contrib" >> /etc/apt/sources.list
+		echo "deb-src http://security.debian.org/ squeeze/updates main contrib" >> /etc/apt/sources.list
+
 		# Generate new password for gsmaster system administrator for live system
 		if [[ "${LIVE}" == true ]]; then
 			echo "** Generating individual password for live-system user 'gsmaster'"
