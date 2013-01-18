@@ -260,9 +260,19 @@ a2enmod passenger 2>&1
 a2dissite default 2>&1
 a2ensite gemeinschaft 2>&1
 
+# Check if we have a production or development state build
+# (production = master-branch was used from GS5 and GBE repo)
+#
+GS_BUILDNAME=\"`cat /etc/gdfdl_build`\"
+if [[ `expr length ${GS_BUILDNAME}` == 10 && x${GS_BRANCH} = x"master" ]]
+	then
+	GS_ENV="production"
+else
+	GS_ENV="development"
+fi
+
 echo -e "GBE: Write local settings file ..."
 mkdir -p /etc/gemeinschaft
-echo "# Do not change anything here" > /etc/gemeinschaft/system.conf
 echo "GS_DIR=\"${GS_DIR}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_DIR_LOCAL=\"${GS_DIR_LOCAL}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_DIR_NORMALIZED=\"${GS_DIR_NORMALIZED}\"" >> /etc/gemeinschaft/system.conf
@@ -270,10 +280,16 @@ echo "GS_DIR_NORMALIZED_LOCAL=\"${GS_DIR_NORMALIZED_LOCAL}\"" >> /etc/gemeinscha
 echo "GS_USER=\"${GS_USER}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_GROUP=\"${GS_GROUP}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_BRANCH=\"${GS_BRANCH}\""  >> /etc/gemeinschaft/system.conf
-echo "GS_BUILDNAME=\"`cat /etc/gdfdl_build`\""  >> /etc/gemeinschaft/system.conf
+echo "GS_BUILDNAME=\"${GS_BUILDNAME}\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_USER=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_DB=\"\${GS_MYSQL_USER}\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_PASSWORD_FILE=\"/var/lib/gemeinschaft/.gs_mysql_password\""  >> /etc/gemeinschaft/system.conf
 echo "GS_GIT_URL=\"${GS_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_ENFORCE_SECURITY_ON_BOOTUP=true" >> /etc/gemeinschaft/system.conf
+echo "GS_ENV=\"${GS_ENV}\"" >> /etc/gemeinschaft/system.conf
+echo "RAILS_ENV=\$GS_ENV" >> /etc/gemeinschaft/system.conf
 rm -f /etc/gemeinschaft_branch /etc/gdfdl_build
+
+# set GS variables as global ENV variables
+[ -f /etc/environment ] && rm /etc/environment
+ln -s /etc/gemeinschaft/system.conf /etc/environment

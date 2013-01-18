@@ -285,16 +285,9 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	echo "** Updating FreeSwitch with database password"
 	sed -i "s/<param name=\"core-db-dsn\".*/<param name=\"core-db-dsn\" value=\"${GS_MYSQL_DB}:${GS_MYSQL_USER}:${GS_MYSQL_PASSWD}\"\/>/" "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf/freeswitch.xml"
 
-	# Lower debug levels for productive installations
+	# Enforce debug level according to GS_ENV
 	#
-	if [[ `expr length ${GS_BUILDNAME}` == 10 ]]; then
-		/usr/local/bin/gs-change-state.sh production
-
-	# Enforce higher debug levels for development installations
-	#
-	else
-		/usr/local/bin/gs-change-state.sh development
-	fi
+	/usr/local/bin/gs-change-state.sh
 
 	# Special tasks for update only
 	#
@@ -303,16 +296,16 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 		/usr/local/bin/gs-enforce-security.sh | grep -Ev retained | grep -Ev "no changes" | grep -Ev "nor referent has been changed"
 
 		echo "** Install Gems"
-		su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=production bundle install"
+		su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=${RAILS_ENV} bundle install"
 	fi
 
 	# Load database structure into DB
 	#
 	echo "** Initializing database"
-	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=production bundle exec rake db:migrate --trace"
+	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=${RAILS_ENV} bundle exec rake db:migrate --trace"
 
 	# Generate assets (like CSS)
 	#
 	echo "** Precompile GS assets"
-	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=production bundle exec rake assets:precompile --trace"
+	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=${RAILS_ENV} bundle exec rake assets:precompile --trace"
 fi

@@ -23,11 +23,11 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="MonAMI Asterisk Manger Interface Emulator"
 NAME=mon_ami
 DAEMON=${GS_DIR_NORMALIZED}/misc/$NAME/$NAME
-DEBUG=""
-DAEMON_ARGS="--log-file=/var/log/$NAME/$NAME.log ${DEBUG}"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 USER="$NAME"
+
+[ x"${GS_ENV}" = x"production" ] && DAEMON_ARGS="--log-file=/var/log/$NAME/$NAME.log" || DAEMON_ARGS="--log-file=/var/log/$NAME/$NAME.log --log-level=2"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
