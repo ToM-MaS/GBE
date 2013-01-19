@@ -69,6 +69,9 @@ echo "default-time-zone='+00:00'" >> /etc/mysql/conf.d/gemeinschaft.cnf
 echo -e "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
 
+echo -e "GBE: Compile OpenVM kernel modules ...\n"
+module-assistant auto-install open-vm -i
+
 echo -e "GBE: Installing nodejs ...\n"
 cd /usr/local/src
 wget -c -t 5 --waitretry=3 http://nodejs.org/dist/node-${NODEJS_VERSION}.tar.gz

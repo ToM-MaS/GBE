@@ -16,4 +16,5 @@ openssh-server postfix dnsmasq ntp memcached avahi-daemon
 shorewall shorewall6 iptables apg haveged
 
 # virtualization support
-open-vm-tools open-vm-source
+open-vm-tools
+open-vm-source autopoint debhelper diffstat gettext groff-base html2text intltool-debian libmail-sendmail-perl libsys-hostname-long-perl libunistring0 man-db module-assistant po-debconf quilt
