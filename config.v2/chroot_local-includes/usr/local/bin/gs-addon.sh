@@ -9,8 +9,7 @@
 
 # General settings
 [ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
-[[ x"${GS_DIR}" == x"" ]] && exit 1
-GS_SYSADDON_DIR="/usr/local/lib/gs-addons"
+[[ x"${GS_SYSADDON_DIR}" == x"" ]] && exit 1
 
 # Enforce root rights
 #

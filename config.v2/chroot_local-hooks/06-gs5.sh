@@ -281,8 +281,10 @@ echo "GS_MYSQL_DB=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_PASSWORD_FILE=\"/var/lib/gemeinschaft/.gs_mysql_password\""  >> /etc/gemeinschaft/system.conf
 echo "GS_GIT_URL=\"${GS_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_ENFORCE_SECURITY_ON_BOOTUP=true" >> /etc/gemeinschaft/system.conf
+echo "GS_SYSADDON_DIR=\"/usr/local/lib/gs-addons\"" >> /etc/gemeinschaft/system.conf
 echo "GS_ENV=\"${GS_ENV}\"" >> /etc/gemeinschaft/system.conf
 echo "RAILS_ENV=$GS_ENV" >> /etc/gemeinschaft/system.conf
+
 rm -f /etc/gemeinschaft_branch /etc/gdfdl_build
 
 # set GS variables as global ENV variables
