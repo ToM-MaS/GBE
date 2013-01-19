@@ -49,7 +49,8 @@ case "$1" in
 	--factory-reset)
 	MODE="factory-reset"
 	while true; do
-    	read -p "ATTENTION! This will do a factory reset, all your data will be LOST! Continue? (y/n) : " yn
+    	echo "ATTENTION! This will do a factory reset, all your data will be LOST!"
+    	read -p "Continue? (y/n) : " yn
 
     	case $yn in
         	Y|y )
