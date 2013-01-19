@@ -11,21 +11,23 @@
 [ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 [[ x"${GS_DIR}" == x"" ]] && exit 1
 
-GS_ADDON_NAME="`basename $0`"
-GS_ADDON_DESCRIPTION="Linux Kernel 3.2 for Debian Squeeze (from Squeeze-Backports)"
+GS_SYSADDON_NAME="`basename $0`"
+GS_SYSADDON_DESCRIPTION="Linux Kernel 3.2 for Debian Squeeze (from Squeeze-Backports)"
 
 case "$1" in
 	install)
 		echo -e "Upgrading Kernel to version 3.1 ...\n"
 		apt-get -y --force-yes -t squeeze-backports install linux-image-3.2.0-0.bpo.4-686-pae firmware-linux-free
+		echo -e "\n\nPLEASE REBOOT YOUR SYSTEM TO ACTIVATE THE NEW KERNEL !\n"
 		;;
 
 	remove)
 		echo -e "Removing Kernel version 3.2 ...\n"
 		apt-get -y --force-yes -t squeeze-backports purge linux-image-3.2.0-0.bpo.4-686-pae firmware-linux-free
+		echo -e "\n\nPLEASE REBOOT YOUR SYSTEM TO ACTIVATE THE OLD KERNEL !\n"
 		;;
 	
 	*)
-		echo -e "${GS_ADDON_NAME}\n\t${GS_ADDON_DESCRIPTION}"
+		echo -e "${GS_SYSADDON_NAME}\n\t${GS_SYSADDON_DESCRIPTION}"
 		;;
 esac
