@@ -70,7 +70,8 @@ echo -e "GBE: Enable bootlog ...\n"
 sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
 
 echo -e "GBE: Compile OpenVM kernel modules ...\n"
-module-assistant auto-install open-vm -i
+KERNEL_VERSION="`find /lib/modules -maxdepth 1 -type d -name "2.*"`"
+module-assistant auto-install open-vm -i -l `basename ${KERNEL_VERSION}`
 
 echo -e "GBE: Installing nodejs ...\n"
 cd /usr/local/src
