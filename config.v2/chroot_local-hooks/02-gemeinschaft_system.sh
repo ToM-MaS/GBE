@@ -72,6 +72,7 @@ sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
 echo -e "GBE: Compile OpenVM kernel modules ...\n"
 KERNEL_VERSION="`find /lib/modules -maxdepth 1 -type d -name "2.*"`"
 module-assistant auto-install open-vm -i -l `basename ${KERNEL_VERSION}`
+rm -rf /usr/src/open-vm*
 
 echo -e "GBE: Installing nodejs ...\n"
 cd /usr/local/src
