@@ -123,36 +123,40 @@ case "${GS_SYSADDON_ACTION}" in
 		fi
 		;;
 
-	list)
-		[ -d "${GS_SYSADDON_DIR}/${OS_CODENAME}" ] && LIST="`find "${GS_SYSADDON_DIR}/${OS_CODENAME}" -maxdepth 1 -type f ! -iname ".*"`"
+	list|search)
+		[ x"${GS_SYSADDON_NAME}" != x"" ] && SEARCHSTRING="*${GS_SYSADDON_NAME}*" || SEARCHSTRING="*"
+
+		[ -d "${GS_SYSADDON_DIR}/${OS_CODENAME}" ] && LIST="`find "${GS_SYSADDON_DIR}/${OS_CODENAME}" -maxdepth 1 -type f -name "${SEARCHSTRING}" ! -iname ".*"`"
+		echo -e "\nADD-ONS FOR ${OS_DISTRIBUTION^^} ${OS_CODENAME^^}"
 		if [ x"${LIST}" != x"" ]; then
-			echo -e "\nADD-ONS FOR ${OS_DISTRIBUTION^^} ${OS_CODENAME^^}"
-			
 			for GS_SYSADDON_SCRIPT in ${LIST}; do
 				GS_SYSADDON_SCRIPT_BASE="`basename "${GS_SYSADDON_SCRIPT}"`"
 				[ -f "${GS_SYSADDON_DIR}/.status" ] && GS_SYSADDON_STATUS="`sed -n "/^${GS_SYSADDON_SCRIPT_BASE} .*$/p" "${GS_SYSADDON_DIR}/.status"`" || GS_SYSADDON_STATUS=""
 				[ x"${GS_SYSADDON_STATUS}" == x"" ] && echo -n "  " || echo -n "* "
 				bash "${GS_SYSADDON_SCRIPT}" info
 			done
+		else
+			echo "  No matching add-ons found."
 		fi
 
-		[ -d "${GS_SYSADDON_DIR}" ] && LIST="`find "${GS_SYSADDON_DIR}" -maxdepth 1 -type f ! -iname ".*"`"
+		[ -d "${GS_SYSADDON_DIR}" ] && LIST="`find "${GS_SYSADDON_DIR}" -maxdepth 1 -type f -name "${SEARCHSTRING}" ! -iname ".*"`"
+		echo -e "\nGENERAL ADD-ONS"
 		if [ x"${LIST}" != x"" ]; then
-			echo -e "\nGENERAL ADD-ONS"
-
 			for GS_SYSADDON_SCRIPT in ${LIST}; do
 				GS_SYSADDON_SCRIPT_BASE="`basename "${GS_SYSADDON_SCRIPT}"`"
 				[ -f "${GS_SYSADDON_DIR}/.status" ] && GS_SYSADDON_STATUS="`sed -n "/^${GS_SYSADDON_SCRIPT_BASE} .*$/p" "${GS_SYSADDON_DIR}/.status"`" || GS_SYSADDON_STATUS=""
 				[ x"${GS_SYSADDON_STATUS}" == x"" ] && echo -n "  " || echo -n "* "
 				bash "${GS_SYSADDON_SCRIPT}" info
 			done
+		else
+			echo "  No matching add-ons found."
 		fi
 
 		echo -e "\nUse '`basename "$0"` install <ADD-ON NAME>' to install.\nUse '`basename "$0"` remove <ADD-ON NAME>' to uninstall.\n"
 		;;
 	
 	help|-h|--help|*)
-		echo -e "\nUsage: $0 [ install | remove | list | status ] <ADD-ON NAME>\n"
+		echo -e "\nUsage: $0 [ install | remove | list | search | status ] <ADD-ON NAME>\n"
 		exit 1
 		;;
 esac
