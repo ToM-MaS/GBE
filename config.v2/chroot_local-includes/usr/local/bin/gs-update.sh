@@ -253,9 +253,8 @@ if [[ "${MODE}" == "update" ]]; then
 		[[ `service mysql status` != 0 ]] && service mysql start
 
 		echo "** Rename and backup old files in \"${GS_DIR}\""
-		rm -rf ${GS_DIR}.bak
-		mv ${GS_DIR} ${GS_DIR}.bak
-		mv ${GS_UPDATE_DIR} ${GS_DIR}
+		[ ! -d "${GS_DIR} ${GS_DIR}.${GS_VERSION}" ] && mv "${GS_DIR}" "${GS_DIR}.${GS_VERSION} "|| rm -rf "${GS_DIR}"
+		cp -r ${GS_UPDATE_DIR} ${GS_DIR}
 	else
 		echo "ERROR: No new version found in \"${GS_UPDATE_DIR}\" - aborting ..."
 		exit 1
@@ -306,4 +305,12 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	#
 	echo "** Precompile GS assets"
 	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=$RAILS_ENV bundle exec rake assets:precompile --trace"
+fi
+
+# Finalize update
+#
+if [[ "${MODE}" == "update" ]]; then
+	# Remove update files after successful update run
+	# otherwise keep them to be installed within next iteration of boot sequence
+	rm -rf "${GS_UPDATE_DIR}"
 fi
