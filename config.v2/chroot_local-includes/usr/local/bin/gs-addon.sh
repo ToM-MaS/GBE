@@ -182,7 +182,7 @@ case "${GS_SYSADDON_ACTION}" in
 		;;
 	
 	help|-h|--help|*)
-		echo -e "\nUsage: $0 [ install | remove | list | search | status ] <ADD-ON NAME>\n"
+		echo -e "\nUsage: `basename $0` [ install | remove | list | search | status ] <ADD-ON NAME>\n"
 		exit 1
 		;;
 esac
