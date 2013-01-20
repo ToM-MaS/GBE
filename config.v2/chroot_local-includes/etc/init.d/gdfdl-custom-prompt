@@ -96,8 +96,8 @@ if [[ ${LIVE} == true ]]
 	then
 	echo "***     DEMO LIVE SYSTEM - ALL CHANGES WILL BE LOST AFTER A REBOOT!" >> /etc/issue
 	echo "***" >> /etc/issue
-	echo "***     LOGIN   : gsmaster" >> /etc/issue
-    echo "***     PASSWORD: `cat /home/gsmaster/.password`" >> /etc/issue
+	echo "***     LOGIN        : gsmaster" >> /etc/issue
+    echo "***     PASSWORD     : `cat /home/gsmaster/.password`" >> /etc/issue
 else
 	echo "***" >> /etc/issue
 	echo "***" >> /etc/issue
