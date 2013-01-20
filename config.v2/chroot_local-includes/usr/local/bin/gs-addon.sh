@@ -72,6 +72,10 @@ case "${GS_SYSADDON_ACTION}" in
 				if [ "${GS_SYSADDON_ACTION}" == "install" ]; then
 					if [ x"${GS_SYSADDON_STATUS}" == x"" ]; then
 						echo -e "\nStarting installation of add-on '${GS_SYSADDON_NAME}' ...\n"
+						export OS_DISTRIBUTION
+						export OS_VERSION
+						export OS_VERSION_MAJOR
+						export OS_CODENAME
 						bash ${GS_SYSADDON_SCRIPT} install
 						if [ $? != 0 ]; then
 							echo -e "\n\n***    ------------------------------------------------------------------"
@@ -94,6 +98,10 @@ case "${GS_SYSADDON_ACTION}" in
 				elif [ "${GS_SYSADDON_ACTION}" == "remove" ]; then
 					if [ x"${GS_SYSADDON_STATUS}" != x"" ]; then
 						echo -e "\nRemoving add-on '${GS_SYSADDON_NAME}' ...\n"
+						export OS_DISTRIBUTION
+						export OS_VERSION
+						export OS_VERSION_MAJOR
+						export OS_CODENAME
 						bash ${GS_SYSADDON_SCRIPT} remove
 						if [ $? != 0 ]; then
 							echo -e "\n\n***    ------------------------------------------------------------------"
