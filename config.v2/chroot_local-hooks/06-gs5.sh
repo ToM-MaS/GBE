@@ -201,12 +201,8 @@ Timeout 100
 	PassengerUser  ${GS_USER}
 	PassengerGroup ${GS_GROUP}
 
-	# http://blog.phusion.nl/2010/01/08/phusion-passenger-2-2-9-released/
-	# http://blog.phusion.nl/2010/07/29/the-road-to-passenger-3-technology-preview-4-adding-new-features-and-removing-old-limitations/
 	RailsBaseURI /
-	#RackBaseURI  /
 	RailsEnv development
-	#RackEnv  development
 
 	<Directory ${GS_DIR_NORMALIZED}/public>
 		AllowOverride all

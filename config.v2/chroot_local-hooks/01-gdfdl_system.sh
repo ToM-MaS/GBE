@@ -35,6 +35,3 @@ echo "en_US ISO-8859-1" >> /etc/locale.gen
 echo "en_US.ISO-8859-15 ISO-8859-15" >> /etc/locale.gen
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen 2>&1 >/dev/null
-
-echo -e "GDFDL: Correcting file permissions ...\n"
-chmod 0440 /etc/sudoers.d/*
