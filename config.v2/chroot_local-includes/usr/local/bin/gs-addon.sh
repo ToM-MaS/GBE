@@ -42,8 +42,12 @@ fi
 
 # Run switcher
 #
-echo -e "\n GEMEINSCHAFT SYSTEM ADD-ON MANAGEMENT"
-echo -e "---------------------------------------"
+echo -e "***    ------------------------------------------------------------------
+***     GEMEINSCHAFT SYSTEM ADD-ON MANAGEMENT
+***     Current version: ${GS_VERSION}
+***     Branch: ${GS_BRANCH}
+***     Base System Build: ${GS_BUILDNAME}
+***    ------------------------------------------------------------------"
 
 GS_SYSADDON_ACTION="$1"
 GS_SYSADDON_NAME="$2"
@@ -70,14 +74,20 @@ case "${GS_SYSADDON_ACTION}" in
 						echo -e "\nStarting installation of add-on '${GS_SYSADDON_NAME}' ...\n"
 						bash ${GS_SYSADDON_SCRIPT} install
 						if [ $? != 0 ]; then
-							echo -e "\n\nERROR: Installation of add-on '${GS_SYSADDON_NAME}' FAILED!\n"
+							echo -e "\n\n***    ------------------------------------------------------------------"
+							echo -e "***     ERROR: Installation of add-on '${GS_SYSADDON_NAME}' FAILED!"
+							echo -e "***    ------------------------------------------------------------------\n\n"
 							exit 1
 						else
-							echo -e "\n\nAdd-on '${GS_SYSADDON_NAME}' was INSTALLED SUCCESSFULLY!\n"
+							echo -e "\n\n***    ------------------------------------------------------------------"
+							echo -e "***     Add-on '${GS_SYSADDON_NAME}' was INSTALLED SUCCESSFULLY!"
+							echo -e "***    ------------------------------------------------------------------\n\n"
 							echo "${GS_SYSADDON_NAME} `date +'%Y-%m-%d_%T'`" >> "${GS_SYSADDON_DIR}/.status"
 						fi
 					else
-						echo -e "\nAdd-on '${GS_SYSADDON_NAME}' was already installed on ${GS_SYSADDON_STATUS#* }\n"
+						echo -e "\n\n***    ------------------------------------------------------------------"
+						echo -e "***     Add-on '${GS_SYSADDON_NAME}' was already installed on ${GS_SYSADDON_STATUS#* }."
+						echo -e "***    ------------------------------------------------------------------\n\n"
 					fi
 
 				# Process removal
@@ -86,29 +96,42 @@ case "${GS_SYSADDON_ACTION}" in
 						echo -e "\nRemoving add-on '${GS_SYSADDON_NAME}' ...\n"
 						bash ${GS_SYSADDON_SCRIPT} remove
 						if [ $? != 0 ]; then
-							echo -e "\n\nERROR: Removal of add-on '${GS_SYSADDON_NAME}' FAILED!\n"
+							echo -e "\n\n***    ------------------------------------------------------------------"
+							echo -e "***     ERROR: Removal of add-on '${GS_SYSADDON_NAME}' FAILED!"
+							echo -e "***    ------------------------------------------------------------------\n\n"
 							exit 1
 						else
-							echo -e "\n\nAdd-on '${GS_SYSADDON_NAME}' was REMOVED SUCCESSFULLY!\n"
+							echo -e "\n\n***    ------------------------------------------------------------------"
+							echo -e "***     Add-on '${GS_SYSADDON_NAME}' was REMOVED SUCCESSFULLY!"
+							echo -e "***    ------------------------------------------------------------------\n\n"
 							sed -i "/^${GS_SYSADDON_NAME} .*$/d" "${GS_SYSADDON_DIR}/.status"
 						fi
 					else
-						echo -e "\nAdd-on '${GS_SYSADDON_NAME}' is currently not installed.\n"
+						echo -e "\n\n***    ------------------------------------------------------------------"
+						echo -e "***     Add-on '${GS_SYSADDON_NAME}' is currently not installed."
+						echo -e "***    ------------------------------------------------------------------\n\n"
 					fi
 
 				# This should actually not happen
 				else
-					echo "FATAL ERROR: Logic error."
+					echo -e "\n\n***    ------------------------------------------------------------------"
+					echo -e "***     FATAL ERROR: Logic error."
+					echo -e "***    ------------------------------------------------------------------\n\n"
 					exit 3
 				fi
 
 			# In case we could not find a declared script for the specified add-on
 			else
-				echo -e "\n\nThe specified system add-on '${GS_SYSADDON_NAME}' does not exist or is not available for your system.\n"
+				echo -e "\n\n***    ------------------------------------------------------------------"
+				echo -e "***     The specified system add-on '${GS_SYSADDON_NAME}'"
+				echo -e "***     does not exist or is not available for your system."
+				echo -e "***    ------------------------------------------------------------------\n\n"
 				exit 1
 			fi
 		else
-			echo -e "\n\nFATAL ERROR: ${GS_SYSADDON_DIR} not found.\n"
+			echo -e "\n\n***    ------------------------------------------------------------------"
+			echo -e "***     FATAL ERROR: ${GS_SYSADDON_DIR} not found."
+			echo -e "***    ------------------------------------------------------------------\n\n"
 			exit 3
 		fi
 		;;
@@ -152,7 +175,10 @@ case "${GS_SYSADDON_ACTION}" in
 			echo "  No matching add-ons found."
 		fi
 
-		echo -e "\nUse '`basename "$0"` install <ADD-ON NAME>' to install.\nUse '`basename "$0"` remove <ADD-ON NAME>' to uninstall.\n"
+		echo -e "\n***    ------------------------------------------------------------------"
+		echo -e "***     Use '`basename "$0"` install <ADD-ON NAME>' to install."
+		echo -e "***     Use '`basename "$0"` remove <ADD-ON NAME>' to uninstall."
+		echo -e "***    ------------------------------------------------------------------\n\n"
 		;;
 	
 	help|-h|--help|*)
