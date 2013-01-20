@@ -49,7 +49,8 @@ case "$1" in
 	--factory-reset)
 	MODE="factory-reset"
 	while true; do
-    	read -p "ATTENTION! This will do a factory reset, all your data will be LOST! Continue? (y/n) : " yn
+    	echo "ATTENTION! This will do a factory reset, all your data will be LOST!"
+    	read -p "Continue? (y/n) : " yn
 
     	case $yn in
         	Y|y )
@@ -160,16 +161,23 @@ esac
 #
 if [[ "${MODE}" == "update-init" ]]; then
 
-	# Clone the git repository
-	#
+	echo -e "Preparing update of Gemeinschaft ...\n"
+
+	# Remove any old update files
 	[[ -d "${GS_UPDATE_DIR}" ]] && rm -rf "${GS_UPDATE_DIR}"
 	[[ -d "${GS_UPDATE_DIR}.tmp" ]] && rm -rf "${GS_UPDATE_DIR}.tmp"
+	
+	# Make a copy of current files
+	cp -r "${GS_DIR}" "${GS_UPDATE_DIR}.tmp"
+	cd "${GS_UPDATE_DIR}.tmp"
 
 	# use master branch if no explicit branch was given and GBE branch is master
 	[[ x"${GS_BRANCH}" == x"" && x"${GDFDL_BRANCH}" == x"develop" ]] && GS_BRANCH="develop"
 	[[ x"${GS_BRANCH}" == x"" && x"${GDFDL_BRANCH}" != x"develop" ]] && GS_BRANCH="master"
 
-	echo -e "Preparing update of Gemeinschaft ...\n"
+	# Add Git remote data to pull from it
+	git reset --hard
+	git remote add origin "${GS_GIT_URL}"
 
 	# Setup Github user credentials for login
 	#
@@ -186,59 +194,62 @@ password ${GS_GIT_PASSWORD}
 	c=1
 	while [[ $c -le 5 ]]
 	do
-		git clone -b "${GS_BRANCH}" "${GS_GIT_URL}" "${GS_UPDATE_DIR}.tmp" 2>&1
-		if [ "$?" -eq "0" ]
+		git remote update 2>&1
+		if [ "$?" = "0" ]
 			then
-			mv "${GS_UPDATE_DIR}.tmp" "${GS_UPDATE_DIR}"
 			break;
 		else
 			[[ $c -eq 5 ]] && exit 1
 			(( c++ ))
-			rm -rf "${GS_UPDATE_DIR}.tmp"
+			echo "$c. try in 3 seconds ..."
+			sleep 3
+		fi
+	done
+
+	c=1
+	while [[ $c -le 5 ]]
+	do
+		git pull origin "${GS_BRANCH}" 2>&1
+		if [ "$?" -eq "0" ]
+			then
+			break;
+		else
+			[[ $c -eq 5 ]] && exit 1
+			(( c++ ))
 			echo "$c. try in 3 seconds ..."
 			sleep 3
 		fi
 	done
 	set -e
 
-	if [[ -f "${GS_UPDATE_DIR}/config/application.rb" ]];
-		then
-		rm -rf ~/.netrc
-		
-		# Make sure we checkout the latest tagged version in case we are in the master branch
-		if [ "${GS_BRANCH}" == "master" ]; then
-			cd "${GS_UPDATE_DIR}"
-			git checkout `git tag -l | tail -n1`
-			cd -
-		fi
-		
-		# Check version compatibility, allow auto-update only for minor versions
-		GS_GIT_VERSION="`cd ${GS_UPDATE_DIR}; git tag --contains HEAD`"
-		GS_REVISION="`cd ${GS_DIR}; git rev-parse HEAD`"
-		GS_GIT_REVISION="`cd ${GS_UPDATE_DIR}; git rev-parse HEAD`"
-		if [[ "${GS_GIT_REVISION}" == "${GS_REVISION}" ]]; then
-			echo -e "\n\n***    ------------------------------------------------------------------"
-			echo -e "***     You already have installed the latest version, no update needed."
-			echo -e "***    ------------------------------------------------------------------\n\n"
-			rm -rf "${GS_UPDATE_DIR}"*
-			exit 0
-		elif [[ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" || x"${GS_GIT_VERSION}" == x"" ]]; then
-			[ "${GS_BRANCH}" != "master" ] && GS_GIT_VERSION="from ${GS_BRANCH} branch"
-			echo -e "\n\n***    ------------------------------------------------------------------"
-			echo -e "***     Scheduled update to new version ${GS_GIT_VERSION}.\n***     Please reboot the system to start the update process."
-			echo -e "***    ------------------------------------------------------------------\n\n"
-		else
-			echo -e "\n\n***    ------------------------------------------------------------------"
-			echo -e "***     Update to next major version ${GS_GIT_VERSION} is not supported via this script.\n***     Please use backup & restore via web interface."
-			echo -e "***    ------------------------------------------------------------------\n\n"
-			rm -rf "${GS_UPDATE_DIR}"*
-			exit 1
-		fi
-	else
-		echo -e "\n\nCould not download current version from repository, ABORTING ...\n\n"
+	rm -rf ~/.netrc
+
+	# Make sure we checkout the latest tagged version in case we are in the master branch, otherwise set HEAD to the latest revision of GS_BRANCH
+	[ "${GS_BRANCH}" == "master" ] && git checkout "`git tag -l | tail -n1`" || git checkout "${GS_BRANCH}"
+
+	# Check version compatibility, allow auto-update only for minor versions
+	GS_GIT_VERSION="`git tag --contains HEAD`"
+	GS_REVISION="`git --git-dir="${GS_DIR}/.git" rev-parse HEAD`"
+	GS_GIT_REVISION="`git rev-parse HEAD`"
+	if [[ "${GS_GIT_REVISION}" == "${GS_REVISION}" ]]; then
 		rm -rf "${GS_UPDATE_DIR}"*
+		echo -e "\n\n***    ------------------------------------------------------------------"
+		echo -e "***     You already have installed the latest version, no update needed."
+		echo -e "***    ------------------------------------------------------------------\n\n"
+		exit 0
+	elif [[ "${GS_GIT_VERSION:0:3}" == "${GS_VERSION:0:3}" || x"${GS_GIT_VERSION}" == x"" ]]; then
+		[ "${GS_BRANCH}" != "master" ] && GS_GIT_VERSION="from ${GS_BRANCH} branch"
+		mv "${GS_UPDATE_DIR}.tmp" "${GS_UPDATE_DIR}"
+		echo -e "\n\n***    ------------------------------------------------------------------"
+		echo -e "***     Scheduled update to new version ${GS_GIT_VERSION}.\n***     Please reboot the system to start the update process."
+		echo -e "***    ------------------------------------------------------------------\n\n"
+	else
+		rm -rf "${GS_UPDATE_DIR}"*
+		echo -e "\n\n***    ------------------------------------------------------------------"
+		echo -e "***     Update to next major version ${GS_GIT_VERSION} is not supported via this script.\n***     Please use backup & restore via web interface."
+		echo -e "***    ------------------------------------------------------------------\n\n"
 		exit 1
-    fi
+	fi
 fi
 
 # Initialize update
@@ -252,9 +263,8 @@ if [[ "${MODE}" == "update" ]]; then
 		[[ `service mysql status` != 0 ]] && service mysql start
 
 		echo "** Rename and backup old files in \"${GS_DIR}\""
-		rm -rf ${GS_DIR}.bak
-		mv ${GS_DIR} ${GS_DIR}.bak
-		mv ${GS_UPDATE_DIR} ${GS_DIR}
+		[ ! -d "${GS_DIR} ${GS_DIR}.${GS_VERSION}" ] && mv "${GS_DIR}" "${GS_DIR}.${GS_VERSION} "|| rm -rf "${GS_DIR}"
+		cp -r ${GS_UPDATE_DIR} ${GS_DIR}
 	else
 		echo "ERROR: No new version found in \"${GS_UPDATE_DIR}\" - aborting ..."
 		exit 1
@@ -305,4 +315,12 @@ if [[ "${MODE}" == "init" || "${MODE}" == "update" ]]; then
 	#
 	echo "** Precompile GS assets"
 	su - ${GS_USER} -c "cd \"${GS_DIR_NORMALIZED}\"; RAILS_ENV=$RAILS_ENV bundle exec rake assets:precompile --trace"
+fi
+
+# Finalize update
+#
+if [[ "${MODE}" == "update" ]]; then
+	# Remove update files after successful update run
+	# otherwise keep them to be installed within next iteration of boot sequence
+	rm -rf "${GS_UPDATE_DIR}"
 fi
