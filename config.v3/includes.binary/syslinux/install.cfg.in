@@ -1,10 +1,10 @@
-#label install
-#	menu label ^Install
-#	text help
-# Start installation to local drive
-#	endtext
-#	kernel @KERNEL_GUI@
-#	append initrd=@INITRD_GUI@ quiet @LB_BOOTAPPEND_INSTALL_GUI@
+label install
+	menu label ^Install
+	text help
+ Start installation to local drive
+	endtext
+	kernel @KERNEL_GUI@
+	append initrd=@INITRD_GUI@ quiet @LB_BOOTAPPEND_INSTALL_GUI@
 
 label install-text
 	menu label Install (^Text mode)

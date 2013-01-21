@@ -66,14 +66,6 @@ echo -e "GBE: Setup MySQL default time zone ...\n"
 echo "[mysqld]" > /etc/mysql/conf.d/gemeinschaft.cnf
 echo "default-time-zone='+00:00'" >> /etc/mysql/conf.d/gemeinschaft.cnf
 
-echo -e "GBE: Enable bootlog ...\n"
-sed -i 's/BOOTLOGD_ENABLE=No/BOOTLOGD_ENABLE=yes/' /etc/default/bootlogd
-
-echo -e "GBE: Compile OpenVM kernel modules ...\n"
-KERNEL_VERSION="`find /lib/modules -maxdepth 1 -type d -name "2.*"`"
-module-assistant auto-install open-vm -i -l `basename ${KERNEL_VERSION}`
-rm -rf /usr/src/open-vm*
-
 echo -e "GBE: Installing nodejs ...\n"
 cd /usr/local/src
 wget -c -t 5 --waitretry=3 http://nodejs.org/dist/node-${NODEJS_VERSION}.tar.gz

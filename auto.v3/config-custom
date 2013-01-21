@@ -9,25 +9,18 @@
 
 lb config noauto \
 	--apt apt \
-	--apt-recommends disabled \
+	--apt-indices false \
 	--architecture i386 \
 	--archive-areas "main contrib" \
-	--bootstrap-flavour minimal \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
-	--distribution squeeze \
 	--iso-application "Gemeinschaft 5" \
 	--iso-preparer "Gemeinschaft Build Environment" \
 	--iso-publisher "AMOOMA GmbH; http://amooma.de/" \
 	--iso-volume "GS5" \
-	--language en \
 	--linux-flavours 686 \
 	--memtest none \
 	--mode debian \
-	--packages-lists minimal \
 	--root-command sudo \
-	--syslinux-splash "config/binary_syslinux/splash.png" \
-	--syslinux-timeout 0 \
 	--win32-loader disabled \
-	--includes none \
 	"${@}"
