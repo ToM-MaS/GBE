@@ -177,7 +177,7 @@ if [[ "${MODE}" == "update-init" ]]; then
 
 	# Add Git remote data to pull from it
 	git reset --hard
-	git remote add origin "${GS_GIT_URL}"
+	git remote add -t "${GS_BRANCH}" origin "${GS_GIT_URL}"
 
 	# Setup Github user credentials for login
 	#
