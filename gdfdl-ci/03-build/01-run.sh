@@ -3,7 +3,7 @@
 # Gemeinschaft 5
 # GBE installer for CI
 #
-# Copyright (c) 2012, Julian Pawlowski <jp@jps-networks.eu>
+# Copyright (c) 2012-2013, Julian Pawlowski <jp@jps-networks.eu>
 # See LICENSE.GBE file for details.
 #
 
@@ -25,10 +25,10 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	SRC_CACHE="${GDFDL_BASEDIR}/.ci/src-cache"
 	SRC_CACHE_BIN="${GDFDL_BASEDIR}/.ci/src-cache-bin"
 
-	[ -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src" ] && "${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
-	[ -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt" ] && "${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/opt"
-	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/usr/local/src"
-	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/chroot_local-includes/opt"
+	[ -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/usr/local/src" ] && "${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/includes.chroot/usr/local/src"
+	[ -d "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/opt" ] && "${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/includes.chroot/opt"
+	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/includes.chroot/usr/local/src"
+	"${GDFDL_ENTRYWRAPPER}" chroot mkdir -p -m 777 "${GDFDL_DIR}/config/includes.chroot/opt"
 
 	# echo "GBE: Caching 3rd party dependencies ..."
 	# [ ! -d "${SRC_CACHE}" ] && mkdir -p "${SRC_CACHE}"
@@ -125,37 +125,37 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	if [[ -d "${SRC_CACHE}" ]]
 		then
 		echo "GBE: Copying 3rd party source depdendencies into their places ..."
-		cp -rpf "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+		cp -rpf "${SRC_CACHE}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/usr/local/src/"
 	fi
 
 	if [[ -d "${SRC_CACHE_BIN}" ]]
 		then
 		echo "GBE: Copying 3rd party pre-compiled depdendencies into their places ..."
-		cp -rpf "${SRC_CACHE_BIN}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+		cp -rpf "${SRC_CACHE_BIN}/"* "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/usr/local/src/"
 	fi
 
 	echo -n "GBE: Copying latest upstream project repositories into their places ... "
 	if [ -d "${GDFDL_BASEDIR}/.ci/freeswitch" ]
 		then
 		echo -n "FreeSWITCH "
-		cp -rpf "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/usr/local/src/"
+		cp -rpf "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/usr/local/src/"
 	fi
 
 	if [ -d "${GDFDL_BASEDIR}/.ci/GS5" ]
 		then
 		echo -n "GS5 "
-		cp -rpf "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/opt/"
+		cp -rpf "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/opt/"
 	fi
 
 	echo "... done"
 	
 	echo "GBE: Updating GS branch information ..."
-	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 777 "${GDFDL_DIR}/config/chroot_local-includes/etc"
-	echo "${GIT_BRANCH}" > "${INSTALLBASEDIR}${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 755 "${GDFDL_DIR}/config/chroot_local-includes/etc"
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 644 "${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
-	"${GDFDL_ENTRYWRAPPER}" chroot chown -f root.root "${GDFDL_DIR}/config/chroot_local-includes/etc/gemeinschaft_branch"
+	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/includes.chroot/etc/gemeinschaft_branch"
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 777 "${GDFDL_DIR}/config/includes.chroot/etc"
+	echo "${GIT_BRANCH}" > "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/gemeinschaft_branch"
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 755 "${GDFDL_DIR}/config/includes.chroot/etc"
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 644 "${GDFDL_DIR}/config/includes.chroot/etc/gemeinschaft_branch"
+	"${GDFDL_ENTRYWRAPPER}" chroot chown -f root.root "${GDFDL_DIR}/config/includes.chroot/etc/gemeinschaft_branch"
 else
 	echo "ERROR: No existing build environment installation found. Run installer first."
 	exit 1

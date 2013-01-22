@@ -3,7 +3,7 @@
 # GDFDL - A Development Framework for Debian live-build
 # Standard Linux Settings
 #
-# Copyright (c) 2012, Julian Pawlowski <jp@jps-networks.eu>
+# Copyright (c) 2012-2013, Julian Pawlowski <jp@jps-networks.eu>
 # See LICENSE.GDFDL file for details.
 #
 
@@ -35,6 +35,3 @@ echo "en_US ISO-8859-1" >> /etc/locale.gen
 echo "en_US.ISO-8859-15 ISO-8859-15" >> /etc/locale.gen
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen 2>&1 >/dev/null
-
-echo -e "GDFDL: Correcting file permissions ...\n"
-chmod 0440 /etc/sudoers.d/*
