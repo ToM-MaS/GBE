@@ -60,7 +60,8 @@ case "$1" in
 				[ ! -d "${GS_UPDATE_DIR}" ] && cp -pr "${GS_DIR}" "${GS_UPDATE_DIR}"
 
 				# Do hard reset of repo to ensure correct files
-				git --git-dir="${GS_UPDATE_DIR}/.git" reset --hard
+				cd "${GS_UPDATE_DIR}"
+				git clean -fdx && git reset --hard HEAD
 
 				# stop services
 				[[ `service mon_ami status` ]] && service mon_ami stop
@@ -176,7 +177,7 @@ if [[ "${MODE}" == "update-init" ]]; then
 	[[ x"${GS_BRANCH}" == x"" && x"${GDFDL_BRANCH}" != x"develop" ]] && GS_BRANCH="master"
 
 	# Add Git remote data to pull from it
-	git reset --hard
+	git clean -fdx && git reset --hard HEAD
 	git remote add -t "${GS_BRANCH}" origin "${GS_GIT_URL}"
 
 	# Setup Github user credentials for login
