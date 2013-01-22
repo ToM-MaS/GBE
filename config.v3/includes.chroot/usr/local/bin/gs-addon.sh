@@ -157,20 +157,21 @@ case "${GS_SYSADDON_ACTION}" in
 	list|search)
 		[ x"${GS_SYSADDON_NAME}" != x"" ] && SEARCHSTRING="*${GS_SYSADDON_NAME}*" || SEARCHSTRING="*"
 
-		[ -d "${GS_SYSADDON_DIR}/${OS_CODENAME}" ] && LIST="`find "${GS_SYSADDON_DIR}/${OS_CODENAME}" -maxdepth 1 -type f -name "${SEARCHSTRING}" ! -iname ".*"`"
-		echo -e "\nADD-ONS FOR ${OS_DISTRIBUTION^^} ${OS_CODENAME^^}"
+		[ -d "${GS_SYSADDON_DIR}/${OS_CODENAME}" ] && LIST="`find "${GS_SYSADDON_DIR}/${OS_CODENAME}" -maxdepth 1 -type f -name "${SEARCHSTRING}" ! -iname ".*" | sort`"
 		if [ x"${LIST}" != x"" ]; then
+			echo -e "\nADD-ONS FOR ${OS_DISTRIBUTION^^} ${OS_CODENAME^^}"
 			for GS_SYSADDON_SCRIPT in ${LIST}; do
 				GS_SYSADDON_SCRIPT_BASE="`basename "${GS_SYSADDON_SCRIPT}"`"
 				[ -f "${GS_SYSADDON_DIR}/.status" ] && GS_SYSADDON_STATUS="`sed -n "/^${GS_SYSADDON_SCRIPT_BASE} .*$/p" "${GS_SYSADDON_DIR}/.status"`" || GS_SYSADDON_STATUS=""
 				[ x"${GS_SYSADDON_STATUS}" == x"" ] && echo -n "  " || echo -n "* "
 				bash "${GS_SYSADDON_SCRIPT}" info
 			done
-		else
+		elif [ x"${GS_SYSADDON_NAME}" != x"" ]; then
+			echo -e "\nADD-ONS FOR ${OS_DISTRIBUTION^^} ${OS_CODENAME^^}"
 			echo "  No matching add-ons found."
 		fi
 
-		[ -d "${GS_SYSADDON_DIR}" ] && LIST="`find "${GS_SYSADDON_DIR}" -maxdepth 1 -type f -name "${SEARCHSTRING}" ! -iname ".*"`"
+		[ -d "${GS_SYSADDON_DIR}" ] && LIST="`find "${GS_SYSADDON_DIR}" -maxdepth 1 -type f -name "${SEARCHSTRING}" ! -iname ".*" | sort`"
 		echo -e "\nGENERAL ADD-ONS"
 		if [ x"${LIST}" != x"" ]; then
 			for GS_SYSADDON_SCRIPT in ${LIST}; do
