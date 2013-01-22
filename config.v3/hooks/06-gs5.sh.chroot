@@ -67,7 +67,9 @@ else
 
 	#FIXME lazy workaround for Jenkins who loses our branch names ...
 	cd "${GS_DIR}"
+	set +e
 	git checkout -b "${GS_BRANCH}"
+	set -e
 	cd -
 fi
 
