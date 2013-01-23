@@ -1,3 +1,2 @@
-fw6 firewall
-net6 ipv6
-
+fw firewall
+net ipv6

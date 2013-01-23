@@ -1,2 +1,1 @@
-net6 eth0 detect dhcp,tcpflags
-
+net eth0 detect dhcp,tcpflags
