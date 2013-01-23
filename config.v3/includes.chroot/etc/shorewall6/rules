@@ -77,8 +77,8 @@ ACCEPT all $FW udp sip-tls
 #ACCEPT all $FW tcp 8021
 
 # This should not be necessary as we are handling unencrypted SIP and H323 traffic via the helper module
-# Only enable them if you really need to!
-#ACCEPT all $FW tcp sip,5070,5080
-#ACCEPT all $FW udp sip,5070,5080
-#ACCEPT all $FW udp 16384:32768
-#ACCEPT all $FW tcp 1720
+# However to enforce availability we will force these ports to be open.
+ACCEPT all $FW tcp sip,5070,5080
+ACCEPT all $FW udp sip,5070,5080
+ACCEPT all $FW udp 16384:32768
+ACCEPT all $FW tcp 1720
