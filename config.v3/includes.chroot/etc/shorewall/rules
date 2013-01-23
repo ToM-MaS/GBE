@@ -16,15 +16,17 @@
 
 SECTION ESTABLISHED
 
-# Accept ESTABLISHED SIP connections very early (needed for helper module)
+# Accept ESTABLISHED SIP connections very early (e.g. needed for helper module)
 ACCEPT all $FW tcp sip,5070,5080,1720
 ACCEPT all $FW udp sip,5070,5080
+ACCEPT all $FW tcp sip-tls,5071,5081
+ACCEPT all $FW udp sip-tls,5071,5081
 
 
 
 SECTION RELATED
 
-# Accept RELATED SIP connections very early (needed for helper module)
+# Accept RELATED SIP connections very early (e.g. needed for helper module)
 ACCEPT all $FW tcp sip,5070,5080,1720
 ACCEPT all $FW udp sip,5070,5080
 
@@ -67,13 +69,13 @@ ACCEPT all $FW udp 1719
 ACCEPT all $FW udp 3478:3479
 ACCEPT all $FW tcp 5002
 ACCEPT all $FW udp 5003
-ACCEPT all $FW tcp sip-tls
-ACCEPT all $FW udp sip-tls
-ACCEPT all $FW tcp 8021
-ACCEPT all $FW udp 16384:32768
+ACCEPT all $FW tcp sip-tls,5071,5081
+ACCEPT all $FW udp sip-tls,5071,5081
+#ACCEPT all $FW tcp 8021
 
 # This should not be necessary as we are handling unencrypted SIP and H323 traffic via the helper module
 # Only enable them if you really need to!
 #ACCEPT all $FW tcp sip,5070,5080
 #ACCEPT all $FW udp sip,5070,5080
+#ACCEPT all $FW udp 16384:32768
 #ACCEPT all $FW tcp 1720
