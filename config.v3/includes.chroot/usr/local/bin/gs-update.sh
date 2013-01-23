@@ -7,6 +7,14 @@
 # See LICENSE.GBE file for details.
 #
 
+# Enforce root rights
+#
+if [[ ${EUID} -ne 0 ]];
+	then
+	echo "ERROR: $0 needs to be run as root. Aborting ..."
+	exit 1
+fi
+
 # General settings
 [ -f /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 [ -f "${GS_MYSQL_PASSWORD_FILE}" ] && GS_MYSQL_PASSWD="`cat "${GS_MYSQL_PASSWORD_FILE}"`" || echo "FATAL ERROR: GS lost it's database password in ${GS_MYSQL_PASSWORD_FILE}"
@@ -16,14 +24,6 @@ GS_UPDATE_DIR="${GS_DIR}.update"
 # check each command return codes for errors
 #
 set -e
-
-# Enforce root rights
-#
-if [[ ${EUID} -ne 0 ]];
-	then
-	echo "ERROR: $0 needs to be run as root. Aborting ..."
-	exit 1
-fi
 
 # Run switcher
 #
