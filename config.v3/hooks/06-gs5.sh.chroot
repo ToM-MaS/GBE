@@ -119,6 +119,9 @@ GS_DIR_NORMALIZED_LOCAL="`dirname "${GS_DIR_LOCAL}"`/`basename "${GS_DIR_NORMALI
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
+# GS firewall settings
+mkdir -p ${GS_DIR_LOCAL}/firewall
+
 # Link FS configs
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
 [ -d /etc/freeswitch ] && rm -rf /etc/freeswitch
