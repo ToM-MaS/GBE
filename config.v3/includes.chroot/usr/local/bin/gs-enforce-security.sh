@@ -79,7 +79,9 @@ echo "Cmnd_Alias UPDATE = /usr/local/bin/gs-update.sh --force-update-init" > /et
 echo "Cmnd_Alias UPDATE_CANCEL = /usr/local/bin/gs-update.sh --cancel" >> /etc/sudoers.d/gemeinschaft
 echo "Cmnd_Alias SHUTDOWN = /sbin/shutdown -h now" >> /etc/sudoers.d/gemeinschaft
 echo "Cmnd_Alias REBOOT = /sbin/shutdown -r now" >> /etc/sudoers.d/gemeinschaft
-echo "${GS_USER} ALL = (ALL) NOPASSWD: UPDATE, UPDATE_CANCEL, SHUTDOWN, REBOOT" >> /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias FW = /usr/sbin/service shorewall refresh" >> /etc/sudoers.d/gemeinschaft
+echo "Cmnd_Alias FW6 = /usr/sbin/service shorewall6 refresh" >> /etc/sudoers.d/gemeinschaft
+echo "${GS_USER} ALL = (ALL) NOPASSWD: UPDATE, UPDATE_CANCEL, SHUTDOWN, REBOOT, FW, FW6" >> /etc/sudoers.d/gemeinschaft
 
 # System configurations
 chown -v root.root /etc/sudoers.d/*
