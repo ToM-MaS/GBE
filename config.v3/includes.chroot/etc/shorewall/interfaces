@@ -1,1 +1,1 @@
-net eth0 detect dhcp,tcpflags,logmartians=1,routefilter,upnpclient
+net eth0 detect dhcp,tcpflags,logmartians=1,routefilter
