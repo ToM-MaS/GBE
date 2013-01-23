@@ -55,6 +55,9 @@ DNS(ACCEPT) all $FW
 ACCEPT all $FW tcp bootps,bootpc
 ACCEPT all $FW udp bootps,bootpc
 
+# Allow SNMP
+SNMP(ACCEPT) all $FW
+
 # Allow ping
 Ping(ACCEPT) all $FW
 

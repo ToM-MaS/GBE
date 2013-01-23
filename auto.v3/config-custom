@@ -11,7 +11,7 @@ lb config noauto \
 	--apt apt \
 	--apt-indices false \
 	--architecture i386 \
-	--archive-areas "main contrib" \
+	--archive-areas "main contrib non-free" \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
 	--iso-application "Gemeinschaft 5" \
