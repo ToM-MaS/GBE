@@ -1,29 +1,79 @@
-# remote administration via SSH
-ACCEPT all fw tcp ssh
+#
+# Shorewall version 4 - Rules File
+#
+# For information on the settings in this file, type "man shorewall-rules"
+#
+# The manpage is also online at
+# http://www.shorewall.net/manpages/shorewall-rules.html
+#
+###################################################################################################################################################################################
+#ACTION         SOURCE          DEST            PROTO   DEST    SOURCE          ORIGINAL        RATE            USER/   MARK    CONNLIMIT       TIME         HEADERS         SWITCH
+#
+
+#SECTION ALL
+
+
+
+SECTION ESTABLISHED
+
+# Accept ESTABLISHED SIP connections very early (needed for helper module)
+ACCEPT all $FW tcp sip,5070,5080,1720
+ACCEPT all $FW udp sip,5070,5080
+
+
+
+SECTION RELATED
+
+# Accept RELATED SIP connections very early (needed for helper module)
+ACCEPT all $FW tcp sip,5070,5080,1720
+ACCEPT all $FW udp sip,5070,5080
+
+
+
+SECTION NEW
 
 # web services
-ACCEPT all fw tcp http,https
-
-# NTP service
-ACCEPT all fw tcp ntp
-ACCEPT all fw udp ntp
-
-# DNS service
-ACCEPT all fw udp domain
-
-# SIP services
-ACCEPT all fw tcp sip,sip-tls
-ACCEPT all fw udp sip,sip-tls
-
-# mon_ami Asterisk emulator
-ACCEPT all fw tcp 5038
-
-# BootP for phones
-ACCEPT all fw tcp bootps,bootpc
-ACCEPT all fw udp bootps,bootpc
-
-# Allow ping
-ACCEPT all fw icmp echo-request
+HTTP(ACCEPT) all $FW
+HTTPS(ACCEPT) all $FW
 
 # Allow mDNS
-ACCEPT all fw udp mdns
+#mDNS(ACCEPT) all $FW
+
+# NTP service
+NTP(ACCEPT) all $FW
+
+# DNS service
+DNS(ACCEPT) all $FW
+
+# BootP for phones
+ACCEPT all $FW tcp bootps,bootpc
+ACCEPT all $FW udp bootps,bootpc
+
+# Allow ping
+Ping(ACCEPT) all $FW
+
+# mon_ami Asterisk emulator
+ACCEPT all $FW tcp 5038
+
+# remote administration via SSH
+SSH(ACCEPT) all $FW - - - - s:1/min:3
+
+
+# SIP/FreeSwitch specific services
+#
+# Also see http://wiki.freeswitch.org/wiki/Firewall
+#
+ACCEPT all $FW udp 1719
+ACCEPT all $FW udp 3478:3479
+ACCEPT all $FW tcp 5002
+ACCEPT all $FW udp 5003
+ACCEPT all $FW tcp sip-tls
+ACCEPT all $FW udp sip-tls
+ACCEPT all $FW tcp 8021
+ACCEPT all $FW udp 16384:32768
+
+# This should not be necessary as we are handling unencrypted SIP and H323 traffic via the helper module
+# Only enable them if you really need to!
+#ACCEPT all $FW tcp sip,5070,5080
+#ACCEPT all $FW udp sip,5070,5080
+#ACCEPT all $FW tcp 1720
