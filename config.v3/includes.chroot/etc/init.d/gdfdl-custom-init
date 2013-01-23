@@ -92,6 +92,9 @@ echo "[gemeinschaft]
 Description  = MySQL database for Gemeinschaft
 Driver       = /usr/lib/i386-linux-gnu/odbc/libmyodbc.so
 Setup        = /usr/lib/i386-linux-gnu/odbc/libodbcmyS.so
+UsageCount	 = 1
+FileUsage    = 1
+Threading    = 0
 " >/etc/odbcinst.ini
 
 echo "[gemeinschaft]
