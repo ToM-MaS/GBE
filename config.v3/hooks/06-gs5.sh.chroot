@@ -90,17 +90,6 @@ ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 echo -e "GBE: Install GS gems ...\n"
 su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
-# Install cronjobs
-#
-echo -e "GBE: Install cronjobs ...\n"
-[ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
-SHELL=/var/lib/gemeinschaft/.rvm/bin/rvm-shell
-RAILS_ENV=production
-23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones
-* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )
-* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" > /etc/cron.d/gemeinschaft_rvm
-
 # Create log dir
 #
 echo -e "GBE: Create logfile directory ...\n"

@@ -32,10 +32,6 @@ case "${GS_ENV}" in
 		echo "** Updating Apache Passenger environment to production level"
 		sed -i "s/RailsEnv development/RailsEnv production/" "/etc/apache2/sites-available/gemeinschaft"
 
-		echo "** Updating Cron logging to production level"
-		sed -i "s/RAILS_ENV=.*/RAILS_ENV=$RAILS_ENV/" /etc/cron.d/gemeinschaft_rvm
-		sed -i "s/# EXTRA_OPTS=\"-L 2\"/EXTRA_OPTS=\"-L 0\"/" /etc/syslog-ng/syslog-ng.conf
-
 		;;
 
 	# Higher debug levels for development installations
@@ -45,10 +41,6 @@ case "${GS_ENV}" in
 
 		echo "** Updating Apache Passenger environment to development level"
 		sed -i "s/RailsEnv production/RailsEnv development/" "/etc/apache2/sites-available/gemeinschaft"
-
-		echo "** Updating Cron logging to development level"
-		sed -i "s/RAILS_ENV=.*/RAILS_ENV=$RAILS_ENV/" /etc/cron.d/gemeinschaft_rvm
-		sed -i "s/EXTRA_OPTS=\"-L 0\"/# EXTRA_OPTS=\"-L 2\"/" /etc/syslog-ng/syslog-ng.conf
 
 		;;
 	*)
