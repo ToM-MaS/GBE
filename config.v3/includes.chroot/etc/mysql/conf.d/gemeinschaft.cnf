@@ -17,9 +17,9 @@ read_buffer_size = 4M
 read_rnd_buffer_size = 2M
 myisam_sort_buffer_size = 64M
 max_connect_errors = 1000
-connect_timeout = 20
-wait_timeout = 300
 max_connections = 400
+connect_timeout = 15
+wait_timeout = 115200
 
 skip-external-locking
 
