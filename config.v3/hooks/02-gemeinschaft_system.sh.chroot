@@ -63,6 +63,9 @@ echo -e "GBE: Setup MySQL default time zone ...\n"
 echo "[mysqld]" > /etc/mysql/conf.d/gemeinschaft.cnf
 echo "default-time-zone='+00:00'" >> /etc/mysql/conf.d/gemeinschaft.cnf
 
+echo -e "GBE: Reconfiguring SNMP logging facilities ...\n"
+sed -i "s/^SNMPDOPTS=.*$/SNMPDOPTS='-LS 0-4 d -Lf \/dev\/null -u snmp -g snmp -I -smux -p \/var\/run\/snmpd.pid'/" /etc/default/snmpd
+
 echo -e "GBE: Installing nodejs ...\n"
 cd /usr/local/src
 wget -c -t 5 --waitretry=3 http://nodejs.org/dist/node-${NODEJS_VERSION}.tar.gz
