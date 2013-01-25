@@ -58,11 +58,6 @@ rm -rf /etc/resolv.conf
 ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
 echo "REPORT_ABSENT_SYMLINK=no" > /etc/default/resolvconf
 
-#FIXME temporal workaround for timezone issues between GS5 call logs and actual local time
-echo -e "GBE: Setup MySQL default time zone ...\n"
-echo "[mysqld]" > /etc/mysql/conf.d/gemeinschaft.cnf
-echo "default-time-zone='+00:00'" >> /etc/mysql/conf.d/gemeinschaft.cnf
-
 echo -e "GBE: Reconfiguring SNMP logging facilities ...\n"
 sed -i "s/^SNMPDOPTS=.*$/SNMPDOPTS='-LS 0-4 d -Lf \/dev\/null -u snmp -g snmp -I -smux -p \/var\/run\/snmpd.pid'/" /etc/default/snmpd
 
