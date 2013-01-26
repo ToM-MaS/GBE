@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ### BEGIN INIT INFO
-# Provides:          gdfdl-custom-init
+# Provides:          gemeinschaft-init
 # Required-Start:    mysql haveged
 # Required-Stop:
-# X-Start-Before:    apache2 freeswitch gdfdl-init
+# X-Start-Before:    apache2 freeswitch
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Do initial task for first startup of Gemeinschaft

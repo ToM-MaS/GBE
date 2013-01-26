@@ -18,7 +18,7 @@ GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
 [[ ${GDFDL_BUILDNAME} =~ "-" ]] && GDFDL_BRANCH=`echo ${GDFDL_BUILDNAME} | cut -d - -f2` || GDFDL_BRANCH="master"
 
 echo -e "\n###########################################################
-## GBE: Install GBS-system\n\n"
+## GBE: Install Gemeinschaft System Environment\n\n"
 
 # use the same branch as from the install environment
 [ x"${GSE_BRANCH}" == x"" ] && GSE_BRANCH="${GDFDL_BRANCH}"
@@ -80,3 +80,33 @@ fi
 #
 GSE_DIR_NORMALIZED=`dirname "${GSE_DIR}"`/gemeinschaft-system
 ln -s `basename "${GSE_DIR}"` "${GSE_DIR_NORMALIZED}"
+
+# Check if we have a production or development state build
+# (production = master-branch was used from GS5 and GBE repo)
+#
+GS_BUILDNAME="`cat /etc/gdfdl_build`"
+if [[ `expr length ${GS_BUILDNAME}` == 10 && x${GSE_BRANCH} = x"master" ]]
+	then
+	GSE_ENV="production"
+else
+	GSE_ENV="development"
+fi
+
+echo -e "GBE: Write local settings file ..."
+mkdir -p /etc/gemeinschaft
+echo "GSE_DIR=\"${GSE_DIR}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_DIR_NORMALIZED=\"${GSE_DIR_NORMALIZED}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_BRANCH=\"${GSE_BRANCH}\""  >> /etc/gemeinschaft/system.conf
+echo "GS_BUILDNAME=\"${GS_BUILDNAME}\""  >> /etc/gemeinschaft/system.conf
+echo "GSE_GIT_URL=\"${GS_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_ENFORCE_SECURITY_ON_BOOTUP=true" >> /etc/gemeinschaft/system.conf
+echo "GSE_ENV=\"${GS_ENV}\"" >> /etc/gemeinschaft/system.conf
+
+rm -f /etc/gdfdl_build
+
+# set GS+GSE variables as global ENV variables
+[ -f /etc/environment ] && rm /etc/environment
+ln -s /etc/gemeinschaft/system.conf /etc/environment
+
+echo -e "GBE: Initializing GSE ..."
+"${GSE_DIR}/bin/gse-update.sh" --force-init
