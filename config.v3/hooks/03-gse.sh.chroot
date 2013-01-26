@@ -84,7 +84,7 @@ ln -s `basename "${GSE_DIR}"` "${GSE_DIR_NORMALIZED}"
 # Check if we have a production or development state build
 # (production = master-branch was used from GS5 and GBE repo)
 #
-GS_BUILDNAME="`cat /etc/gdfdl_build`"
+GS_BUILDNAME="${GDFDL_BUILDNAME}"
 if [[ `expr length ${GS_BUILDNAME}` == 10 && x${GSE_BRANCH} = x"master" ]]
 	then
 	GSE_ENV="production"
@@ -103,8 +103,6 @@ echo "GSE_ENV=\"${GSE_ENV}\"" >> /etc/gemeinschaft/system.conf
 echo "GSE_USER=\"${GSE_USER}\"" >> /etc/gemeinschaft/system.conf
 echo "GSE_GROUP=\"${GSE_GROUP}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_BUILDNAME=\"${GS_BUILDNAME}\""  >> /etc/gemeinschaft/system.conf
-
-rm -f /etc/gdfdl_build
 
 # set GS+GSE variables as global ENV variables
 [ -f /etc/environment ] && rm /etc/environment

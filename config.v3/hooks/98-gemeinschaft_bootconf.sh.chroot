@@ -35,3 +35,6 @@ update-rc.d gemeinschaft-runtime-init-post defaults 2>&1
 
 echo -e "GBE: Set initial file permissions and security settings ...\n"
 "${GSE_DIR_NORMALIZED}/bin/gs-enforce-security.sh" | grep -Ev retained | grep -Ev "no changes" | grep -Ev "nor referent has been changed"
+
+# Cleanup
+rm -f /etc/gdfdl_build
