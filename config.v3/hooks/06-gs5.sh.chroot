@@ -123,13 +123,6 @@ ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
 
-#FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
-ln -s /usr/share/freeswitch/scripts /usr/scripts
-ln -s /var/lib/freeswitch/db /usr/db
-ln -s /var/lib/freeswitch/recordings /usr/recordings
-ln -s /var/lib/freeswitch/storage /usr/storage
-ln -s /usr/lib/i386-linux-gnu/lua /usr/local/lib/lua
-
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 
 echo -e "GBE: Adjust Apache2 configuration ...\n"
