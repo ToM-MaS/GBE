@@ -18,14 +18,14 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft specific system configuration\n\n"
 
-echo -e "GBE: Create service group '${GS_GROUP}' ...\n"
-groupadd -r -f ${GS_GROUP}
+echo -e "GBE: Create service group '${GSE_GROUP}' ...\n"
+groupadd -r -f ${GSE_GROUP}
 
-echo -e "GBE: Create service account ${GS_USER} ...\n"
+echo -e "GBE: Create service account ${GSE_USER} ...\n"
 # hint: This should be a system service account (-s) or at least UID needs to be != 1000
 # otherwise live-config user setup will not work correctly.
-useradd ${GS_USER} -N -m -r -d /var/lib/${GS_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GS_GROUP}
-ln -s ${GS_USER} /var/lib/gemeinschaft
+useradd ${GSE_USER} -N -m -r -d /var/lib/${GSE_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GSE_GROUP}
+ln -s ${GSE_USER} /var/lib/gemeinschaft
 
 echo -e "GBE: Create service account mon_ami ...\n"
 # hint: This should be a system service account (-s) or at least UID needs to be != 1000
@@ -42,7 +42,7 @@ echo "smtp_tls_security_level = may" >> /etc/postfix/main.cf
 echo "smtpd_tls_CApath = /etc/ssl/certs" >> /etc/postfix/main.cf
 echo "smtpd_tls_cert_file=/etc/ssl/gemeinschaft.crt" >> /etc/postfix/main.cf
 echo "smtpd_tls_key_file=/etc/ssl/gemeinschaft.key" >> /etc/postfix/main.cf
-echo "${GS_USER}: root" >> /etc/aliases
+echo "${GSE_USER}: root" >> /etc/aliases
 echo "gsmaster: root" >> /etc/aliases
 newaliases
 

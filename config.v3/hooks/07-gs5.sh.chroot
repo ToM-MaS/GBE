@@ -89,7 +89,7 @@ ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 # Install GS related Gems
 #
 echo -e "GBE: Install GS gems ...\n"
-su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
+su - ${GSE_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 # Create log dir
 #
@@ -126,7 +126,7 @@ ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/voicemail /var/lib/freeswitch/voicemail
 
-PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
+PASSENGER_ROOT="`su - ${GSE_USER} -c "passenger-config --root"`"
 
 echo -e "GBE: Adjust Apache2 configuration ...\n"
 echo "LoadModule passenger_module ${PASSENGER_ROOT}/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
@@ -178,8 +178,8 @@ Timeout 100
 	PassengerStatThrottleRate 10
 	PassengerSpawnMethod smart-lv2
 	PassengerUseGlobalQueue on
-	PassengerUser  ${GS_USER}
-	PassengerGroup ${GS_GROUP}
+	PassengerUser  ${GSE_USER}
+	PassengerGroup ${GSE_GROUP}
 
 	RailsBaseURI /
 	RailsEnv development
@@ -206,8 +206,8 @@ Timeout 100
 	PassengerStatThrottleRate 10
 	PassengerSpawnMethod smart-lv2
 	PassengerUseGlobalQueue on
-	PassengerUser  ${GS_USER}
-	PassengerGroup ${GS_GROUP}
+	PassengerUser  ${GSE_USER}
+	PassengerGroup ${GSE_GROUP}
 
 	RailsBaseURI /
 	RailsEnv development
@@ -236,8 +236,8 @@ echo "GS_DIR=\"${GS_DIR}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_DIR_LOCAL=\"${GS_DIR_LOCAL}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_DIR_NORMALIZED=\"${GS_DIR_NORMALIZED}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_DIR_NORMALIZED_LOCAL=\"${GS_DIR_NORMALIZED_LOCAL}\"" >> /etc/gemeinschaft/system.conf
-echo "GS_USER=\"${GS_USER}\"" >> /etc/gemeinschaft/system.conf
-echo "GS_GROUP=\"${GS_GROUP}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_USER=\"${GSE_USER}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_GROUP=\"${GSE_GROUP}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_BRANCH=\"${GS_BRANCH}\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_USER=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_DB=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
