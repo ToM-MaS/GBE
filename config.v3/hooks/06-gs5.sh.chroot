@@ -119,9 +119,11 @@ ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scrip
 mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db
 mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage
 mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings
+[ -d /var/lib/freeswitch/voicemail ] && mv /var/lib/freeswitch/voicemail ${GS_DIR_LOCAL}/freeswitch/voicemail || mkdir -p ${GS_DIR_LOCAL}/freeswitch/voicemail
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/voicemail /var/lib/freeswitch/voicemail
 
 PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
 

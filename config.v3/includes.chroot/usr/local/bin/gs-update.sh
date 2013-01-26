@@ -77,6 +77,7 @@ case "$1" in
 				rm -rfv "${GS_DIR_LOCAL_NORMALIZED}/freeswitch/conf/"* \
 					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/storage/"* \
 					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/recordings/"* \
+					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/voicemail/"* \
 					"${GS_DIR_LOCAL_NORMALIZED}/freeswitch/db/"*
 
 				echo -e "\n\n***    ------------------------------------------------------------------"
