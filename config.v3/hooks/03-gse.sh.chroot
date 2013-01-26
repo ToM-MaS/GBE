@@ -100,6 +100,8 @@ echo "GSE_BRANCH=\"${GSE_BRANCH}\""  >> /etc/gemeinschaft/system.conf
 echo "GSE_GIT_URL=\"${GSE_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
 echo "GSE_ENFORCE_SECURITY_ON_BOOTUP=true" >> /etc/gemeinschaft/system.conf
 echo "GSE_ENV=\"${GSE_ENV}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_USER=\"${GSE_USER}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_GROUP=\"${GSE_GROUP}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_BUILDNAME=\"${GS_BUILDNAME}\""  >> /etc/gemeinschaft/system.conf
 
 rm -f /etc/gdfdl_build
