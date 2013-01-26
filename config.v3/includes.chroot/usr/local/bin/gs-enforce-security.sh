@@ -50,6 +50,7 @@ if [ -f /var/lib/freeswitch/.odbc.ini ]; then
 	chown -v freeswitch.freeswitch /var/lib/freeswitch/.odbc.ini
 	chmod -v 0640 /var/lib/freeswitch/.odbc.ini
 fi
+[ -f "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.serial" ] && chmod -v 0640 "${GS_DIR_LOCAL}/freeswitch/conf/freeswitch.serial"
 
 # GS firewall settings
 chown -vR ${GS_USER}.${GS_GROUP} "${GS_DIR_LOCAL}/firewall"
