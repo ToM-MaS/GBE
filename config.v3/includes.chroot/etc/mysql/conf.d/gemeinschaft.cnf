@@ -1,21 +1,21 @@
 [mysqld]
 
 # Performance optimization
-key_buffer = 128M
+key_buffer = 32M
 max_allowed_packet = 16M
 thread_stack = 192K
 thread_cache_size = 64
 table_cache = 512
 query_cache_type = 1
-query_cache_size = 25M
+query_cache_size = 16M
 query_cache_limit = 1MB
 tmp_table_size = 8M
 expire_logs_days = 10
-max_binlog_size = 100M
+max_binlog_size = 50M
 sort_buffer_size = 4M
 read_buffer_size = 4M
 read_rnd_buffer_size = 2M
-myisam_sort_buffer_size = 64M
+myisam_sort_buffer_size = 32M
 max_connect_errors = 1000
 max_connections = 400
 connect_timeout = 15
