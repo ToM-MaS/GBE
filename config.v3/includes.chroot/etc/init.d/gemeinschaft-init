@@ -65,7 +65,7 @@ case "$1" in
 			apg -m30 -a0 -n 1 -M NCL > /root/.mysql_root_password
 			chmod 0440 /root/.mysql_root_password
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
-			mysql -e "USE mysql; DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1' OR host='::1' ); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1' OR host='::1'); FLUSH PRIVILEGES;" --user=root --password="${MYSQL_INIT-PASSWD}"
+			mysql -e "USE mysql; DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1' OR host='::1' ); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1' OR host='::1'); FLUSH PRIVILEGES;" --user=root --password="${MYSQL_INIT_PASSWD}"
 		else
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
 		fi
