@@ -1,3 +1,0 @@
-[submodule "config.v3/includes.chroot/opt/GBE-system"]
-	path = config.v3/includes.chroot/opt/GBE-system
-	url = https://github.com/amooma/GBE-system.git
