@@ -115,12 +115,12 @@ chmod -v 0640 /var/lib/freeswitch/.odbc.ini
 		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft;" --user=root --password="${MYSQL_PASSWD_ROOT}"
 
 		# Run update script
-		/usr/local/bin/gs-update.sh --force-init
+		"${GSE_DIR_NORMALIZED}/bin/gs-update.sh" --force-init
 
 		# self destruction
 		#
 		rm -rf /gdfdl-custom.conf
-		rm -rf /etc/init.d/gdfdl-custom-init; update-rc.d gdfdl-custom-init remove
+		rm -rf /etc/init.d/gemeinschaft-init; update-rc.d gemeinschaft-init remove
 		;;
 
 	stop)
