@@ -119,7 +119,7 @@ chmod -v 0640 /var/lib/freeswitch/.odbc.ini
 
 		# self destruction
 		#
-		rm -rf /gdfdl-custom.conf
+		rm -rf /gdfdl-custom.conf /gdfdl.conf
 		rm -rf /etc/init.d/gemeinschaft-init; update-rc.d gemeinschaft-init remove
 		;;
 
