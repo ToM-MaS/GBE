@@ -1,4 +1,0 @@
-net6 all DROP
-fw6 all ACCEPT
-all all REJECT
-

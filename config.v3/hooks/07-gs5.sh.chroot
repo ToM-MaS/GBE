@@ -16,6 +16,7 @@ source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
 [[ ${GDFDL_BUILDNAME} =~ "-" ]] && GDFDL_BRANCH=`echo ${GDFDL_BUILDNAME} | cut -d - -f2` || GDFDL_BRANCH="master"
+source /etc/gemeinschaft/system.conf
 
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft installation\n\n"
@@ -88,23 +89,7 @@ ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 # Install GS related Gems
 #
 echo -e "GBE: Install GS gems ...\n"
-su - ${GS_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
-
-# Install delayed worker job
-#
-echo -e "GBE: Install delayed worker job ...\n"
-echo "W1:2345:respawn:/bin/su - ${GS_USER} -l -c \"cd ${GS_DIR_NORMALIZED}; RAILS_ENV=production bundle exec rake jobs:work 2>&1 >/dev/null\"" >> /etc/inittab
-
-# Install cronjobs
-#
-echo -e "GBE: Install cronjobs ...\n"
-[ ! -d /etc/cron.d ] && mkdir -p /etc/cron.d
-echo "PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
-SHELL=/var/lib/gemeinschaft/.rvm/bin/rvm-shell
-RAILS_ENV=production
-23 1 * * * ${GS_USER} ${GS_DIR_NORMALIZED}/script/logout_phones
-* * * * * ${GS_USER} ( cd ${GS_DIR_NORMALIZED}; bundle exec rake send_voicemail_notifications )
-* * * * * ${GS_USER} ( sleep 30; cd ${GS_DIR_NORMALIZED}; bundle exec rake send_fax_notifications )" > /etc/cron.d/gemeinschaft_rvm
+su - ${GSE_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 # Create log dir
 #
@@ -119,6 +104,9 @@ GS_DIR_NORMALIZED_LOCAL="`dirname "${GS_DIR_LOCAL}"`/`basename "${GS_DIR_NORMALI
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
+# GS firewall settings
+mkdir -p ${GS_DIR_LOCAL}/firewall
+
 # Link FS configs
 echo -e "GBE: Link FreeSWITCH configuration ...\n"
 [ -d /etc/freeswitch ] && rm -rf /etc/freeswitch
@@ -132,23 +120,13 @@ ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scrip
 mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db
 mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage
 mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings
+[ -d /var/lib/freeswitch/voicemail ] && mv /var/lib/freeswitch/voicemail ${GS_DIR_LOCAL}/freeswitch/voicemail || mkdir -p ${GS_DIR_LOCAL}/freeswitch/voicemail
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
+ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/voicemail /var/lib/freeswitch/voicemail
 
-#FIXME this is definitely a hack! correct path in GS Lua scripts would be a better idea...
-ln -s /usr/share/freeswitch/scripts /usr/scripts
-ln -s /var/lib/freeswitch/db /usr/db
-ln -s /var/lib/freeswitch/recordings /usr/recordings
-ln -s /var/lib/freeswitch/storage /usr/storage
-ln -s /usr/lib/i386-linux-gnu/lua /usr/local/lib/lua
-
-#FIXME another hack for ruby/rails environment as GS scripts explicitly uses this path for sourcing
-#      (although excplicit sourcing is deprecated from GBE perspective)
-mkdir -p /usr/local/rvm/scripts
-ln -s /var/lib/gemeinschaft/.rvm/scripts/rvm /usr/local/rvm/scripts/rvm
-
-PASSENGER_ROOT="`su - ${GS_USER} -c "passenger-config --root"`"
+PASSENGER_ROOT="`su - ${GSE_USER} -c "passenger-config --root"`"
 
 echo -e "GBE: Adjust Apache2 configuration ...\n"
 echo "LoadModule passenger_module ${PASSENGER_ROOT}/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
@@ -200,8 +178,8 @@ Timeout 100
 	PassengerStatThrottleRate 10
 	PassengerSpawnMethod smart-lv2
 	PassengerUseGlobalQueue on
-	PassengerUser  ${GS_USER}
-	PassengerGroup ${GS_GROUP}
+	PassengerUser  ${GSE_USER}
+	PassengerGroup ${GSE_GROUP}
 
 	RailsBaseURI /
 	RailsEnv development
@@ -228,8 +206,8 @@ Timeout 100
 	PassengerStatThrottleRate 10
 	PassengerSpawnMethod smart-lv2
 	PassengerUseGlobalQueue on
-	PassengerUser  ${GS_USER}
-	PassengerGroup ${GS_GROUP}
+	PassengerUser  ${GSE_USER}
+	PassengerGroup ${GSE_GROUP}
 
 	RailsBaseURI /
 	RailsEnv development
@@ -253,38 +231,16 @@ a2enmod passenger 2>&1
 a2dissite default 2>&1
 a2ensite gemeinschaft 2>&1
 
-# Check if we have a production or development state build
-# (production = master-branch was used from GS5 and GBE repo)
-#
-GS_BUILDNAME="`cat /etc/gdfdl_build`"
-if [[ `expr length ${GS_BUILDNAME}` == 10 && x${GS_BRANCH} = x"master" ]]
-	then
-	GS_ENV="production"
-else
-	GS_ENV="development"
-fi
-
 echo -e "GBE: Write local settings file ..."
-mkdir -p /etc/gemeinschaft
 echo "GS_DIR=\"${GS_DIR}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_DIR_LOCAL=\"${GS_DIR_LOCAL}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_DIR_NORMALIZED=\"${GS_DIR_NORMALIZED}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_DIR_NORMALIZED_LOCAL=\"${GS_DIR_NORMALIZED_LOCAL}\"" >> /etc/gemeinschaft/system.conf
-echo "GS_USER=\"${GS_USER}\"" >> /etc/gemeinschaft/system.conf
-echo "GS_GROUP=\"${GS_GROUP}\"" >> /etc/gemeinschaft/system.conf
 echo "GS_BRANCH=\"${GS_BRANCH}\""  >> /etc/gemeinschaft/system.conf
-echo "GS_BUILDNAME=\"${GS_BUILDNAME}\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_USER=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_DB=\"gemeinschaft\""  >> /etc/gemeinschaft/system.conf
 echo "GS_MYSQL_PASSWORD_FILE=\"/var/lib/gemeinschaft/.gs_mysql_password\""  >> /etc/gemeinschaft/system.conf
 echo "GS_GIT_URL=\"${GS_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
-echo "GS_ENFORCE_SECURITY_ON_BOOTUP=true" >> /etc/gemeinschaft/system.conf
-echo "GS_SYSADDON_DIR=\"/usr/local/lib/gs-addons\"" >> /etc/gemeinschaft/system.conf
-echo "GS_ENV=\"${GS_ENV}\"" >> /etc/gemeinschaft/system.conf
-echo "RAILS_ENV=$GS_ENV" >> /etc/gemeinschaft/system.conf
+echo "RAILS_ENV=\"$GSE_ENV\"" >> /etc/gemeinschaft/system.conf
 
-rm -f /etc/gemeinschaft_branch /etc/gdfdl_build
-
-# set GS variables as global ENV variables
-[ -f /etc/environment ] && rm /etc/environment
-ln -s /etc/gemeinschaft/system.conf /etc/environment
+rm -f /etc/gemeinschaft_branch

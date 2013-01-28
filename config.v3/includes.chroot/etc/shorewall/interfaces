@@ -1,2 +1,0 @@
-net eth0 detect dhcp,routefilter,tcpflags
-

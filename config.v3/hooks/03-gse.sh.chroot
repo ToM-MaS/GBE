@@ -1,0 +1,112 @@
+#!/bin/bash
+#
+# Gemeinschaft 5
+# Install Gemeinschaft System Environment
+#
+# Copyright (c) 2013, Julian Pawlowski <jp@jps-networks.eu>
+# See LICENSE.GBE file for details.
+#
+
+# check each command return codes for errors
+#
+set -e
+
+# General settings
+source /gdfdl.conf
+[ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
+GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
+[[ ${GDFDL_BUILDNAME} =~ "-" ]] && GDFDL_BRANCH=`echo ${GDFDL_BUILDNAME} | cut -d - -f2` || GDFDL_BRANCH="master"
+
+echo -e "\n###########################################################
+## GBE: Install Gemeinschaft System Environment\n\n"
+
+# use the same branch as from the install environment
+[ x"${GSE_BRANCH}" == x"" ] && GSE_BRANCH="${GDFDL_BRANCH}"
+
+# Clone the git repository
+#
+if [[ ! -d "${GSE_DIR}" ]];
+	then
+
+	echo -e "GBE: Downloading Gemeinschaft System Environment from ${GSE_GIT_URL} (branch: ${GSE_BRANCH}) ...\n"
+
+	# Setup Github user credentials for login
+	#
+	if [ ! -z "${GSE_GIT_USER}" -a ! -z "${GSE_GIT_PASSWORD}" ]
+		then
+		echo "Github credentials found!"
+echo "machine Github.com
+login ${GSE_GIT_USER}
+password ${GSE_GIT_PASSWORD}
+" >  ~/.netrc
+	fi
+
+	set +e
+	c=1
+	while [[ $c -le 5 ]]
+	do
+		git clone -b "${GSE_BRANCH}" "${GSE_GIT_URL}" "${GSE_DIR}" 2>&1
+		if [ "$?" -eq "0" ]
+			then
+			break;
+		else
+			[[ $c -eq 5 ]] && exit 1
+			(( c++ ))
+			rm -rf "${GSE_DIR}"
+			echo "$c. try in 3 seconds ..."
+			sleep 3
+		fi
+	done
+	set -e
+
+	rm -rf ~/.netrc
+else
+	#FIXME lazy workaround for Jenkins who loses our branch names ...
+	cd "${GSE_DIR}"
+	set +e
+	git checkout -b "${GSE_BRANCH}"
+	set -e
+	cd -
+fi
+
+# Make sure we checkout the latest tagged version in case we are in the master branch
+if [ "${GSE_BRANCH}" == "master" ]; then
+	cd "${GSE_DIR}"
+	git checkout `git tag -l | tail -n1`
+	cd -
+fi
+
+#  Create alias
+#
+GSE_DIR_NORMALIZED=`dirname "${GSE_DIR}"`/gemeinschaft-system
+ln -s `basename "${GSE_DIR}"` "${GSE_DIR_NORMALIZED}"
+
+# Check if we have a production or development state build
+# (production = master-branch was used from GS5 and GBE repo)
+#
+GS_BUILDNAME="${GDFDL_BUILDNAME}"
+if [[ `expr length ${GS_BUILDNAME}` == 10 && x${GSE_BRANCH} = x"master" ]]
+	then
+	GSE_ENV="production"
+else
+	GSE_ENV="development"
+fi
+
+echo -e "GBE: Write local settings file ..."
+mkdir -p /etc/gemeinschaft
+echo "GSE_DIR=\"${GSE_DIR}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_DIR_NORMALIZED=\"${GSE_DIR_NORMALIZED}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_BRANCH=\"${GSE_BRANCH}\""  >> /etc/gemeinschaft/system.conf
+echo "GSE_GIT_URL=\"${GSE_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_ENFORCE_SECURITY_ON_BOOTUP=true" >> /etc/gemeinschaft/system.conf
+echo "GSE_ENV=\"${GSE_ENV}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_USER=\"${GSE_USER}\"" >> /etc/gemeinschaft/system.conf
+echo "GSE_GROUP=\"${GSE_GROUP}\"" >> /etc/gemeinschaft/system.conf
+echo "GS_BUILDNAME=\"${GS_BUILDNAME}\""  >> /etc/gemeinschaft/system.conf
+
+# set GS+GSE variables as global ENV variables
+[ -f /etc/environment ] && rm /etc/environment
+ln -s /etc/gemeinschaft/system.conf /etc/environment
+
+echo -e "GBE: Initializing GSE ..."
+"${GSE_DIR}/bin/gse-update.sh" --force-init
