@@ -2,13 +2,11 @@
 # Debian Live Build Environment
 # System packages for Gemeinschaft 5
 #
-# Julian Pawlowski <julian.pawlowski@gmail.com> 2012-2013.
+# Julian Pawlowski <jp@jps-networks.eu> 2012-2013.
 #
 
-user-setup sudo less
-
 # tools
-wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates
+wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude
 
 # services
 mysql-server-5.5 mysql-server mysql-client-5.5 mysql-client mysql-common
