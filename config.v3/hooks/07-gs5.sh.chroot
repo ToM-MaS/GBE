@@ -97,14 +97,22 @@ echo -e "GBE: Create logfile directory ...\n"
 [ ! -d /var/log/gemeinschaft ] && mkdir -p /var/log/gemeinschaft
 [ ! -d /var/log/mon_ami ] && mkdir -p /var/log/mon_ami
 
+# Create backup dir
+#
+echo -e "GBE: Create backup directory ...\n"
+[ ! -d /var/backup/gemeinschaft ] && mkdir -p /var/backup/gemeinschaft
+
 # Create local configuration dir
 #
+echo -e "GBE: Create local configuration directory ...\n"
 GS_DIR_LOCAL="/var/opt/`basename "${GS_DIR}"`"
 GS_DIR_NORMALIZED_LOCAL="`dirname "${GS_DIR_LOCAL}"`/`basename "${GS_DIR_NORMALIZED}"`"
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
 # GS firewall settings
+#
+echo -e "GBE: Create local firewall directory ...\n"
 mkdir -p ${GS_DIR_LOCAL}/firewall
 
 # Link FS configs
