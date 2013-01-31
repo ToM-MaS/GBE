@@ -100,7 +100,7 @@ echo -e "GBE: Create logfile directory ...\n"
 # Create backup dir
 #
 echo -e "GBE: Create backup directory ...\n"
-[ ! -d /var/backup/gemeinschaft ] && mkdir -p /var/backup/gemeinschaft
+[ ! -d "/var/backups/${GS_DIR}" ] && mkdir -p "/var/backups/${GS_DIR}"
 
 # Create local configuration dir
 #
