@@ -67,12 +67,3 @@ wget -c -t 5 --waitretry=3 http://nodejs.org/dist/node-${NODEJS_VERSION}.tar.gz
 tar xzvf node-*.tar.gz && cd `ls -rd node-v*` && ./configure && make install
 cd ..
 rm -rf node-*
-
-# See http://wiki.freeswitch.org/wiki/Using_ODBC_in_the_core#PostgreSQL_8.4_on_Debian_Squeeze
-# This issue seems still to be valid for Wheezy according to direct feedback from FS dev team
-echo -e "GBE: Installing unixODBC ...\n"
-cd /usr/local/src
-wget -c -t 5 --waitretry=3 http://ftp.unixodbc.org/pub/unixODBC/unixODBC-${UNIXODBC_VERSION}.tar.gz
-tar xzvf unixODBC-*.tar.gz && cd unixODBC-* && ./configure --prefix=/usr && make install
-cd ..
-rm -rf unixODBC-*
