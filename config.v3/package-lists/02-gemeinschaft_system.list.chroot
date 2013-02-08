@@ -9,7 +9,7 @@
 wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude 
 
 # sysadmin tools
-sysstat htop iftop iotop dstat lsof mtr-tiny tcpdump ssldump pciutils usbutils lshw hwinfo tree screen
+sysstat htop iftop iotop dstat lsof mtr-tiny tcpdump ssldump pciutils usbutils mailutils lshw hwinfo tree screen
 
 # debug tools
 kdump-tools
@@ -19,7 +19,7 @@ mysql-server-5.5 mysql-server mysql-client-5.5 mysql-client mysql-common
 openssh-server postfix dnsmasq ntp memcached snmpd snmp snmp-mibs-downloader
 
 # security
-shorewall shorewall6 iptables apg haveged
+shorewall shorewall6 iptables apg haveged sshguard
 
 # virtualization support
 open-vm-tools
