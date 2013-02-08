@@ -7,3 +7,6 @@ libtiff-tools
 liblua5.1-sql-mysql-2
 liblua5.1-socket2
 python
+
+# SSO
+libapache2-mod-auth-ntlm-winbind krb5-user
