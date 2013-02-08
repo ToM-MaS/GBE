@@ -6,7 +6,10 @@
 #
 
 # tools
-wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude
+wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude 
+
+# sysadmin tools
+sysstat htop iftop iotop dstat lsof mtr-tiny tcpdump ssldump pciutils usbutils lshw hwinfo tree screen
 
 # services
 mysql-server-5.5 mysql-server mysql-client-5.5 mysql-client mysql-common
