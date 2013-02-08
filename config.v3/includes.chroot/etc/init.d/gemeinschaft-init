@@ -86,17 +86,7 @@ case "$1" in
 			MYSQL_PASSWD_GS="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
 		fi
 
-		# Generate ODBC configuration files
-		echo "** Configuring ODBC"
-echo "[gemeinschaft]
-Description  = MySQL database for Gemeinschaft
-Driver       = /usr/lib/i386-linux-gnu/odbc/libmyodbc.so
-Setup        = /usr/lib/i386-linux-gnu/odbc/libodbcmyS.so
-UsageCount	 = 1
-FileUsage    = 1
-Threading    = 0
-" >/etc/odbcinst.ini
-
+		# Generate ODBC configuration
 echo "[gemeinschaft]
 Description  = MySQL database for Gemeinschaft
 Driver       = /usr/lib/i386-linux-gnu/odbc/libmyodbc.so
