@@ -9,4 +9,4 @@ liblua5.1-socket2
 python
 
 # SSO
-libapache2-mod-auth-ntlm-winbind krb5-user
+libapache2-mod-auth-ntlm-winbind winbind samba-common samba-common-bin krb5-user
