@@ -6,7 +6,7 @@
 #
 
 # tools
-wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude 
+wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude bash-completion
 
 # sysadmin tools
 sysstat htop iftop slurm iptraf iotop dstat lsof mtr-tiny tcpdump ngrep ssldump pciutils usbutils mailutils lshw hwinfo tree screen dtach tmux byobu multitail powertop
