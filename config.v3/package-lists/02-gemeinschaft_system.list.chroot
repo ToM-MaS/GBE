@@ -7,6 +7,7 @@
 
 # tools
 wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude bash-completion
+libcap2-bin libpcap-dev
 
 # sysadmin tools
 sysstat htop iftop slurm iptraf iotop dstat lsof mtr-tiny tcpdump ngrep ssldump pciutils usbutils mailutils lshw hwinfo tree screen dtach tmux byobu multitail powertop
@@ -21,5 +22,3 @@ shorewall shorewall6 iptables apg haveged sshguard
 # virtualization support
 open-vm-tools open-vm-dkms linux-headers-686-pae
 
-# debugging
-libpcap-dev
