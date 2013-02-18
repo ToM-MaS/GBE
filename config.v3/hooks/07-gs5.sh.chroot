@@ -92,9 +92,9 @@ echo -e "GBE: Install GS gems ...\n"
 su - ${GSE_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
 # Move Freeswitch storage files
-mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db
-mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage
-mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings
+[ -d /var/lib/freeswitch/db ] && mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db || mkdir -p ${GS_DIR_LOCAL}/freeswitch/db
+[ -d /var/lib/freeswitch/storage ] && mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage || mkdir -p ${GS_DIR_LOCAL}/freeswitch/storage
+[ -d /var/lib/freeswitch/recordings ] && mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings || mkdir -p ${GS_DIR_LOCAL}/freeswitch/recordings
 [ -d /var/lib/freeswitch/voicemail ] && mv /var/lib/freeswitch/voicemail ${GS_DIR_LOCAL}/freeswitch/voicemail || mkdir -p ${GS_DIR_LOCAL}/freeswitch/voicemail
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
