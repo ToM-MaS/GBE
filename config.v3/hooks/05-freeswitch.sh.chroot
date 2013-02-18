@@ -389,9 +389,6 @@ else
 	ln -s /usr/share/freeswitch/scripts /opt/freeswitch/scripts
 fi
 
-# Install german voice prompts
-/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-de-tts-bits1-hsmm-8khz
-
 echo -e "GBE: Enabling FreeSwitch ...\n"
 echo "# this is for manually installed FS versions
 FREESWITCH_ENABLED=\"true\"

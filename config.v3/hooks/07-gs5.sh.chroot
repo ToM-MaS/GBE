@@ -145,3 +145,6 @@ echo "GS_GIT_URL=\"${GS_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
 echo "RAILS_ENV=\"$GSE_ENV\"" >> /etc/gemeinschaft/system.conf
 
 rm -f /etc/gemeinschaft_branch
+
+# Install german voice prompts
+/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-de-tts-bits1-hsmm-8khz
