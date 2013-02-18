@@ -380,6 +380,7 @@ else
 	# compatibility with manual installation and GS default directories
 	mkdir -p /opt/freeswitch
 	ln -s /usr/share/freeswitch/sounds /opt/freeswitch/sounds
+	ln -s /usr/lib/freeswitch/mod /opt/freeswitch/mod
 	ln -s /var/lib/freeswitch/storage /opt/freeswitch/storage
 	ln -s /var/lib/freeswitch/recordings /opt/freeswitch/recordings
 	ln -s /var/lib/freeswitch/voicemail /opt/freeswitch/voicemail
