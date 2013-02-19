@@ -91,6 +91,14 @@ ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 echo -e "GBE: Install GS gems ...\n"
 su - ${GSE_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
+# Create local configuration dir
+#
+echo -e "GBE: Create local configuration directory ...\n"
+GS_DIR_LOCAL="/var/opt/`basename "${GS_DIR}"`"
+GS_DIR_NORMALIZED_LOCAL="`dirname "${GS_DIR_LOCAL}"`/`basename "${GS_DIR_NORMALIZED}"`"
+mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
+ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
+
 # Move Freeswitch storage files
 [ -d /var/lib/freeswitch/db ] && mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db || mkdir -p ${GS_DIR_LOCAL}/freeswitch/db
 [ -d /var/lib/freeswitch/storage ] && mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage || mkdir -p ${GS_DIR_LOCAL}/freeswitch/storage
