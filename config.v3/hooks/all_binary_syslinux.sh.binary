@@ -12,6 +12,10 @@ LB_BOOTAPPEND_LIVE_CH="noautologin quickreboot noprompt timezone=Europe/Zurich k
 LB_BOOTAPPEND_LIVE_EN="noautologin quickreboot noprompt timezone=Europe/London keyboard-layouts=us"
 SELF="`pwd`"
 
+# Backup original files for debugging purposes
+echo "Backup existing directory ${SELF}/binary/isolinux/ ..."
+cp -pfr ${SELF}/binary/isolinux/ ${SELF}/binary/isolinux.orig/
+
 # Copy default files
 echo "Copy files from ${SELF}/config/includes.binary/syslinux/ to ${SELF}/binary/isolinux/ ..."
 cp -pf ${SELF}/config/includes.binary/syslinux/splash.png ${SELF}/binary/isolinux/
