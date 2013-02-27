@@ -372,7 +372,7 @@ if [[ ! -f /usr/bin/freeswitch ]]
 	fi
 else
 	# for Debian package based installations we still need to do some additional work for music and sounds
-	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-en-us-callie-8000-1.0.22.tar.gz"
+	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-en-us-callie-8000-1.0.24.tar.gz"
 	wget -P "${SRC_DIR}" -c -t 5 --waitretry=3 "http://repo.profhost.eu/static/freeswitch/freeswitch-sounds-music-8000-1.0.8.tar.gz"
 	mkdir -p /usr/share/freeswitch/sounds
 	find /usr/local/src -name 'freeswitch-*.tar.gz' -type f -exec tar xfz {} -C /usr/share/freeswitch/sounds \;
@@ -380,6 +380,7 @@ else
 	# compatibility with manual installation and GS default directories
 	mkdir -p /opt/freeswitch
 	ln -s /usr/share/freeswitch/sounds /opt/freeswitch/sounds
+	ln -s /usr/lib/freeswitch/mod /opt/freeswitch/mod
 	ln -s /var/lib/freeswitch/storage /opt/freeswitch/storage
 	ln -s /var/lib/freeswitch/recordings /opt/freeswitch/recordings
 	ln -s /var/lib/freeswitch/voicemail /opt/freeswitch/voicemail
@@ -400,9 +401,6 @@ DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
 # fix boot dependencies
 sed -i 's/# Required-Start: $network $remote_fs $local_fs/# Required-Start: $network $remote_fs $local_fs mysql/' /etc/init.d/freeswitch
 update-rc.d freeswitch defaults
-
-# Create spool directory
-mkdir -p /var/spool/freeswitch
 
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*

@@ -91,18 +91,6 @@ ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 echo -e "GBE: Install GS gems ...\n"
 su - ${GSE_USER} -c "cd ${GS_DIR}; bundle install 2>&1"
 
-# Create log dir
-#
-echo -e "GBE: Create logfile directory ...\n"
-[ ! -d /var/log/gemeinschaft ] && mkdir -p /var/log/gemeinschaft
-[ ! -d /var/log/mon_ami ] && mkdir -p /var/log/mon_ami
-
-# Create backup dir
-#
-echo -e "GBE: Create backup directory ...\n"
-GS_BACKUP_DIR="/var/backups/`basename ${GS_DIR}`"
-[ ! -d "${GS_BACKUP_DIR}" ] && mkdir -p "${GS_BACKUP_DIR}"
-
 # Create local configuration dir
 #
 echo -e "GBE: Create local configuration directory ...\n"
@@ -111,24 +99,10 @@ GS_DIR_NORMALIZED_LOCAL="`dirname "${GS_DIR_LOCAL}"`/`basename "${GS_DIR_NORMALI
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
 ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
-# GS firewall settings
-#
-echo -e "GBE: Create local firewall directory ...\n"
-mkdir -p ${GS_DIR_LOCAL}/firewall
-
-# Link FS configs
-echo -e "GBE: Link FreeSWITCH configuration ...\n"
-[ -d /etc/freeswitch ] && rm -rf /etc/freeswitch
-ln -s "${GS_DIR_NORMALIZED_LOCAL}/freeswitch/conf" /etc/freeswitch
-[ -d /usr/conf ] && rm -rf /usr/conf
-ln -s /etc/freeswitch /usr/conf
-[ -d /usr/share/freeswitch/scripts ] && rm -rf /usr/share/freeswitch/scripts
-ln -s "${GS_DIR_NORMALIZED}/misc/freeswitch/scripts" /usr/share/freeswitch/scripts
-
 # Move Freeswitch storage files
-mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db
-mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage
-mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings
+[ -d /var/lib/freeswitch/db ] && mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db || mkdir -p ${GS_DIR_LOCAL}/freeswitch/db
+[ -d /var/lib/freeswitch/storage ] && mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage || mkdir -p ${GS_DIR_LOCAL}/freeswitch/storage
+[ -d /var/lib/freeswitch/recordings ] && mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings || mkdir -p ${GS_DIR_LOCAL}/freeswitch/recordings
 [ -d /var/lib/freeswitch/voicemail ] && mv /var/lib/freeswitch/voicemail ${GS_DIR_LOCAL}/freeswitch/voicemail || mkdir -p ${GS_DIR_LOCAL}/freeswitch/voicemail
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
 ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
@@ -179,3 +153,6 @@ echo "GS_GIT_URL=\"${GS_GIT_URL}\"" >> /etc/gemeinschaft/system.conf
 echo "RAILS_ENV=\"$GSE_ENV\"" >> /etc/gemeinschaft/system.conf
 
 rm -f /etc/gemeinschaft_branch
+
+# Install german voice prompts
+/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-de-tts-google-8khz

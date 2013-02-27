@@ -21,7 +21,7 @@ lb config noauto \
 	--iso-preparer "Gemeinschaft Build Environment" \
 	--iso-publisher "AMOOMA GmbH; http://amooma.de/" \
 	--iso-volume "GS5" \
-	--linux-flavours 686 \
+	--linux-flavours "486 686-pae" \
 	--memtest none \
 	--mode debian \
 	--root-command sudo \

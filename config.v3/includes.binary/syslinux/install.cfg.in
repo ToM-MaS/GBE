@@ -1,15 +1,11 @@
 label install
 	menu label ^Install (with DHCP)
-	text help
- Start installation to local drive
-	endtext
-	kernel @KERNEL_GUI@
-	append initrd=@INITRD_GUI@ quiet @LB_BOOTAPPEND_INSTALL_GUI@
+	linux @KERNEL_GUI@
+	initrd @INITRD_GUI@
+	append @LB_BOOTAPPEND_INSTALL_GUI@
 
 label install-text
 	menu label Install (^Text mode with static IP)
-	text help
- Start installation to local drive in text mode
-	endtext
-	kernel @KERNEL@
-	append initrd=@INITRD@ quiet @LB_BOOTAPPEND_INSTALL@
+	linux @KERNEL@
+	initrd @INITRD@
+	append @LB_BOOTAPPEND_INSTALL@

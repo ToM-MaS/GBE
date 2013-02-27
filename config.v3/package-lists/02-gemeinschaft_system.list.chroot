@@ -20,5 +20,4 @@ openssh-server postfix dnsmasq ntp memcached snmpd snmp snmp-mibs-downloader
 shorewall shorewall6 iptables apg haveged sshguard
 
 # virtualization support
-open-vm-tools open-vm-dkms linux-headers-686-pae
-
+open-vm-tools open-vm-dkms linux-headers-486 linux-headers-686-pae
