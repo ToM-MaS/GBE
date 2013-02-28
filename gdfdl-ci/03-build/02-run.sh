@@ -28,7 +28,8 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 		echo -n "Extracting GS5 tag information from SCM ... "
 		"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "/iso/SCM-TAG.GS5"
 		"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 777 "/iso"
-		git --exec-path="${GDFDL_BASEDIR}/.ci/GS5" --git-dir="${GDFDL_BASEDIR}/.ci/GS5/.git" describe --tags `git rev-list --tags --max-count=1` > "${INSTALLBASEDIR}/iso/SCM-TAG.GS5"
+		TAGGED_COMMIT="`git --exec-path="${GDFDL_BASEDIR}/.ci/GS5" --git-dir="${GDFDL_BASEDIR}/.ci/GS5/.git" rev-list --tags --max-count=1`"
+		git --exec-path="${GDFDL_BASEDIR}/.ci/GS5" --git-dir="${GDFDL_BASEDIR}/.ci/GS5/.git" describe --tags "${TAGGED_COMMIT}" > "${INSTALLBASEDIR}/iso/SCM-TAG.GS5"
 	fi
 
 	echo "done"
