@@ -145,6 +145,7 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 		then
 		echo -n "GS5 "
 		cp -rpf "${GDFDL_BASEDIR}/.ci/GS5" "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/opt/"
+		git --exec-path="${GDFDL_BASEDIR}/.ci/GS5" --git-dir="${GDFDL_BASEDIR}/.ci/GS5/.git" tag -l | tail -n1 > "${INSTALLBASEDIR}${GDFDL_DIR}/iso/SCM-TAG.GS5"
 	fi
 
 	echo "... done"
