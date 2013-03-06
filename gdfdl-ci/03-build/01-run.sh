@@ -157,19 +157,22 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 644 "${GDFDL_DIR}/config/includes.chroot/etc/gemeinschaft_branch"
 	"${GDFDL_ENTRYWRAPPER}" chroot chown -f root.root "${GDFDL_DIR}/config/includes.chroot/etc/gemeinschaft_branch"
 
-	echo "GBE: Updating environment variables ..."
-	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf "${GDFDL_DIR}/config/includes.chroot/etc/environment"
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 777 "${GDFDL_DIR}/config/includes.chroot/etc"
-	touch "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/environment"
+	echo -n "GBE: Updating environment variables ..."
+	"${GDFDL_ENTRYWRAPPER}" chroot rm -rf /etc/environment
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 777 /etc
+	touch "${INSTALLBASEDIR}/etc/environment"
 	if [ x"$http_proxy" != x"" ]; then
-		echo "export http_proxy=$http_proxy" >> "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/environment"
+		echo -n " http_proxy"
+		echo "export http_proxy=$http_proxy" >> "${INSTALLBASEDIR}/etc/environment"
 	fi
 	if [ x"$ftp_proxy" != x"" ]; then
-		echo "export ftp_proxy=$ftp_proxy" >> "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/environment"
+		echo -n " ftp_proxy"
+		echo "export ftp_proxy=$ftp_proxy" >> "${INSTALLBASEDIR}/etc/environment"
 	fi
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 755 "${GDFDL_DIR}/config/includes.chroot/etc"
-	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 644 "${GDFDL_DIR}/config/includes.chroot/etc/environment"
-	"${GDFDL_ENTRYWRAPPER}" chroot chown -f root.root "${GDFDL_DIR}/config/includes.chroot/etc/environment"
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 755 /etc
+	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 644 /etc/environment
+	"${GDFDL_ENTRYWRAPPER}" chroot chown -f root.root /etc/environment
+	echo ""
 else
 	echo "ERROR: No existing build environment installation found. Run installer first."
 	exit 1

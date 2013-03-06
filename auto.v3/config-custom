@@ -9,6 +9,8 @@
 
 if [ x"${http_proxy}" != x"" ]; then
 
+	echo "http_proxy environment variable found - configuring LB to use it"
+
 lb config noauto \
 	--apt-http-proxy ${http_proxy} \
 	--apt apt \
