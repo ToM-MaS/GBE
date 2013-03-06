@@ -16,7 +16,6 @@ lb config noauto \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
 	--debootstrap-options "--variant=minbase" \
-	--firmware-chroot false \
 	--iso-application "Gemeinschaft 5" \
 	--iso-preparer "Gemeinschaft Build Environment" \
 	--iso-publisher "AMOOMA GmbH; http://amooma.de/" \
