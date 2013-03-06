@@ -162,10 +162,10 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 777 "${GDFDL_DIR}/config/includes.chroot/etc"
 	touch "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/environment"
 	if [ x"$http_proxy" != x"" ]; then
-		echo "export http_proxy=$http_proxy" >> > "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/environment"
+		echo "export http_proxy=$http_proxy" >> "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/environment"
 	fi
 	if [ x"$ftp_proxy" != x"" ]; then
-		echo "export ftp_proxy=$ftp_proxy" >> > "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/environment"
+		echo "export ftp_proxy=$ftp_proxy" >> "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/etc/environment"
 	fi
 	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 755 "${GDFDL_DIR}/config/includes.chroot/etc"
 	"${GDFDL_ENTRYWRAPPER}" chroot chmod -f 644 "${GDFDL_DIR}/config/includes.chroot/etc/environment"
