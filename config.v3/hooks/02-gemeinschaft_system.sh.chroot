@@ -46,7 +46,7 @@ echo "${GSE_USER}: root" >> /etc/aliases
 echo "gsmaster: root" >> /etc/aliases
 newaliases
 
-echo - "GBE: Configuring NTP server ...\n"
+echo -e "GBE: Configuring NTP server ...\n"
 sed -i "s/^server.*\$//" /etc/ntp.conf
 echo "server 0.de.pool.ntp.org" >> /etc/ntp.conf
 echo "server 1.de.pool.ntp.org" >> /etc/ntp.conf
