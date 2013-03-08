@@ -141,6 +141,12 @@ if [ -f "${GDFDL_ENTRYWRAPPER}" ];
 		cp -rpf "${GDFDL_BASEDIR}/.ci/freeswitch" "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/usr/local/src/"
 	fi
 
+	if [ -d "${GDFDL_BASEDIR}/.ci/GSE" ]
+		then
+		echo -n "GSE "
+		cp -rpf "${GDFDL_BASEDIR}/.ci/GSE" "${INSTALLBASEDIR}${GDFDL_DIR}/config/includes.chroot/opt/"
+	fi
+
 	if [ -d "${GDFDL_BASEDIR}/.ci/GS5" ]
 		then
 		echo -n "GS5 "
