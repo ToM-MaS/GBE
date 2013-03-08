@@ -6,7 +6,7 @@
 #
 
 # tools
-wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude bash-completion
+wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude apt apt-utils bash-completion
 libcap2-bin libpcap-dev unzip
 
 # sysadmin tools
