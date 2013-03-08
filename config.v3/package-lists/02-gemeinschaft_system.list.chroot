@@ -7,7 +7,7 @@
 
 # tools
 wget inetutils-ping inetutils-telnet traceroute resolvconf bootlogd ca-certificates less aptitude apt apt-utils bash-completion
-libcap2-bin libpcap-dev unzip
+libcap2-bin libpcap-dev unzip net-tools
 
 # sysadmin tools
 sysstat htop iftop slurm iptraf iotop dstat lsof mtr-tiny tcpdump ngrep ssldump pciutils usbutils mailutils lshw hwinfo tree screen dtach tmux byobu multitail powertop
