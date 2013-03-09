@@ -3,24 +3,43 @@
   <actions/>
   <description>Provides the workspace basis for building Gemeinschaft 5</description>
   <displayName>GBE (Development)</displayName>
-  <logRotator>
-    <daysToKeep>-1</daysToKeep>
-    <numToKeep>10</numToKeep>
-    <artifactDaysToKeep>-1</artifactDaysToKeep>
-    <artifactNumToKeep>-1</artifactNumToKeep>
-  </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.security.AuthorizationMatrixProperty>
-      <permission>hudson.model.Run.Update:authenticated</permission>
-      <permission>hudson.model.Item.Build:authenticated</permission>
-      <permission>hudson.scm.SCM.Tag:authenticated</permission>
-      <permission>hudson.model.Item.Read:anonymous</permission>
-      <permission>hudson.model.Item.Read:authenticated</permission>
+      <permission>hudson.model.Run.Delete:jpawlowski</permission>
+      <permission>hudson.model.Run.Delete:wintermeyer</permission>
       <permission>hudson.model.Item.Discover:anonymous</permission>
-      <permission>hudson.model.Item.Discover:authenticated</permission>
+      <permission>hudson.model.Item.Discover:spag</permission>
+      <permission>hudson.model.Item.Discover:jpawlowski</permission>
+      <permission>hudson.model.Item.Discover:saschadaniels</permission>
+      <permission>hudson.model.Item.Discover:wintermeyer</permission>
+      <permission>hudson.model.Item.Build:spag</permission>
+      <permission>hudson.model.Item.Build:jpawlowski</permission>
+      <permission>hudson.model.Item.Build:saschadaniels</permission>
+      <permission>hudson.model.Item.Build:wintermeyer</permission>
+      <permission>hudson.scm.SCM.Tag:jpawlowski</permission>
+      <permission>hudson.scm.SCM.Tag:wintermeyer</permission>
+      <permission>hudson.model.Run.Update:spag</permission>
+      <permission>hudson.model.Run.Update:jpawlowski</permission>
+      <permission>hudson.model.Run.Update:saschadaniels</permission>
+      <permission>hudson.model.Run.Update:wintermeyer</permission>
+      <permission>hudson.model.Item.Read:anonymous</permission>
+      <permission>hudson.model.Item.Read:spag</permission>
+      <permission>hudson.model.Item.Read:jpawlowski</permission>
+      <permission>hudson.model.Item.Read:saschadaniels</permission>
+      <permission>hudson.model.Item.Read:wintermeyer</permission>
+      <permission>hudson.model.Item.Delete:jpawlowski</permission>
+      <permission>hudson.model.Item.Delete:wintermeyer</permission>
+      <permission>hudson.model.Item.Workspace:spag</permission>
+      <permission>hudson.model.Item.Workspace:jpawlowski</permission>
+      <permission>hudson.model.Item.Workspace:saschadaniels</permission>
+      <permission>hudson.model.Item.Workspace:wintermeyer</permission>
+      <permission>hudson.model.Item.Cancel:jpawlowski</permission>
+      <permission>hudson.model.Item.Cancel:wintermeyer</permission>
+      <permission>hudson.model.Item.Configure:jpawlowski</permission>
+      <permission>hudson.model.Item.Configure:wintermeyer</permission>
     </hudson.security.AuthorizationMatrixProperty>
-    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.4">
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.5">
       <projectUrl>https://github.com/amooma/GBE/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
@@ -39,13 +58,13 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@1.1.26">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@1.2.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec></refspec>
-        <url>git@github-gbe:amooma/GBE.git</url>
+        <url>https://github.com/amooma/GBE.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -72,7 +91,7 @@
     <excludedUsers></excludedUsers>
     <gitConfigName></gitConfigName>
     <gitConfigEmail></gitConfigEmail>
-    <skipTag>false</skipTag>
+    <skipTag>true</skipTag>
     <includedRegions></includedRegions>
     <scmName></scmName>
   </scm>
@@ -82,11 +101,11 @@
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers class="vector">
-    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.4">
+    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.5">
       <spec></spec>
     </com.cloudbees.jenkins.GitHubPushTrigger>
     <hudson.triggers.SCMTrigger>
-      <spec>0 */3 * * *</spec>
+      <spec>1 */2 * * *</spec>
       <ignorePostCommitHooks>false</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
@@ -105,23 +124,62 @@ fi</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.Mailer plugin="mailer@1.4">
-      <recipients>jp@jps-networks.eu</recipients>
-      <dontNotifyEveryUnstableBuild>true</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
+    <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder plugin="display-upstream-changes@0.1"/>
     <hudson.tasks.test.AggregatedTestResultPublisher>
-      <includeFailedBuilds>false</includeFailedBuilds>
+      <includeFailedBuilds>true</includeFailedBuilds>
     </hudson.tasks.test.AggregatedTestResultPublisher>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.27.1">
+      <recipientList>$DEFAULT_RECIPIENTS</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger>
+          <email>
+            <recipientList>jp@jps-networks.de</recipientList>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <sendToDevelopers>true</sendToDevelopers>
+            <sendToRequester>true</sendToRequester>
+            <includeCulprits>false</includeCulprits>
+            <sendToRecipientList>false</sendToRecipientList>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo></replyTo>
+          </email>
+          <failureCount>1</failureCount>
+        </hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger>
+        <hudson.plugins.emailext.plugins.trigger.FixedTrigger>
+          <email>
+            <recipientList>jp@jps-networks.de</recipientList>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <sendToDevelopers>true</sendToDevelopers>
+            <sendToRequester>true</sendToRequester>
+            <includeCulprits>false</includeCulprits>
+            <sendToRecipientList>false</sendToRecipientList>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo></replyTo>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.FixedTrigger>
+      </configuredTriggers>
+      <contentType>default</contentType>
+      <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
+      <defaultContent>$DEFAULT_CONTENT</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+      <presendScript></presendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_RECIPIENTS</replyTo>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
     <hudson.tasks.BuildTrigger>
-      <childProjects>DEV-GS_20_GS5</childProjects>
+      <childProjects>DEV-GS_10_GSE</childProjects>
       <threshold>
-        <name>SUCCESS</name>
-        <ordinal>0</ordinal>
-        <color>BLUE</color>
+        <name>UNSTABLE</name>
+        <ordinal>1</ordinal>
+        <color>YELLOW</color>
       </threshold>
     </hudson.tasks.BuildTrigger>
-    <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder plugin="display-upstream-changes@0.1"/>
   </publishers>
   <buildWrappers/>
 </project>

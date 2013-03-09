@@ -4,8 +4,9 @@
 # settings
 #
 distro=wheezy
-arch=amd64
-suite=testing
+arch=i386
+suite=unstable
+http_proxy=http://localhost:3128/
 
 rm -f *.tar.gz *.tar.xz *.dsc *.build *.changes *.deb
 
@@ -21,10 +22,14 @@ cd freeswitch
 
 ver="$(cat build/next-release.txt | sed -e 's/-/~/g')~n$(date +%Y%m%dT%H%M%SZ)-1~${distro}+1"
 git clean -fdx && git reset --hard HEAD
+
+echo "# Do not generate diff for changes in configure.in
+extend-diff-ignore = \"configure.in$\"" > debian/source/options
+
 ./build/set-fs-version.sh "$ver"
-git add configure.in && git commit -m "bump to custom v$ver"
 [ -f ../modules_${distro}.conf ] && cp -L ../modules_${distro}.conf debian/modules.conf
 (cd debian && ./bootstrap.sh -c $distro)
+git add configure.in && git commit -m "bump to custom v$ver"
 dch -b -m -v "$ver" --force-distribution -D "$suite" "Custom build."
 
 # Needs sudo right if user!=root:
@@ -32,6 +37,7 @@ dch -b -m -v "$ver" --force-distribution -D "$suite" "Custom build."
 git-buildpackage -b -us -uc \
   --git-verbose \
   --git-pbuilder --git-dist=$distro --git-arch=$arch \
+  --git-keyid=09E60DF5 \
   --git-compression-level=1v --git-compression=xz
 git reset --hard HEAD^
 
