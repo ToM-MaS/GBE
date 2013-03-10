@@ -32,3 +32,13 @@ cd "`su - ${GSE_USER} -c "passenger-config --root"`/.."
 ln -snf \
   "`su - ${GSE_USER} -c "passenger-config --root"`" \
   "`su - ${GSE_USER} -c "passenger-config --root"`/../passenger"
+
+
+echo -e "GBE: Installing mod_websocket @Apache2 ...\n"
+(cd /usr/local/src; git clone git://github.com/disconnect/apache-websocket.git)
+cd /usr/local/src/apache-websocket
+
+apxs2 -i -a -c mod_websocket.c
+apxs2 -i -a -c mod_websocket_draft76.c
+
+cd - 2>&1 >/dev/null
