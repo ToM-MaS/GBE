@@ -32,15 +32,3 @@ cd "`su - ${GSE_USER} -c "passenger-config --root"`/.."
 ln -snf \
   "`su - ${GSE_USER} -c "passenger-config --root"`" \
   "`su - ${GSE_USER} -c "passenger-config --root"`/../passenger"
-
-
-echo -e "GBE: Installing mod_websocket @Apache2 ...\n"
-(cd /usr/local/src; git clone https://github.com/abligh/apache-websocket)
-cd /usr/local/src/apache-websocket
-
-apxs2 -i -a -c mod_websocket.c
-apxs2 -i -a -c mod_websocket_draft76.c
-(cd vncproxy; apxs2 -i -a -c -I.. mod_websocket_vnc_proxy.c)
-
-cd - 2>&1 >/dev/null
-rm -rf /usr/local/src/apache-websocket
