@@ -11,7 +11,7 @@ http_proxy=http://localhost:3128/
 rm -f *.tar.gz *.tar.xz *.dsc *.build *.changes *.deb
 
 # Install basic Debian maintainer packages
-#sudo apt-get -y --force-yes install -qq build-essential git-buildpackage udev autoconf automake autotools-dev debhelper dh-make devscripts fakeroot file gfortran git gnupg gpc lintian patch patchutils pbuilder perl python python xutils-dev
+#sudo apt-get -y --force-yes install -qq build-essential git-buildpackage udev autoconf automake autotools-dev debhelper dh-make devscripts fakeroot file gfortran git gnupg lintian patch patchutils pbuilder perl python python xutils-dev libicu-dev libgnutls-dev libtheora-dev 
 
 [ ! -d /var/cache/pbuilder/base-${distro}-${arch}.cow ] && DIST=${distro} ARCH=${arch} git-pbuilder create || DIST=${distro} ARCH=${arch} git-pbuilder update
 [ ! -L /dev/fd ] && sudo ln -s /proc/self/fd /dev/fd
