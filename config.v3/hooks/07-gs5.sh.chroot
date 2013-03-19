@@ -113,24 +113,7 @@ PASSENGER_ROOT="`su - ${GSE_USER} -c "passenger-config --root"`"
 
 echo -e "GBE: Adjust Apache2 configuration ...\n"
 echo "LoadModule passenger_module ${PASSENGER_ROOT}/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
-echo "PassengerRoot ${PASSENGER_ROOT}
-PassengerRuby /var/lib/gemeinschaft/.rvm/wrappers/default/ruby
-
-PassengerMaxPoolSize 4
-PassengerMaxInstancesPerApp 3
-# http://stackoverflow.com/questions/821820/how-does-phusion-passenger-reuse-threads-and-processes
-# Both virtual hosts (PassengerAppRoot ${GS_DIR_NORMALIZED}) are actually
-# the same application!
-
-PassengerPoolIdleTime 200
-PassengerMaxRequests 10000
-PassengerLogLevel 0
-RailsFrameworkSpawnerIdleTime 0
-RailsAppSpawnerIdleTime 0
-PassengerUserSwitching on
-PassengerDefaultUser nobody
-PassengerFriendlyErrorPages off
-PassengerSpawnMethod smart-lv2" > /etc/apache2/mods-available/passenger.conf
+echo "PassengerRoot ${PASSENGER_ROOT}" > /etc/apache2/mods-available/passenger.conf
 
 # enable modules
 a2enmod rewrite 2>&1

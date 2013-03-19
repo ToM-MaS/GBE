@@ -383,14 +383,5 @@ else
 	ln -s /usr/share/freeswitch/scripts /opt/freeswitch/scripts
 fi
 
-echo -e "GBE: Enabling FreeSwitch ...\n"
-echo "# this is for manually installed FS versions
-FREESWITCH_ENABLED=\"true\"
-FREESWITCH_PARAMS=\"-rp -nc\"
-
-# this is for FS installations via Debian packages
-DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
-" > /etc/default/freeswitch
-
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*

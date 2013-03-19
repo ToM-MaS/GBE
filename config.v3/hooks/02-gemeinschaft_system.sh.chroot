@@ -62,9 +62,6 @@ rm -rf /etc/resolv.conf
 ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
 echo "REPORT_ABSENT_SYMLINK=no" > /etc/default/resolvconf
 
-echo -e "GBE: Reconfiguring SNMP logging facilities ...\n"
-sed -i "s/^SNMPDOPTS=.*$/SNMPDOPTS='-LS 0-4 d -Lf \/dev\/null -u snmp -g snmp -I -smux -p \/var\/run\/snmpd.pid'/" /etc/default/snmpd
-
 echo -e "GBE: Installing nodejs ...\n"
 cd /usr/local/src
 wget -c -t 5 --waitretry=3 http://nodejs.org/dist/node-${NODEJS_VERSION}.tar.gz
