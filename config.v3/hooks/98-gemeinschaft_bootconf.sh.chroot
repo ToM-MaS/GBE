@@ -29,6 +29,7 @@ update-rc.d gemeinschaft-prompt defaults 2>&1
 update-rc.d gemeinschaft-runtime-init defaults 2>&1
 update-rc.d gemeinschaft-runtime-helper defaults 2>&1
 update-rc.d gemeinschaft-runtime-init-post defaults 2>&1
+update-rc.d freeswitch defaults 2>&1
 update-rc.d winbind remove 2>&1
 update-rc.d haproxy defaults 2>&1
 #update-rc.d mon_ami defaults 2>&1

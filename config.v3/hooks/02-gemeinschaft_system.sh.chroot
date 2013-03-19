@@ -32,19 +32,23 @@ echo -e "GBE: Create service account mon_ami ...\n"
 # otherwise live-config user setup will not work correctly.
 useradd mon_ami -m -r -d /var/lib/mon_ami -s /bin/bash -c "MonAMI Service Account"
 
-echo -e "GBE: Configuring Postfix ...\n"
-# Disable TLS for INCOMING mails to avoid certificate issues
-# when Gemeinschaft wants to send mails
-sed -i 's/smtpd_use_tls=yes/smtpd_use_tls=no/' /etc/postfix/main.cf
-# Enable TLS for OUTGOING mails so that emails to users can be encrypted
-echo "smtp_use_tls = yes" >> /etc/postfix/main.cf
-echo "smtp_tls_security_level = may" >> /etc/postfix/main.cf
-echo "smtpd_tls_CApath = /etc/ssl/certs" >> /etc/postfix/main.cf
-echo "smtpd_tls_cert_file=/etc/ssl/gemeinschaft.crt" >> /etc/postfix/main.cf
-echo "smtpd_tls_key_file=/etc/ssl/gemeinschaft.key" >> /etc/postfix/main.cf
-echo "${GSE_USER}: root" >> /etc/aliases
-echo "gsmaster: root" >> /etc/aliases
-newaliases
+if [ -e /etc/postfix/main.cf ]; then
+	echo -e "GBE: Configuring Postfix ...\n"
+	# Disable TLS for INCOMING mails to avoid certificate issues
+	# when Gemeinschaft wants to send mails
+	sed -i 's/smtpd_use_tls=yes/smtpd_use_tls=no/' /etc/postfix/main.cf
+	# Enable TLS for OUTGOING mails so that emails to users can be encrypted
+	echo "smtp_use_tls = yes" >> /etc/postfix/main.cf
+	echo "smtp_tls_security_level = may" >> /etc/postfix/main.cf
+	echo "smtpd_tls_CApath = /etc/ssl/certs" >> /etc/postfix/main.cf
+	echo "smtpd_tls_cert_file=/etc/ssl/gemeinschaft.crt" >> /etc/postfix/main.cf
+	echo "smtpd_tls_key_file=/etc/ssl/gemeinschaft.key" >> /etc/postfix/main.cf
+fi
+if [ -e /etc/aliases ]; then
+	echo "${GSE_USER}: root" >> /etc/aliases
+	echo "gsmaster: root" >> /etc/aliases
+	[ -e /usr/bin/newaliases ] && newaliases
+fi
 
 echo -e "GBE: Configuring NTP server ...\n"
 sed -i "s/^server.*\$//" /etc/ntp.conf
