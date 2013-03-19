@@ -28,13 +28,13 @@ echo -e "GBE: Disable ri and rdoc generation ...\n"
 echo "gem: --no-ri --no-rdoc" > /var/lib/gemeinschaft/.gemrc
 
 echo -e "GBE: Install Ruby version ${RUBY_VERSION} ...\n"
-su - ${GSE_USER} -c "rvm install ${RUBY_VERSION} 2>&1"
+su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; rvm install ${RUBY_VERSION} 2>&1"
 
 echo -e "GBE: Set Ruby default version ...\n"
-su - ${GSE_USER} -c "rvm use ${RUBY_VERSION} --default 2>&1"
+su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; rvm use ${RUBY_VERSION} --default 2>&1"
 
 echo -e "GBE: Update Ruby Gems version ${RUBY_GEMS_VERSION} ...\n"
-su - ${GSE_USER} -c "rvm rubygems ${RUBY_GEMS_VERSION} 2>&1"
+su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; rvm rubygems ${RUBY_GEMS_VERSION} 2>&1"
 
 echo -e "GBE: Install Rails ${RAILS_VERSION} ...\n"
-su - ${GSE_USER} -c "gem install rails --version '~> ${RAILS_VERSION}' 2>&1"
+su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; gem install rails --version '~> ${RAILS_VERSION}' 2>&1"
