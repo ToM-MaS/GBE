@@ -32,6 +32,12 @@ else
 	LIVE=false
 fi
 
+if [ -e "/etc/rpi-issue" ]; then
+	PLATFORM="rpi"
+else
+	PLATFORM="x86"
+fi
+
 case "$1" in
 	start)
 		# Post-Installation setup for Gemeinschaft 5
@@ -40,10 +46,12 @@ case "$1" in
 		echo -e "Preparing Gemeinschaft for 1st start ...\n"
 
 		# write correct APT source list
-		echo "deb http://cdn.debian.net/debian/ wheezy main contrib non-free" > /etc/apt/sources.list
-		echo "deb-src http://cdn.debian.net/debian/ wheezy main contrib non-free" >> /etc/apt/sources.list
-		echo "deb http://security.debian.org/ wheezy/updates main contrib non-free" >> /etc/apt/sources.list
-		echo "deb-src http://security.debian.org/ wheezy/updates main contrib non-free" >> /etc/apt/sources.list
+		if [ "${PLATFORM}" == "x86" ]; then
+			echo "deb http://cdn.debian.net/debian/ wheezy main contrib non-free" > /etc/apt/sources.list
+			echo "deb-src http://cdn.debian.net/debian/ wheezy main contrib non-free" >> /etc/apt/sources.list
+			echo "deb http://security.debian.org/ wheezy/updates main contrib non-free" >> /etc/apt/sources.list
+			echo "deb-src http://security.debian.org/ wheezy/updates main contrib non-free" >> /etc/apt/sources.list
+		fi
 
 		# Generate new password for gsmaster system administrator for live system
 		if [[ "${LIVE}" == true ]]; then
