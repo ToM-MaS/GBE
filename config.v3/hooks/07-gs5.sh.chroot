@@ -64,7 +64,7 @@ password ${GS_GIT_PASSWORD}
 
 	[ -f "${GS_DIR}/config/application.rb" ] && rm -rf ~/.netrc
 else
-	[ -f /etc/gemeinschaft_branch ] && GS_BRANCH="`cat /etc/gemeinschaft_branch`"
+	[ -f /etc/gemeinschaft_branch ] && GS_BRANCH="`cat /etc/gemeinschaft_branch`" || GS_BRANCH="master"
 
 	#FIXME lazy workaround for Jenkins who loses our branch names ...
 	cd "${GS_DIR}"

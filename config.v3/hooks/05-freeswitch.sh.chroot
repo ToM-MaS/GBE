@@ -371,6 +371,7 @@ if [[ ! -f /usr/bin/freeswitch ]]
 		chown -R freeswitch.root /opt/freeswitch
 	fi
 else
+	echo -e "GBE: Creating compatibility symlinks ...\n"
 	# compatibility with manual installation and GS default directories
 	mkdir -p /opt/freeswitch
 	ln -s /usr/share/freeswitch/sounds /opt/freeswitch/sounds

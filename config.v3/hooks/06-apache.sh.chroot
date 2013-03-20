@@ -27,7 +27,7 @@ ln -snf \
   "/usr/lib/apache2/modules/mod_passenger.so"
 
 cd "`su - ${GSE_USER} -c "passenger-config --root"`/.."
-[ ! -e "passenger" ] || rm -rf "passenger"
+[ -e "passenger" ] && rm -rf "passenger"
 
 ln -snf \
   "`su - ${GSE_USER} -c "passenger-config --root"`" \

@@ -24,15 +24,15 @@ rm -rf /etc/init.d/gdfdl-init
 rm -rf /etc/init.d/gdfdl-prompt
 
 echo -e "GBE: Enabling system services ...\n"
-update-rc.d gemeinschaft-init defaults 2>&1
-update-rc.d gemeinschaft-prompt defaults 2>&1
-update-rc.d gemeinschaft-runtime-init defaults 2>&1
-update-rc.d gemeinschaft-runtime-helper defaults 2>&1
-update-rc.d gemeinschaft-runtime-init-post defaults 2>&1
-update-rc.d freeswitch defaults 2>&1
-update-rc.d winbind remove 2>&1
-update-rc.d haproxy defaults 2>&1
-#update-rc.d mon_ami defaults 2>&1
+update-rc.d -f gemeinschaft-init defaults 2>&1
+update-rc.d -f gemeinschaft-prompt defaults 2>&1
+update-rc.d -f gemeinschaft-runtime-init defaults 2>&1
+update-rc.d -f gemeinschaft-runtime-helper defaults 2>&1
+update-rc.d -f gemeinschaft-runtime-init-post defaults 2>&1
+update-rc.d -f freeswitch defaults 2>&1
+update-rc.d -f winbind remove 2>&1
+update-rc.d -f haproxy defaults 2>&1
+#update-rc.d -f mon_ami defaults 2>&1
 
 echo -e "GBE: Set initial file permissions and security settings ...\n"
 "${GSE_DIR_NORMALIZED}/bin/gs-enforce-security.sh" | grep -Ev retained | grep -Ev "no changes" | grep -Ev "nor referent has been changed"
