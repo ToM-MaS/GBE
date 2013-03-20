@@ -12,6 +12,7 @@
 set -e
 
 # General settings
+[ -e /etc/environment ] && . /etc/environment
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
@@ -84,7 +85,7 @@ fi
 #  Create alias for GS5 backwards compatibility
 #
 GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
-ln -s `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
+ln -sv `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 
 # Install GS related Gems
 #
@@ -97,23 +98,22 @@ echo -e "GBE: Create local configuration directory ...\n"
 GS_DIR_LOCAL="/var/opt/`basename "${GS_DIR}"`"
 GS_DIR_NORMALIZED_LOCAL="`dirname "${GS_DIR_LOCAL}"`/`basename "${GS_DIR_NORMALIZED}"`"
 mkdir -p ${GS_DIR_LOCAL}/freeswitch/conf
-ln -s `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
+ln -sv `basename "${GS_DIR_LOCAL}"` "${GS_DIR_NORMALIZED_LOCAL}"
 
 # Move Freeswitch storage files
 [ -d /var/lib/freeswitch/db ] && mv /var/lib/freeswitch/db ${GS_DIR_LOCAL}/freeswitch/db || mkdir -p ${GS_DIR_LOCAL}/freeswitch/db
 [ -d /var/lib/freeswitch/storage ] && mv /var/lib/freeswitch/storage ${GS_DIR_LOCAL}/freeswitch/storage || mkdir -p ${GS_DIR_LOCAL}/freeswitch/storage
 [ -d /var/lib/freeswitch/recordings ] && mv /var/lib/freeswitch/recordings ${GS_DIR_LOCAL}/freeswitch/recordings || mkdir -p ${GS_DIR_LOCAL}/freeswitch/recordings
 [ -d /var/lib/freeswitch/voicemail ] && mv /var/lib/freeswitch/voicemail ${GS_DIR_LOCAL}/freeswitch/voicemail || mkdir -p ${GS_DIR_LOCAL}/freeswitch/voicemail
-ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
-ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
-ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
-ln -s ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/voicemail /var/lib/freeswitch/voicemail
-
-PASSENGER_ROOT="`su - ${GSE_USER} -c "passenger-config --root"`"
+ln -sv ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/db /var/lib/freeswitch/db
+ln -sv ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/storage /var/lib/freeswitch/storage
+ln -sv ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/recordings /var/lib/freeswitch/recordings
+ln -sv ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/voicemail /var/lib/freeswitch/voicemail
 
 echo -e "GBE: Adjust Apache2 configuration ...\n"
-echo "LoadModule passenger_module ${PASSENGER_ROOT}/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
-echo "PassengerRoot ${PASSENGER_ROOT}" > /etc/apache2/mods-available/passenger.conf
+PASSENGER_ROOT="`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`"
+echo "LoadModule passenger_module ${PASSENGER_ROOT%*/*}/passenger/ext/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
+echo "PassengerRoot ${PASSENGER_ROOT%*/*}/passenger" > /etc/apache2/mods-available/passenger.conf
 
 # enable modules
 a2enmod rewrite 2>&1

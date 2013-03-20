@@ -12,6 +12,7 @@
 set -e
 
 # General settings
+[ -e /etc/environment ] && . /etc/environment
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 SRC_DIR="/usr/local/src"
@@ -374,14 +375,14 @@ else
 	echo -e "GBE: Creating compatibility symlinks ...\n"
 	# compatibility with manual installation and GS default directories
 	mkdir -p /opt/freeswitch
-	ln -s /usr/share/freeswitch/sounds /opt/freeswitch/sounds
-	ln -s /usr/lib/freeswitch/mod /opt/freeswitch/mod
-	ln -s /var/lib/freeswitch/storage /opt/freeswitch/storage
-	ln -s /var/lib/freeswitch/recordings /opt/freeswitch/recordings
-	ln -s /var/lib/freeswitch/voicemail /opt/freeswitch/voicemail
-	ln -s /var/lib/freeswitch/db /opt/freeswitch/db
-	ln -s /etc/freeswitch /opt/freeswitch/conf
-	ln -s /usr/share/freeswitch/scripts /opt/freeswitch/scripts
+	ln -sv /usr/share/freeswitch/sounds /opt/freeswitch/sounds
+	ln -sv /usr/lib/freeswitch/mod /opt/freeswitch/mod
+	ln -sv /var/lib/freeswitch/storage /opt/freeswitch/storage
+	ln -sv /var/lib/freeswitch/recordings /opt/freeswitch/recordings
+	ln -sv /var/lib/freeswitch/voicemail /opt/freeswitch/voicemail
+	ln -sv /var/lib/freeswitch/db /opt/freeswitch/db
+	ln -sv /etc/freeswitch /opt/freeswitch/conf
+	ln -sv /usr/share/freeswitch/scripts /opt/freeswitch/scripts
 fi
 
 # cleanup sources

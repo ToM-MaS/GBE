@@ -12,6 +12,7 @@
 set -e
 
 # General settings
+[ -e /etc/environment ] && . /etc/environment
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 

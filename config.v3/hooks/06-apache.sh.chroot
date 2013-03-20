@@ -12,6 +12,7 @@
 set -e
 
 # General settings
+[ -e /etc/environment ] && . /etc/environment
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 
@@ -22,13 +23,8 @@ echo -e "GBE: Installing Passenger version ${PASSENGER_VERSION} @Apache2 ...\n"
 su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; gem install passenger --version ${PASSENGER_VERSION} 2>&1"
 su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-install-apache2-module --auto 2>&1"
 
-ln -snf \
-  "`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`/ext/apache2/mod_passenger.so" \
-  "/usr/lib/apache2/modules/mod_passenger.so"
+PASSENGER_ROOT="`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`"
 
-cd "`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`/.."
-[ -e "passenger" ] && rm -rf "passenger"
-
-ln -snf \
-  "`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`" \
-  "`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`/../passenger"
+[ -e "${PASSENGER_ROOT%*/*}/passenger" ] && rm -rv "${PASSENGER_ROOT%*/*}/passenger"
+ln -snfv "${PASSENGER_ROOT##*/}" "${PASSENGER_ROOT%*/*}/passenger"
+ln -snfv "${PASSENGER_ROOT%*/*}/passenger/ext/apache2/mod_passenger.so" "/usr/lib/apache2/modules/mod_passenger.so"
