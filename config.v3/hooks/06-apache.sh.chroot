@@ -19,16 +19,16 @@ echo -e "\n###########################################################
 ## GBE: Webserver configuration\n\n"
 
 echo -e "GBE: Installing Passenger version ${PASSENGER_VERSION} @Apache2 ...\n"
-su - ${GSE_USER} -c "gem install passenger --version ${PASSENGER_VERSION} 2>&1"
-su - ${GSE_USER} -c "passenger-install-apache2-module --auto 2>&1"
+su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; gem install passenger --version ${PASSENGER_VERSION} 2>&1"
+su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-install-apache2-module --auto 2>&1"
 
 ln -snf \
-  "`su - ${GSE_USER} -c "passenger-config --root"`/ext/apache2/mod_passenger.so" \
+  "`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`/ext/apache2/mod_passenger.so" \
   "/usr/lib/apache2/modules/mod_passenger.so"
 
-cd "`su - ${GSE_USER} -c "passenger-config --root"`/.."
+cd "`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`/.."
 [ -e "passenger" ] && rm -rf "passenger"
 
 ln -snf \
-  "`su - ${GSE_USER} -c "passenger-config --root"`" \
-  "`su - ${GSE_USER} -c "passenger-config --root"`/../passenger"
+  "`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`" \
+  "`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`/../passenger"
