@@ -19,6 +19,12 @@ GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
 [[ ${GDFDL_BUILDNAME} =~ "-" ]] && GDFDL_BRANCH=`echo ${GDFDL_BUILDNAME} | cut -d - -f2` || GDFDL_BRANCH="master"
 source /etc/gemeinschaft/system.conf
 
+if [ -e "/etc/rpi-issue" ]; then
+	PLATFORM="rpi"
+else
+	PLATFORM="x86"
+fi
+
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft installation\n\n"
 
@@ -136,9 +142,11 @@ echo "RAILS_ENV=\"$GSE_ENV\"" >> /etc/gemeinschaft/system.conf
 
 rm -f /etc/gemeinschaft_branch
 
-# Install moh
-/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-music-8khz
+if [ "${PLATFORM}" == "x86" ]; then
+	# Install moh
+	/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-music-8khz
 
-# Install voice prompts
-/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-en-callie-8khz
-/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-de-tts-google-8khz
+	# Install voice prompts
+	/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-en-callie-8khz
+	/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-de-tts-google-8khz
+fi
