@@ -67,10 +67,12 @@ case "$1" in
 		#
 		
 		# Start MySQL without permissions
+		set +e
 		service mysql status 2>&1 >/dev/null
 		[ $? == 0 ] && service mysql stop
 		mysqld_safe --skip-grant-tables &
 		sleep 3
+		set -e
 
 		# Change MySQL password for user root
 		if [ ! -f /root/.mysql_root_password ]
@@ -119,8 +121,10 @@ chmod -v 0640 /var/lib/freeswitch/.odbc.ini
 
 		# Run update script
 		"${GSE_DIR_NORMALIZED}/bin/gs-update.sh" --force-init
+		set +e
 		service mysql status 2>&1 >/dev/null
 		[ $? == 0 ] && service mysql stop
+		set -e
 
 		# self destruction
 		#
