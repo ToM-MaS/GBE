@@ -63,32 +63,43 @@ case "$1" in
 			echo -e "${GSMASTER_PASSWORD}\n${GSMASTER_PASSWORD}" | (passwd gsmaster)
 		fi
 
+
 		# Database setup
 		#
-		
-		# Start MySQL without permissions
-		set +e
-		service mysql status 2>&1 >/dev/null
-		[ $? == 0 ] && service mysql stop
-		mysqld_safe --skip-grant-tables &
-		sleep 3
-		set -e
 
 		# Change MySQL password for user root
 		if [ ! -f /root/.mysql_root_password ]
 			then
+			# Start MySQL without permissions
+			set +e
+			service mysql status 2>&1 >/dev/null
+			[ $? == 0 ] && service mysql stop
+			set -e
+			mysqld_safe --skip-grant-tables &
+			sleep 10
+
 			echo "** Generating individual password for MySQL user 'root'"
 			apg -m30 -a0 -n 1 -M NCL > /root/.mysql_root_password
 			chmod 0440 /root/.mysql_root_password
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
-			mysql -e "USE mysql; DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1' OR host='::1' ); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1' OR host='::1'); FLUSH PRIVILEGES;" --user=root
+			mysql -e "DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1' OR host='::1' ); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1' OR host='::1'); FLUSH PRIVILEGES;" --user=root --host=127.0.0.1 mysql
+
+			set +e
+			service mysql status 2>&1 >/dev/null
+			[ $? == 0 ] && service mysql stop
+			set -e
 		else
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
 		fi
 
+		set +e
+		service mysql status 2>&1 >/dev/null
+		[ $? != 0 ] && service mysql start
+		set -e
+
 		# Load timezone information into database
 		echo "** Loading timezone information into MySQL database"
-		mysql_tzinfo_to_sql /usr/share/zoneinfo 2>/dev/null | mysql mysql --user=root --password="${MYSQL_PASSWD_ROOT}" 2>&1 >/dev/null
+		mysql_tzinfo_to_sql /usr/share/zoneinfo 2>/dev/null | mysql mysql --user=root --password="${MYSQL_PASSWD_ROOT}" --host=127.0.0.1 2>&1 >/dev/null
 
 		# Create MySQL user for Gemeinschaft
 		if [ ! -f "${GS_MYSQL_PASSWORD_FILE}" ]
@@ -96,7 +107,7 @@ case "$1" in
 			echo "** Creating MySQL user '${GS_MYSQL_USER}'"
 			apg -m30 -a0 -n 1 -M NCL > "${GS_MYSQL_PASSWORD_FILE}"
 			MYSQL_PASSWD_GS="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
-			mysql -e "GRANT ALL PRIVILEGES ON ${GS_MYSQL_DB}.* TO ${GS_MYSQL_USER} @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_GS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}"
+			mysql -e "GRANT ALL PRIVILEGES ON ${GS_MYSQL_DB}.* TO ${GS_MYSQL_USER} @'localhost' IDENTIFIED BY '${MYSQL_PASSWD_GS}'; FLUSH PRIVILEGES;" --user=root --password="${MYSQL_PASSWD_ROOT}" --host=127.0.0.1
 		else
 			MYSQL_PASSWD_GS="`cat "${GS_MYSQL_PASSWORD_FILE}"`"
 		fi
@@ -117,7 +128,7 @@ chmod -v 0640 /var/lib/freeswitch/.odbc.ini
 
 		# (re)create Gemeinschaft database
 		echo "** Creating MySQL database 'gemeinschaft'"
-		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft;" --user=root --password="${MYSQL_PASSWD_ROOT}"
+		mysql -e "DROP DATABASE IF EXISTS gemeinschaft; CREATE DATABASE gemeinschaft;" --user=root --password="${MYSQL_PASSWD_ROOT}" --host=127.0.0.1
 
 		# Run update script
 		"${GSE_DIR_NORMALIZED}/bin/gs-update.sh" --force-init
