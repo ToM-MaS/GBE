@@ -15,14 +15,11 @@ if [ x"${http_proxy}" != x"" ]; then
 
 lb config noauto \
 	--apt-http-proxy ${http_proxy} \
-	--apt apt \
 	--apt-indices false \
-	--apt-recommends false \
 	--architecture i386 \
 	--archive-areas "main contrib non-free" \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
-	--debootstrap-options "--variant=minbase" \
 	--iso-application "Gemeinschaft 5" \
 	--iso-preparer "Gemeinschaft Build Environment" \
 	--iso-publisher "AMOOMA GmbH; http://amooma.de/" \
@@ -37,14 +34,11 @@ lb config noauto \
 else
 
 lb config noauto \
-	--apt apt \
 	--apt-indices false \
-	--apt-recommends false \
 	--architecture i386 \
 	--archive-areas "main contrib non-free" \
 	--chroot-filesystem squashfs \
 	--debian-installer live \
-	--debootstrap-options "--variant=minbase" \
 	--iso-application "Gemeinschaft 5" \
 	--iso-preparer "Gemeinschaft Build Environment" \
 	--iso-publisher "AMOOMA GmbH; http://amooma.de/" \

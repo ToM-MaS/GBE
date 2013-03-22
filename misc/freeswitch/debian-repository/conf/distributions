@@ -1,32 +1,22 @@
-Origin: repo.profhost.eu
+Origin: repo.amooma.de
 Label: apt repository
 Suite: stable
-Codename: squeeze
-Version: 3.1
-Architectures: i386 amd64 source 
-Components: main contrib non-free
-Description: JPS Networks Debian Repository
-#Update: debian
-SignWith: yes
-
-Origin: repo.profhost.eu
-Label: apt repository
-Suite: testing
 Codename: wheezy
 Version: 3.1
-Architectures: i386 amd64 source
+Architectures: i386 amd64 armel armhf source
 Components: main contrib non-free
-Description: JPS Networks Debian Repository
+Description: AMOOMA Debian Stable Repository
 #Update: debian
 SignWith: yes
 
-Origin: repo.profhost.eu
+Origin: repo.amooma.de
 Label: apt repository
 Suite: unstable
-Codename: sid
+Codename: wheezy-unstable
 Version: 3.1
-Architectures: i386 amd64 source
+Architectures: i386 amd64 armel armhf source
 Components: main contrib non-free
-Description: JPS Networks Debian Repository
+Description: AMOOMA Debian Unstable Repository
 #Update: debian
 SignWith: yes
+

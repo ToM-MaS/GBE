@@ -1,57 +1,62 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Gemeinschaft 5 nightly development build</description>
+  <description>Gemeinschaft 5 nightly development build&#xd;
+&lt;br /&gt;&lt;br /&gt;&#xd;
+&lt;strong&gt;IMPORTANT: &lt;font color=&quot;red&quot;&gt;DON&apos;T START THE BUILD PROCESS HERE !&lt;/font&gt;&lt;/strong&gt; (only for a good reason!)&lt;br /&gt;&#xd;
+&lt;strong&gt;Instead start the build process by building the &lt;a href=&quot;/job/NIGHTLY-GS_00_GBE/&quot;&gt;GBE first&lt;/a&gt;, it will automatically handover to this GS5 build afterwards.&lt;/strong&gt;</description>
   <displayName>Gemeinschaft 5 (Nightly Build)</displayName>
-  <logRotator>
-    <daysToKeep>-1</daysToKeep>
-    <numToKeep>10</numToKeep>
-    <artifactDaysToKeep>-1</artifactDaysToKeep>
-    <artifactNumToKeep>-1</artifactNumToKeep>
-  </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.security.AuthorizationMatrixProperty>
-      <permission>hudson.model.Item.Delete:jpawlowski</permission>
-      <permission>hudson.model.Item.Configure:jpawlowski</permission>
-      <permission>hudson.model.Item.Cancel:jpawlowski</permission>
-      <permission>hudson.model.Run.Update:spag</permission>
-      <permission>hudson.model.Run.Update:jpawlowski</permission>
-      <permission>hudson.model.Run.Update:saschadaniels</permission>
-      <permission>hudson.model.Run.Update:wintermeyer</permission>
-      <permission>hudson.model.Item.Workspace:spag</permission>
-      <permission>hudson.model.Item.Workspace:jpawlowski</permission>
-      <permission>hudson.model.Item.Workspace:saschadaniels</permission>
-      <permission>hudson.model.Item.Workspace:wintermeyer</permission>
+      <permission>hudson.model.Run.Delete:jpawlowski</permission>
+      <permission>hudson.model.Run.Delete:wintermeyer</permission>
+      <permission>hudson.model.Item.Discover:anonymous</permission>
+      <permission>hudson.model.Item.Discover:spag</permission>
+      <permission>hudson.model.Item.Discover:jpawlowski</permission>
+      <permission>hudson.model.Item.Discover:saschadaniels</permission>
+      <permission>hudson.model.Item.Discover:wintermeyer</permission>
       <permission>hudson.model.Item.Build:spag</permission>
       <permission>hudson.model.Item.Build:jpawlowski</permission>
       <permission>hudson.model.Item.Build:saschadaniels</permission>
       <permission>hudson.model.Item.Build:wintermeyer</permission>
+      <permission>hudson.scm.SCM.Tag:spag</permission>
       <permission>hudson.scm.SCM.Tag:jpawlowski</permission>
+      <permission>hudson.scm.SCM.Tag:saschadaniels</permission>
+      <permission>hudson.scm.SCM.Tag:wintermeyer</permission>
+      <permission>hudson.model.Run.Update:spag</permission>
+      <permission>hudson.model.Run.Update:jpawlowski</permission>
+      <permission>hudson.model.Run.Update:saschadaniels</permission>
+      <permission>hudson.model.Run.Update:wintermeyer</permission>
+      <permission>hudson.model.Item.Read:anonymous</permission>
       <permission>hudson.model.Item.Read:spag</permission>
-      <permission>hudson.model.Item.Read:authenticated</permission>
       <permission>hudson.model.Item.Read:jpawlowski</permission>
       <permission>hudson.model.Item.Read:saschadaniels</permission>
       <permission>hudson.model.Item.Read:wintermeyer</permission>
-      <permission>hudson.model.Item.Discover:anonymous</permission>
-      <permission>hudson.model.Item.Discover:spag</permission>
-      <permission>hudson.model.Item.Discover:authenticated</permission>
-      <permission>hudson.model.Item.Discover:jpawlowski</permission>
-      <permission>hudson.model.Item.Discover:saschadaniels</permission>
-      <permission>hudson.model.Item.Discover:wintermeyer</permission>
-      <permission>hudson.model.Run.Delete:jpawlowski</permission>
+      <permission>hudson.model.Item.Delete:jpawlowski</permission>
+      <permission>hudson.model.Item.Delete:wintermeyer</permission>
+      <permission>hudson.model.Item.Workspace:spag</permission>
+      <permission>hudson.model.Item.Workspace:jpawlowski</permission>
+      <permission>hudson.model.Item.Workspace:saschadaniels</permission>
+      <permission>hudson.model.Item.Workspace:wintermeyer</permission>
+      <permission>hudson.model.Item.Cancel:spag</permission>
+      <permission>hudson.model.Item.Cancel:jpawlowski</permission>
+      <permission>hudson.model.Item.Cancel:saschadaniels</permission>
+      <permission>hudson.model.Item.Cancel:wintermeyer</permission>
+      <permission>hudson.model.Item.Configure:jpawlowski</permission>
+      <permission>hudson.model.Item.Configure:wintermeyer</permission>
     </hudson.security.AuthorizationMatrixProperty>
-    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.4">
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.5">
       <projectUrl>https://github.com/amooma/GS5/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@1.1.26">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@1.2.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <name>GS5</name>
         <refspec></refspec>
-        <url>git@github-gs5:amooma/GS5.git</url>
+        <url>https://github.com/amooma/GS5.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -78,33 +83,32 @@
     <excludedUsers></excludedUsers>
     <gitConfigName></gitConfigName>
     <gitConfigEmail></gitConfigEmail>
-    <skipTag>false</skipTag>
+    <skipTag>true</skipTag>
     <includedRegions></includedRegions>
     <scmName></scmName>
   </scm>
-  <quietPeriod>60</quietPeriod>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
   <triggers class="vector">
     <hudson.triggers.SCMTrigger>
-      <spec>30 6 * * *</spec>
+      <spec>45 4 * * *</spec>
       <ignorePostCommitHooks>false</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>workspace/DEV-GS_00_GBE</customWorkspace>
+  <customWorkspace>jobs/NIGHTLY-GS_00_GBE/workspace</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>export GIT_BRANCH
-./gdfdl-ci/03-build/00-run.sh
-</command>
+export http_proxy=http://localhost:3128/
+./gdfdl-ci/03-build/00-run.sh</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
     <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder plugin="display-upstream-changes@0.1"/>
-    <jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin plugin="publish-over-ssh@1.9">
+    <jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin plugin="publish-over-ssh@1.10">
       <consolePrefix>SSH: </consolePrefix>
       <delegate>
         <publishers>
@@ -122,6 +126,7 @@
                 <cleanRemote>false</cleanRemote>
                 <noDefaultExcludes>false</noDefaultExcludes>
                 <makeEmptyDirs>false</makeEmptyDirs>
+                <patternSeparator>[, ]+</patternSeparator>
                 <execCommand></execCommand>
                 <execTimeout>120000</execTimeout>
                 <usePty>false</usePty>
@@ -136,6 +141,7 @@
                 <cleanRemote>false</cleanRemote>
                 <noDefaultExcludes>false</noDefaultExcludes>
                 <makeEmptyDirs>false</makeEmptyDirs>
+                <patternSeparator>[, ]+</patternSeparator>
                 <execCommand></execCommand>
                 <execTimeout>120000</execTimeout>
                 <usePty>false</usePty>
@@ -147,12 +153,6 @@
               <retries>5</retries>
               <retryDelay>10000</retryDelay>
             </retry>
-            <credentials class="jenkins.plugins.publish_over_ssh.BapSshCredentials">
-              <secretPassphrase>6Cj94dTf05YdjX8gPy6LEw==</secretPassphrase>
-              <key></key>
-              <keyPath>.ssh/id_rsa-gs5</keyPath>
-              <username>gs-iso</username>
-            </credentials>
           </jenkins.plugins.publish__over__ssh.BapSshPublisher>
         </publishers>
         <continueOnError>false</continueOnError>
@@ -166,7 +166,7 @@
         <hudson.plugins.postbuildtask.TaskProperties>
           <logTexts>
             <hudson.plugins.postbuildtask.LogProperties>
-              <logText>Removing files older</logText>
+              <logText>Archiving artifacts</logText>
               <operator>AND</operator>
             </hudson.plugins.postbuildtask.LogProperties>
           </logTexts>
@@ -179,12 +179,27 @@
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.25">
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.27.1">
       <recipientList>$DEFAULT_RECIPIENTS</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
           <email>
-            <recipientList>stefan.wintermeyer@amooma.de</recipientList>
+            <recipientList></recipientList>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <sendToDevelopers>true</sendToDevelopers>
+            <sendToRequester>true</sendToRequester>
+            <includeCulprits>false</includeCulprits>
+            <sendToRecipientList>false</sendToRecipientList>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo></replyTo>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+        <hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger>
+          <email>
+            <recipientList></recipientList>
             <subject>$PROJECT_DEFAULT_SUBJECT</subject>
             <body>$PROJECT_DEFAULT_CONTENT</body>
             <sendToDevelopers>true</sendToDevelopers>
@@ -193,9 +208,26 @@
             <sendToRecipientList>true</sendToRecipientList>
             <attachmentsPattern></attachmentsPattern>
             <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
             <replyTo></replyTo>
           </email>
-        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+          <failureCount>1</failureCount>
+        </hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger>
+        <hudson.plugins.emailext.plugins.trigger.FixedTrigger>
+          <email>
+            <recipientList></recipientList>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <sendToDevelopers>true</sendToDevelopers>
+            <sendToRequester>true</sendToRequester>
+            <includeCulprits>false</includeCulprits>
+            <sendToRecipientList>true</sendToRecipientList>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo></replyTo>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.FixedTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
       <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
@@ -203,7 +235,8 @@
       <attachmentsPattern></attachmentsPattern>
       <presendScript></presendScript>
       <attachBuildLog>false</attachBuildLog>
-      <replyTo></replyTo>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_RECIPIENTS</replyTo>
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers/>

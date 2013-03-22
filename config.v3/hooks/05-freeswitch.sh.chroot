@@ -12,6 +12,7 @@
 set -e
 
 # General settings
+[ -e /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 SRC_DIR="/usr/local/src"
@@ -371,26 +372,18 @@ if [[ ! -f /usr/bin/freeswitch ]]
 		chown -R freeswitch.root /opt/freeswitch
 	fi
 else
+	echo -e "GBE: Creating compatibility symlinks ...\n"
 	# compatibility with manual installation and GS default directories
 	mkdir -p /opt/freeswitch
-	ln -s /usr/share/freeswitch/sounds /opt/freeswitch/sounds
-	ln -s /usr/lib/freeswitch/mod /opt/freeswitch/mod
-	ln -s /var/lib/freeswitch/storage /opt/freeswitch/storage
-	ln -s /var/lib/freeswitch/recordings /opt/freeswitch/recordings
-	ln -s /var/lib/freeswitch/voicemail /opt/freeswitch/voicemail
-	ln -s /var/lib/freeswitch/db /opt/freeswitch/db
-	ln -s /etc/freeswitch /opt/freeswitch/conf
-	ln -s /usr/share/freeswitch/scripts /opt/freeswitch/scripts
+	ln -sv /usr/share/freeswitch/sounds /opt/freeswitch/sounds
+	ln -sv /usr/lib/freeswitch/mod /opt/freeswitch/mod
+	ln -sv /var/lib/freeswitch/storage /opt/freeswitch/storage
+	ln -sv /var/lib/freeswitch/recordings /opt/freeswitch/recordings
+	ln -sv /var/lib/freeswitch/voicemail /opt/freeswitch/voicemail
+	ln -sv /var/lib/freeswitch/db /opt/freeswitch/db
+	ln -sv /etc/freeswitch /opt/freeswitch/conf
+	ln -sv /usr/share/freeswitch/scripts /opt/freeswitch/scripts
 fi
-
-echo -e "GBE: Enabling FreeSwitch ...\n"
-echo "# this is for manually installed FS versions
-FREESWITCH_ENABLED=\"true\"
-FREESWITCH_PARAMS=\"-rp -nc\"
-
-# this is for FS installations via Debian packages
-DAEMON_ARGS=\"-u freeswitch -g freeswitch -rp -nc\"
-" > /etc/default/freeswitch
 
 # cleanup sources
 rm -rf "${SRC_DIR}/freeswitch"*

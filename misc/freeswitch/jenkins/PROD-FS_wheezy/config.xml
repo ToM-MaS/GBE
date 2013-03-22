@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>FreeSWITCH for Debian wheezy/testing 32-Bit</description>
-  <displayName>FreeSWITCH wheezy/testing i386</displayName>
+  <description>FreeSWITCH Stable tree for Debian Wheezy 32-Bit</description>
+  <displayName>FreeSWITCH 1.2/stable Wheezy i386</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.security.AuthorizationMatrixProperty>
@@ -10,29 +10,31 @@
       <permission>hudson.model.Item.Read:anonymous</permission>
     </hudson.security.AuthorizationMatrixProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@1.2.0">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <name></name>
+        <name>origin</name>
         <refspec></refspec>
         <url>git://git.freeswitch.org/freeswitch</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>master</name>
+        <name>v1.2.stable</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
+    <localBranch>master</localBranch>
     <disableSubmodules>false</disableSubmodules>
     <recursiveSubmodules>false</recursiveSubmodules>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <authorOrCommitter>false</authorOrCommitter>
     <clean>false</clean>
-    <wipeOutWorkspace>false</wipeOutWorkspace>
+    <wipeOutWorkspace>true</wipeOutWorkspace>
     <pruneBranches>false</pruneBranches>
     <remotePoll>false</remotePoll>
     <ignoreNotifyCommit>false</ignoreNotifyCommit>
+    <useShallowClone>false</useShallowClone>
     <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
     <gitTool>Default</gitTool>
     <submoduleCfg class="list"/>
@@ -42,7 +44,7 @@
     <excludedUsers></excludedUsers>
     <gitConfigName></gitConfigName>
     <gitConfigEmail></gitConfigEmail>
-    <skipTag>false</skipTag>
+    <skipTag>true</skipTag>
     <includedRegions></includedRegions>
     <scmName></scmName>
   </scm>
@@ -51,7 +53,12 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers class="vector"/>
+  <triggers class="vector">
+    <hudson.triggers.SCMTrigger>
+      <spec>2 */3 * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
@@ -62,7 +69,8 @@
 #
 distro=wheezy
 arch=i386
-suite=testing
+suite=stable
+http_proxy=http://localhost:3128/
 
 rm -f *.tar.gz *.tar.xz *.dsc *.build *.changes *.deb
 
@@ -71,17 +79,24 @@ rm -f *.tar.gz *.tar.xz *.dsc *.build *.changes *.deb
 
 [ ! -d /var/cache/pbuilder/base-${distro}-${arch}.cow ] &amp;&amp; DIST=${distro} ARCH=${arch} git-pbuilder create || DIST=${distro} ARCH=${arch} git-pbuilder update
 [ ! -L /dev/fd ] &amp;&amp; sudo ln -s /proc/self/fd /dev/fd
-[ ! -d ./freeswitch ] &amp;&amp; git clone git://git.freeswitch.org/freeswitch freeswitch
+if [ ! -d ./freeswitch ]; then
+ git clone -b v1.2.stable git://git.freeswitch.org/freeswitch freeswitch
+ (cd freeswitch; git branch master; git branch -D v1.2.stable)
+fi
 
 
 cd freeswitch
 
 ver=&quot;$(cat build/next-release.txt | sed -e &apos;s/-/~/g&apos;)~n$(date +%Y%m%dT%H%M%SZ)-1~${distro}+1&quot;
 git clean -fdx &amp;&amp; git reset --hard HEAD
+
+echo &quot;# Do not generate diff for changes in configure.in
+extend-diff-ignore = \&quot;configure.in$\&quot;&quot; &gt; debian/source/options
+
 ./build/set-fs-version.sh &quot;$ver&quot;
-git add configure.in &amp;&amp; git commit -m &quot;bump to custom v$ver&quot;
 [ -f ../modules_${distro}.conf ] &amp;&amp; cp -L ../modules_${distro}.conf debian/modules.conf
 (cd debian &amp;&amp; ./bootstrap.sh -c $distro)
+git add configure.in &amp;&amp; git commit -m &quot;bump to custom v$ver&quot;
 dch -b -m -v &quot;$ver&quot; --force-distribution -D &quot;$suite&quot; &quot;Custom build.&quot;
 
 # Needs sudo right if user!=root:
@@ -89,7 +104,7 @@ dch -b -m -v &quot;$ver&quot; --force-distribution -D &quot;$suite&quot; &quot;C
 git-buildpackage -b -us -uc \
   --git-verbose \
   --git-pbuilder --git-dist=$distro --git-arch=$arch \
-  --git-keyid=83AF64E1 \
+  --git-keyid=09E60DF5 \
   --git-compression-level=1v --git-compression=xz
 git reset --hard HEAD^
 
@@ -97,13 +112,17 @@ cd -</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>*.deb</artifacts>
+      <latestOnly>false</latestOnly>
+    </hudson.tasks.ArtifactArchiver>
+    <jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin plugin="publish-over-ssh@1.10">
       <consolePrefix>SSH: </consolePrefix>
       <delegate>
         <publishers>
           <jenkins.plugins.publish__over__ssh.BapSshPublisher>
-            <configName>JPS Debian Repository</configName>
-            <verbose>false</verbose>
+            <configName>AMOOMA Debian Repository</configName>
+            <verbose>true</verbose>
             <transfers>
               <jenkins.plugins.publish__over__ssh.BapSshTransfer>
                 <remoteDirectory>build/${BUILD_TAG}</remoteDirectory>
@@ -113,8 +132,11 @@ cd -</command>
                 <remoteDirectorySDF>false</remoteDirectorySDF>
                 <flatten>false</flatten>
                 <cleanRemote>false</cleanRemote>
-                <execCommand>reprepro -Vb /var/www/debian include wheezy /var/www/debian/build/${BUILD_TAG}/*.changes &amp;&amp; rm -rf /var/www/debian/build/${BUILD_TAG}/</execCommand>
-                <execTimeout>300000</execTimeout>
+                <noDefaultExcludes>false</noDefaultExcludes>
+                <makeEmptyDirs>false</makeEmptyDirs>
+                <patternSeparator>[, ]+</patternSeparator>
+                <execCommand>reprepro -Vb /var/www/repo.amooma.de/debian include wheezy /var/www/repo.amooma.de/debian/build/${BUILD_TAG}/*.changes &amp;&amp; rm -rf /var/www/repo.amooma.de/debian/build/${BUILD_TAG}/</execCommand>
+                <execTimeout>120000</execTimeout>
                 <usePty>false</usePty>
               </jenkins.plugins.publish__over__ssh.BapSshTransfer>
             </transfers>
@@ -122,17 +144,17 @@ cd -</command>
             <usePromotionTimestamp>false</usePromotionTimestamp>
             <retry class="jenkins.plugins.publish_over_ssh.BapSshRetry">
               <retries>10</retries>
-              <retryDelay>15000</retryDelay>
+              <retryDelay>10000</retryDelay>
             </retry>
           </jenkins.plugins.publish__over__ssh.BapSshPublisher>
         </publishers>
         <continueOnError>false</continueOnError>
-        <failOnError>true</failOnError>
+        <failOnError>false</failOnError>
         <alwaysPublishFromMaster>false</alwaysPublishFromMaster>
         <hostConfigurationAccess class="jenkins.plugins.publish_over_ssh.BapSshPublisherPlugin" reference="../.."/>
       </delegate>
     </jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin>
-    <hudson.plugins.postbuildtask.PostbuildTask>
+    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
       <tasks>
         <hudson.plugins.postbuildtask.TaskProperties>
           <logTexts>
@@ -143,15 +165,10 @@ cd -</command>
           </logTexts>
           <EscalateStatus>false</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
-          <script>rm -f *.tar.gz *.tar.xz *.dsc *.build *.changes *.deb</script>
+          <script>rm -f *.tar.gz *.tar.xz *.tar.bz2 *.dsc *.build *.changes *.deb</script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
-    <hudson.tasks.Mailer>
-      <recipients>jp@jps-networks.eu</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers/>
 </project>

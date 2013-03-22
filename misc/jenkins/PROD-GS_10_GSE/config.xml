@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Provides the workspace basis for building Gemeinschaft 5</description>
-  <displayName>GBE (Nightly Build)</displayName>
+  <description>Dummy injector for Gemeinschaft System Environment</description>
+  <displayName>GSE (Production)</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.security.AuthorizationMatrixProperty>
@@ -40,23 +40,8 @@
       <permission>hudson.model.Item.Configure:wintermeyer</permission>
     </hudson.security.AuthorizationMatrixProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.5">
-      <projectUrl>https://github.com/amooma/GBE/</projectUrl>
+      <projectUrl>https://github.com/amooma/GBE-system/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.ChoiceParameterDefinition>
-          <name>REINSTALL</name>
-          <description>Choose to completely cleanup/uninstall the build environment and re-install instead of just updating it.
-(Updating only should be default)</description>
-          <choices class="java.util.Arrays$ArrayList">
-            <a class="string-array">
-              <string>no</string>
-              <string>yes</string>
-            </a>
-          </choices>
-        </hudson.model.ChoiceParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@1.2.0">
     <configVersion>2</configVersion>
@@ -64,28 +49,29 @@
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec></refspec>
-        <url>https://github.com/amooma/GBE.git</url>
+        <url>https://github.com/amooma/GBE-system.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>develop</name>
+        <name>master</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
+    <localBranch>master</localBranch>
     <disableSubmodules>false</disableSubmodules>
     <recursiveSubmodules>false</recursiveSubmodules>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <authorOrCommitter>false</authorOrCommitter>
-    <clean>false</clean>
+    <clean>true</clean>
     <wipeOutWorkspace>false</wipeOutWorkspace>
-    <pruneBranches>false</pruneBranches>
+    <pruneBranches>true</pruneBranches>
     <remotePoll>false</remotePoll>
     <ignoreNotifyCommit>false</ignoreNotifyCommit>
     <useShallowClone>false</useShallowClone>
     <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
     <gitTool>Default</gitTool>
     <submoduleCfg class="list"/>
-    <relativeTargetDir></relativeTargetDir>
+    <relativeTargetDir>.ci/GSE</relativeTargetDir>
     <reference></reference>
     <excludedRegions></excludedRegions>
     <excludedUsers></excludedUsers>
@@ -98,78 +84,18 @@
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers class="vector">
-    <hudson.triggers.SCMTrigger>
-      <spec>42 4 * * *</spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
-    </hudson.triggers.SCMTrigger>
-  </triggers>
+  <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
   <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <hudson.tasks.Shell>
-      <command>#!/bin/bash
-if [[ &quot;${REINSTALL}&quot; == &quot;yes&quot; ]]
- then
- ./gdfdl-ci/00-uninstall/00-run.sh
- ./gdfdl-ci/01-install/00-run.sh
- ./gdfdl-ci/02-update/00-run.sh
-else
- ./gdfdl-ci/02-update/00-run.sh
-fi</command>
-    </hudson.tasks.Shell>
-  </builders>
+  <customWorkspace>jobs/PROD-GS_00_GBE/workspace</customWorkspace>
+  <builders/>
   <publishers>
     <jenkins.plugins.displayupstreamchanges.DisplayUpstreamChangesRecorder plugin="display-upstream-changes@0.1"/>
     <hudson.tasks.test.AggregatedTestResultPublisher>
-      <includeFailedBuilds>false</includeFailedBuilds>
+      <includeFailedBuilds>true</includeFailedBuilds>
     </hudson.tasks.test.AggregatedTestResultPublisher>
-    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.27.1">
-      <recipientList>$DEFAULT_RECIPIENTS</recipientList>
-      <configuredTriggers>
-        <hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger>
-          <email>
-            <recipientList></recipientList>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <sendToDevelopers>true</sendToDevelopers>
-            <sendToRequester>true</sendToRequester>
-            <includeCulprits>false</includeCulprits>
-            <sendToRecipientList>false</sendToRecipientList>
-            <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo></replyTo>
-          </email>
-          <failureCount>1</failureCount>
-        </hudson.plugins.emailext.plugins.trigger.FirstFailureTrigger>
-        <hudson.plugins.emailext.plugins.trigger.FixedTrigger>
-          <email>
-            <recipientList></recipientList>
-            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
-            <body>$PROJECT_DEFAULT_CONTENT</body>
-            <sendToDevelopers>true</sendToDevelopers>
-            <sendToRequester>true</sendToRequester>
-            <includeCulprits>false</includeCulprits>
-            <sendToRecipientList>false</sendToRecipientList>
-            <attachmentsPattern></attachmentsPattern>
-            <attachBuildLog>false</attachBuildLog>
-            <compressBuildLog>false</compressBuildLog>
-            <replyTo></replyTo>
-          </email>
-        </hudson.plugins.emailext.plugins.trigger.FixedTrigger>
-      </configuredTriggers>
-      <contentType>default</contentType>
-      <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
-      <defaultContent>$DEFAULT_CONTENT</defaultContent>
-      <attachmentsPattern></attachmentsPattern>
-      <presendScript></presendScript>
-      <attachBuildLog>false</attachBuildLog>
-      <compressBuildLog>false</compressBuildLog>
-      <replyTo>$DEFAULT_RECIPIENTS</replyTo>
-    </hudson.plugins.emailext.ExtendedEmailPublisher>
     <hudson.tasks.BuildTrigger>
-      <childProjects>NIGHTLY-GS_10_GSE</childProjects>
+      <childProjects>PROD-GS_20_GS5</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>

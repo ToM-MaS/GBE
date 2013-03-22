@@ -12,6 +12,7 @@
 set -e
 
 # General settings
+[ -e /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf || echo "FATAL ERROR: Local configuration file in /etc/gemeinschaft/system.conf missing"
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 source /etc/gemeinschaft/system.conf
@@ -24,16 +25,14 @@ rm -rf /etc/init.d/gdfdl-init
 rm -rf /etc/init.d/gdfdl-prompt
 
 echo -e "GBE: Enabling system services ...\n"
-update-rc.d gemeinschaft-init defaults 2>&1
-update-rc.d gemeinschaft-prompt defaults 2>&1
-update-rc.d gemeinschaft-runtime-init defaults 2>&1
-update-rc.d gemeinschaft-runtime-helper defaults 2>&1
-update-rc.d gemeinschaft-runtime-init-post defaults 2>&1
-update-rc.d freeswitch defaults 2>&1
-update-rc.d winbind remove 2>&1
-#update-rc.d mon_ami defaults 2>&1
-[ -f /etc/default/shorewall ] && sed -i "s/^startup=.*\$/startup=1/" /etc/default/shorewall
-[ -f /etc/default/shorewall6 ] && sed -i "s/^startup=.*\$/startup=1/" /etc/default/shorewall6
+update-rc.d -f gemeinschaft-init defaults 2>&1
+update-rc.d -f gemeinschaft-prompt defaults 2>&1
+update-rc.d -f gemeinschaft-runtime-init defaults 2>&1
+update-rc.d -f gemeinschaft-runtime-helper defaults 2>&1
+update-rc.d -f gemeinschaft-runtime-init-post defaults 2>&1
+update-rc.d -f freeswitch defaults 2>&1
+update-rc.d -f winbind remove 2>&1
+update-rc.d -f haproxy defaults 2>&1
 
 echo -e "GBE: Set initial file permissions and security settings ...\n"
 "${GSE_DIR_NORMALIZED}/bin/gs-enforce-security.sh" | grep -Ev retained | grep -Ev "no changes" | grep -Ev "nor referent has been changed"

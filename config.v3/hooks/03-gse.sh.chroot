@@ -12,6 +12,7 @@
 set -e
 
 # General settings
+[ -e /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 GDFDL_BUILDNAME="`cat /etc/gdfdl_build`"
@@ -79,7 +80,7 @@ fi
 #  Create alias
 #
 GSE_DIR_NORMALIZED=`dirname "${GSE_DIR}"`/gemeinschaft-system
-ln -s `basename "${GSE_DIR}"` "${GSE_DIR_NORMALIZED}"
+ln -sv `basename "${GSE_DIR}"` "${GSE_DIR_NORMALIZED}"
 
 # Check if we have a production or development state build
 # (production = master-branch was used from GS5 and GBE repo)
@@ -106,7 +107,7 @@ echo "GS_BUILDNAME=\"${GS_BUILDNAME}\""  >> /etc/gemeinschaft/system.conf
 
 # set GS+GSE variables as global ENV variables
 [ -f /etc/environment ] && rm /etc/environment
-ln -s /etc/gemeinschaft/system.conf /etc/environment
+ln -sv /etc/gemeinschaft/system.conf /etc/environment
 
 echo -e "GBE: Initializing GSE ..."
 "${GSE_DIR}/bin/gse-update.sh" --force-init

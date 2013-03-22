@@ -12,6 +12,7 @@
 set -e
 
 # General settings
+[ -e /etc/gemeinschaft/system.conf ] && source /etc/gemeinschaft/system.conf
 source /gdfdl.conf
 [ -f /gdfdl-custom.conf ] && source /gdfdl-custom.conf
 
@@ -25,7 +26,7 @@ echo -e "GBE: Create service account ${GSE_USER} ...\n"
 # hint: This should be a system service account (-s) or at least UID needs to be != 1000
 # otherwise live-config user setup will not work correctly.
 useradd ${GSE_USER} -N -m -r -d /var/lib/${GSE_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GSE_GROUP}
-ln -s ${GSE_USER} /var/lib/gemeinschaft
+ln -sv ${GSE_USER} /var/lib/gemeinschaft
 
 echo -e "GBE: Create service account mon_ami ...\n"
 # hint: This should be a system service account (-s) or at least UID needs to be != 1000
@@ -50,7 +51,7 @@ if [ -e /etc/aliases ]; then
 	[ -e /usr/bin/newaliases ] && newaliases
 fi
 
-echo - "GBE: Configuring NTP server ...\n"
+echo -e "GBE: Configuring NTP server ...\n"
 sed -i "s/^server.*\$//" /etc/ntp.conf
 echo "server 0.de.pool.ntp.org" >> /etc/ntp.conf
 echo "server 1.de.pool.ntp.org" >> /etc/ntp.conf
@@ -59,11 +60,8 @@ echo "server 3.de.pool.ntp.org" >> /etc/ntp.conf
 
 echo -e "GBE: Setup name resolution ...\n"
 rm -rf /etc/resolv.conf
-ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
+ln -sv /etc/resolvconf/run/resolv.conf /etc/resolv.conf
 echo "REPORT_ABSENT_SYMLINK=no" > /etc/default/resolvconf
-
-echo -e "GBE: Reconfiguring SNMP logging facilities ...\n"
-sed -i "s/^SNMPDOPTS=.*$/SNMPDOPTS='-LS 0-4 d -Lf \/dev\/null -u snmp -g snmp -I -smux -p \/var\/run\/snmpd.pid'/" /etc/default/snmpd
 
 echo -e "GBE: Installing nodejs ...\n"
 cd /usr/local/src
