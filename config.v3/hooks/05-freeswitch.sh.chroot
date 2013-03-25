@@ -20,9 +20,11 @@ SRC_DIR="/usr/local/src"
 echo -e "\n###########################################################
 ## GBE: FreeSwitch installation\n\n"
 
+FS_PACKAGES="`dpkg --get-selections | grep freeswitch`"
+
 # in case there is no existing FS installation via DEB package yet, run manual install
 #
-if [[ ! -f /usr/bin/freeswitch ]]
+if [[ x"${FS_PACKAGES}" == x"" ]]
 	then
 	echo -e "GBE: Downloading FreeSwitch and 3rd party components ...\n"
 	cd "${SRC_DIR}"
