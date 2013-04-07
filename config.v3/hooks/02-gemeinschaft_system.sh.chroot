@@ -79,3 +79,6 @@ mkdir -p /var/spool/pcapsipdump
 chmod 0700 /var/spool/pcapsipdump
 cd ..
 rm -rf pcapsipdump-*
+
+#FIXME
+echo "89.221.14.194 repo.amooma.de" >> /etc/hosts
