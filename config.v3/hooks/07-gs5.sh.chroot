@@ -142,11 +142,9 @@ echo "RAILS_ENV=\"$GSE_ENV\"" >> /etc/gemeinschaft/system.conf
 
 rm -f /etc/gemeinschaft_branch
 
-if [ "${PLATFORM}" == "x86" ]; then
-	# Install moh
-	/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-music-8khz
+# Install moh
+/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-music-8khz
 
-	# Install voice prompts
-	/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-en-callie-8khz
-	/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-de-tts-google-8khz
-fi
+# Install voice prompts
+/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-en-callie-8khz
+/opt/gemeinschaft-system/bin/gs-addon.sh install fs-sounds-de-tts-google-8khz
