@@ -97,6 +97,9 @@ case "$1" in
 		[ $? != 0 ] && service mysql start
 		set -e
 
+		# temp. disable InnoDB flush log to improve IO performance
+		mysql -e "set global innodb_flush_log_at_trx_commit = 0;" --user=root --password="${MYSQL_PASSWD_ROOT}" --host=127.0.0.1
+
 		# Load timezone information into database
 		echo "** Loading timezone information into MySQL database"
 		mysql_tzinfo_to_sql /usr/share/zoneinfo 2>/dev/null | mysql mysql --user=root --password="${MYSQL_PASSWD_ROOT}" --host=127.0.0.1 2>&1 >/dev/null
