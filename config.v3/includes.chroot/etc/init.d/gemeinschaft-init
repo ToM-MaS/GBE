@@ -49,8 +49,7 @@ case "$1" in
 		if [ "${PLATFORM}" == "x86" ]; then
 			echo "deb http://cdn.debian.net/debian/ wheezy main contrib non-free" > /etc/apt/sources.list
 			echo "deb-src http://cdn.debian.net/debian/ wheezy main contrib non-free" >> /etc/apt/sources.list
-			echo "deb http://security.debian.org/ wheezy/updates main contrib non-free" >> /etc/apt/sources.list
-			echo "deb-src http://security.debian.org/ wheezy/updates main contrib non-free" >> /etc/apt/sources.list
+			echo "deb http://security.debian.org/ wheezy/updates main" >> /etc/apt/sources.list
 		fi
 
 		# Generate new password for gsmaster system administrator for live system
