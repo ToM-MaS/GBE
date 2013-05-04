@@ -95,7 +95,6 @@ ln -sv `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 
 # Install GS related Gems
 #
-chown ${GSE_USER} ${GS_DIR} -R
 echo -e "GBE: Install GS gems ...\n"
 su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; cd ${GS_DIR}; bundle install 2>&1"
 
