@@ -19,6 +19,9 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft specific system configuration\n\n"
 
+#FIXME
+echo "89.221.14.194 repo.amooma.de" >> /etc/hosts
+
 echo -e "GBE: Create service group '${GSE_GROUP}' ...\n"
 groupadd -r -f ${GSE_GROUP}
 
@@ -74,11 +77,8 @@ echo -e "GBE: Installing pcapsipdump ...\n"
 cd /usr/local/src
 wget -c -t 5 --waitretry=3 http://downloads.sourceforge.net/project/pcapsipdump/pcapsipdump/${PCAPSIPDUMP_VERSION}/pcapsipdump-${PCAPSIPDUMP_VERSION}.tar.gz
 tar xzvf pcapsipdump-*.tar.gz && cd pcapsipdump-* && make
-cp -d pcapsipdump /usr/sbin/pcapsipdump
-mkdir -p /var/spool/pcapsipdump
-chmod 0700 /var/spool/pcapsipdump
+cp -dv pcapsipdump /usr/sbin/pcapsipdump
+mkdir -pv /var/spool/pcapsipdump
+chmod -v 0700 /var/spool/pcapsipdump
 cd ..
 rm -rf pcapsipdump-*
-
-#FIXME
-echo "89.221.14.194 repo.amooma.de" >> /etc/hosts
