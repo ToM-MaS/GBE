@@ -93,6 +93,12 @@ fi
 GS_DIR_NORMALIZED=`dirname "${GS_DIR}"`/gemeinschaft
 ln -sv `basename "${GS_DIR}"` "${GS_DIR_NORMALIZED}"
 
+# Enforce correct file permissions
+#
+set +e
+"${GSE_DIR_NORMALIZED}/bin/gs-enforce-security.sh" | grep -Ev retained | grep -Ev "no changes" | grep -Ev "nor referent has been changed"
+set -e
+
 # Install GS related Gems
 #
 echo -e "GBE: Install GS gems ...\n"
