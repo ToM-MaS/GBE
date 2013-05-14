@@ -25,7 +25,7 @@ rm -rf /etc/init.d/gdfdl-init
 rm -rf /etc/init.d/gdfdl-prompt
 
 # remove temp. sudo rights from GSE_USER
-rm -f /etc/sudoers.d/temp.gbe
+rm -f /etc/sudoers.d/temp_gbe
 
 echo -e "GBE: Enabling system services ...\n"
 update-rc.d -f gemeinschaft-init defaults 2>&1
