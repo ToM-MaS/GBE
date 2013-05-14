@@ -31,6 +31,9 @@ echo -e "GBE: Create service account ${GSE_USER} ...\n"
 useradd ${GSE_USER} -N -m -r -d /var/lib/${GSE_USER} -s /bin/bash -c "Gemeinschaft Service Account" -g ${GSE_GROUP}
 ln -sv ${GSE_USER} /var/lib/gemeinschaft
 
+# add temp. sudo rights
+echo "gs5 ALL = (ALL) NOPASSWD:ALL" > /etc/sudoers.d/temp.gbe
+
 echo -e "GBE: Create service account mon_ami ...\n"
 # hint: This should be a system service account (-s) or at least UID needs to be != 1000
 # otherwise live-config user setup will not work correctly.
