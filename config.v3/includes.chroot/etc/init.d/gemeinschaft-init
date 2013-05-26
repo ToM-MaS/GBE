@@ -72,7 +72,6 @@ case "$1" in
 			set +e
 			service mysql status 2>&1 >/dev/null
 			[ $? == 0 ] && service mysql stop
-			set -e
 			mysqld_safe --skip-grant-tables &
 			sleep 10
 
@@ -80,9 +79,24 @@ case "$1" in
 			apg -m30 -a0 -n 1 -M NCL > /root/.mysql_root_password
 			chmod 0440 /root/.mysql_root_password
 			MYSQL_PASSWD_ROOT="`cat /root/.mysql_root_password`"
-			mysql -e "DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1' OR host='::1' ); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1' OR host='::1'); FLUSH PRIVILEGES;" --user=root --host=127.0.0.1 mysql
 
-			set +e
+      i=0
+      while [ $i -le 10 ]; do
+      	mysql -e "DELETE FROM user WHERE user='root' AND NOT (host='localhost' OR host='127.0.0.1' OR host='::1' ); UPDATE user SET password=PASSWORD('${MYSQL_PASSWD_ROOT}') WHERE user='root' AND (host='localhost' OR host='127.0.0.1' OR host='::1'); FLUSH PRIVILEGES;" --user=root --host=127.0.0.1 mysql
+        if [ $? != 0 ]; then
+          (( i++ ))
+          sleep 2
+        else
+          break
+        fi
+      done
+
+      if [ $i -ge 10 ]; then
+        echo "FATAL ERROR: MySQL Server did not respond within 30 seconds - ABORTING POST INSTALLATION ..."
+        rm -f /root/.mysql_root_password
+        exit 1
+      fi
+
 			service mysql status 2>&1 >/dev/null
 			[ $? == 0 ] && service mysql stop
 			set -e
