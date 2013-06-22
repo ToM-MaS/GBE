@@ -27,7 +27,6 @@ lb config noauto \
 	--linux-flavours "486 686-pae" \
 	--memtest none \
 	--mode debian \
-	--root-command sudo \
 	--win32-loader disabled \
 	"${@}"
 
@@ -46,7 +45,6 @@ lb config noauto \
 	--linux-flavours "486 686-pae" \
 	--memtest none \
 	--mode debian \
-	--root-command sudo \
 	--win32-loader disabled \
 	"${@}"
 fi
