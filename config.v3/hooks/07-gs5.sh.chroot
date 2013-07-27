@@ -119,7 +119,7 @@ ln -sv ${GS_DIR_NORMALIZED_LOCAL}/freeswitch/voicemail /var/lib/freeswitch/voice
 
 echo -e "GBE: Adjust Apache2 configuration ...\n"
 PASSENGER_ROOT="`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-config --root"`"
-echo "LoadModule passenger_module ${PASSENGER_ROOT%*/*}/passenger/buildout/apache2/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
+echo "LoadModule passenger_module /usr/lib/apache2/modules/mod_passenger.so" > /etc/apache2/mods-available/passenger.load
 echo "PassengerRoot ${PASSENGER_ROOT%*/*}/passenger" > /etc/apache2/mods-available/passenger.conf
 
 # enable modules
