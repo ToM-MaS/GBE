@@ -27,4 +27,4 @@ PASSENGER_ROOT="`su - ${GSE_USER} -c "source ~/.rvm/scripts/rvm; passenger-confi
 
 [ -e "${PASSENGER_ROOT%*/*}/passenger" ] && rm -rv "${PASSENGER_ROOT%*/*}/passenger"
 ln -snfv "${PASSENGER_ROOT##*/}" "${PASSENGER_ROOT%*/*}/passenger"
-ln -snfv "${PASSENGER_ROOT%*/*}/passenger/ext/apache2/mod_passenger.so" "/usr/lib/apache2/modules/mod_passenger.so"
+ln -snfv "${PASSENGER_ROOT%*/*}/passenger/buildout/apache2/mod_passenger.so" "/usr/lib/apache2/modules/mod_passenger.so"
