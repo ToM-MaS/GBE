@@ -19,9 +19,6 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Gemeinschaft specific system configuration\n\n"
 
-#FIXME
-echo "89.221.14.194 repo.amooma.de" >> /etc/hosts
-
 echo -e "GBE: Create service group '${GSE_GROUP}' ...\n"
 groupadd -r -f ${GSE_GROUP}
 
