@@ -19,6 +19,9 @@ source /gdfdl.conf
 echo -e "\n###########################################################
 ## GBE: Ruby/Rails installation\n\n"
 
+echo -e "Add GPG trust for RVM ...\n"
+su - ${GSE_USER} -c "gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
+
 echo -e "GBE: Install RVM version ${RVM_VERSION} ...\n"
 su - ${GSE_USER} -c "curl --retry 5 --fail --silent -L get.rvm.io | bash -s ${RVM_VERSION} 2>&1"
 
