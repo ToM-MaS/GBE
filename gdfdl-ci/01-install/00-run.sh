@@ -15,6 +15,8 @@
 
 set -e
 
+umask 022
+
 SELF="`readlink -f $0`"
 GDFDL_BASEDIR_CI_STEP="`dirname ${SELF}`"
 GDFDL_BASEDIR_CI="`dirname ${GDFDL_BASEDIR_CI_STEP}`"
@@ -25,7 +27,7 @@ source "${GDFDL_BASEDIR}/gdfdl.conf"
 
 if [[ x"${GIT_BRANCH}" != x"" ]]
 	then
-	GDFDL_BRANCH="${GIT_BRANCH}"
+	GDFDL_BRANCH="${GIT_BRANCH##*/}"
 else
 	GDFDL_BRANCH="`cd "${GDFDL_BASEDIR}"; git branch | cut -d " " -f 2`"
 fi
