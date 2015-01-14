@@ -26,6 +26,10 @@ lb config noauto \
 	--iso-volume "GS5" \
 	--linux-flavours "486 686-pae" \
 	--memtest none \
+	--mirror-bootstrap http://http.debian.net/debian \
+	--mirror-chroot-backports http://http.debian.net/debian \
+	--mirror-binary http://http.debian.net/debian \
+	--mirror-binary-backports http://http.debian.net/debian \
 	--mode debian \
 	--win32-loader disabled \
 	"${@}"
@@ -44,6 +48,10 @@ lb config noauto \
 	--iso-volume "GS5" \
 	--linux-flavours "486 686-pae" \
 	--memtest none \
+	--mirror-bootstrap http://http.debian.net/debian \
+	--mirror-chroot-backports http://http.debian.net/debian \
+	--mirror-binary http://http.debian.net/debian \
+	--mirror-binary-backports http://http.debian.net/debian \
 	--mode debian \
 	--win32-loader disabled \
 	"${@}"
